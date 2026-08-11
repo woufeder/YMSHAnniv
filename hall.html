@@ -3,28 +3,55 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>YMSH 5週年紀念 - 穿堂留言板</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-        <title>YMSH 5週年紀念 - 穿堂留言板</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/hall.css">
   </head>
-  <body>
+  <body class="hall-body">
     <div class="hall-container">
-        <h1>穿堂留言板</h1>
-        <div class="message-board">
-            <div class="message-form">
-                <input type="text" id="messageInput" placeholder="留下您的祝福訊息...">
-                <button id="submitMessage">送出留言</button>
-            </div>
-            <div class="messages-list" id="messagesList">
-                <!-- 留言將由 JavaScript 動態載入 -->
-            </div>
+        <h6 class="hall-title">穿堂留言板</h6>
+
+        <!-- Canvas 移到上方，撐滿螢幕 -->
+        <div class="messages-canvas" id="messagesList">
+            <!-- 便條紙將由 JavaScript 動態隨機分佈 -->
         </div>
-        <button id="backToMap" class="back-btn">返回地圖</button>
+
+        <!-- 操作區域放在下方 -->
+        <div class="hall-controls">
+            <button id="openModalBtn" class="btn-write">✍️ 寫下祝福</button>
+            <button id="backToMap" class="back-btn">返回地圖</button>
+        </div>
     </div>
+
+    <!-- 留言 Modal 彈窗 -->
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="messageModalLabel">留下您的祝福</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="userNameInput" class="form-label">姓名</label>
+              <input type="text" class="form-control" id="userNameInput" placeholder="請輸入您的姓名">
+            </div>
+            <div class="mb-3">
+              <label for="messageInput" class="form-label">祝福訊息</label>
+              <textarea class="form-control" id="messageInput" rows="4" placeholder="寫下您對 YMSH 的想念..."></textarea>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+            <button type="button" id="submitMessage" class="btn btn-primary">送出留言</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
-        <script src="js/utils.js"></script>
+    <script src="js/utils.js"></script>
     <script src="js/hall.js"></script>
   </body>
 </html>
