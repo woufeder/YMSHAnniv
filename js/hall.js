@@ -1,125 +1,154 @@
 // hall.js - Google Sheet 留言板串接
 document.addEventListener('DOMContentLoaded', function() {
+    const userNameInput = document.getElementById('userNameInput');
     const messageInput = document.getElementById('messageInput');
     const submitBtn = document.getElementById('submitMessage');
     const messagesList = document.getElementById('messagesList');
     const backBtn = document.getElementById('backToMap');
+    const openModalBtn = document.getElementById('openModalBtn');
 
-    const userName = localStorage.getItem('userName') || '匿名使用者';
+    // 初始化 Bootstrap Modal
+    const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
 
-    // Google Apps Script Web App URL (需要實際部署後取得)
-    const SHEET_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL';
+    // Google Apps Script Web App URL
+    const SHEET_URL = "https://script.google.com/macros/s/AKfycbyt1y70Lve-DHZ8dpXGPOl3u02ZnCXpNnsxnEztrDWHgsbL-uTRbKJdunXykinjHNw62Q/exec";
+
+    if (localStorage.getItem('userName')) {
+        userNameInput.value = localStorage.getItem('userName');
+    }
 
     let messages = [];
 
-    function loadMessages() {
-        // 模擬從 Google Sheet 載入留言
-        // 實際實作時需要替換為真實的 Google Apps Script API 呼叫
-        const mockMessages = [
-            { name: '小明', message: '恭喜 YMSH 5週年！', timestamp: '2024-10-01 10:30' },
-            { name: '小華', message: '感謝這個學校帶給我們的美好回憶', timestamp: '2024-10-01 11:15' },
-            { name: '小美', message: '祝願學校越來越好！', timestamp: '2024-10-01 14:20' }
-        ];
+    // 根據 ID 產生固定且隨機的樣式
+    function generateStickyNoteStyle(id) {
+        let seed = 0;
+        for (let i = 0; i < id.length; i++) {
+            seed += id.charCodeAt(i);
+        }
 
-        // 從 localStorage 獲取本地留言
-        const localMessages = JSON.parse(localStorage.getItem('localMessages')) || [];
-        messages = [...mockMessages, ...localMessages];
+        const pseudoRandom = (max, offset = 0) => {
+            const x = Math.sin(seed + offset) * 10000;
+            return (x - Math.floor(x)) * max;
+        };
 
-        displayMessages();
+        const colors = ['#fff9c4', '#f8bbd0', '#e1f5fe', '#f0f4c3', '#ffe0b2'];
+        const color = colors[Math.floor(pseudoRandom(colors.length))];
+
+        // 優化位置：預留邊距，確保便條紙不會超出螢幕
+        const top = 5 + pseudoRandom(75); // 5% ~ 80%
+        const left = 5 + pseudoRandom(75); // 5% ~ 80%
+        const rotation = -8 + pseudoRandom(16);
+
+        return {
+            position: 'absolute',
+            top: `${top}%`,
+            left: `${left}%`,
+            backgroundColor: color,
+            transform: `rotate(${rotation}deg)`,
+            width: '160px',
+            minHeight: '160px',
+            padding: '15px',
+            boxShadow: '2px 4px 10px rgba(0,0,0,0.2)',
+            borderRadius: '2px',
+            zIndex: Math.floor(pseudoRandom(100))
+        };
+    }
+
+    async function loadMessages() {
+        try {
+            const response = await fetch(SHEET_URL, {
+                method: 'GET',
+                redirect: 'follow'
+            });
+
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+            const data = await response.json();
+
+            messages = data.map(item => ({
+                id: item['ID'],
+                name: item['姓名'],
+                message: item['訊息'],
+                timestamp: item['時間戳記']
+            }));
+
+            displayMessages();
+        } catch (error) {
+            console.error('載入留言失敗:', error);
+        }
     }
 
     function displayMessages() {
         messagesList.innerHTML = '';
-        
-        messages.reverse().forEach(msg => {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'message-item';
-            messageDiv.innerHTML = `
-                <div class="message-header">
-                    <span class="message-author">${msg.name}</span>
-                    <span class="message-time">${msg.timestamp}</span>
-                </div>
-                <div class="message-content">${msg.message}</div>
-            `;
-            messagesList.appendChild(messageDiv);
-        });
 
-        messages.reverse(); // 恢復原序
+        messages.forEach(msg => {
+            const note = document.createElement('div');
+            note.className = 'sticky-note';
+            const style = generateStickyNoteStyle(msg.id || msg.timestamp);
+            Object.assign(note.style, style);
+
+            note.innerHTML = `
+                <div class="note-header">
+                    <span class="note-author">${msg.name}</span>
+                    <span class="note-time">${msg.timestamp}</span>
+                </div>
+                <div class="note-content">${msg.message}</div>
+            `;
+            messagesList.appendChild(note);
+        });
     }
 
-    function submitMessage() {
+    async function submitMessage() {
+        const name = userNameInput.value.trim();
         const messageText = messageInput.value.trim();
+
+        if (!name) {
+            alert('請輸入您的姓名');
+            return;
+        }
         if (!messageText) {
             alert('請輸入留言內容');
             return;
         }
 
-        const newMessage = {
-            name: userName,
-            message: messageText,
-            timestamp: new Date().toLocaleString('zh-TW')
+        localStorage.setItem('userName', name);
+
+        const messageData = {
+            name: name,
+            message: messageText
         };
 
-        // 實際實作時，這裡應該發送到 Google Apps Script
-        // 目前先儲存到 localStorage
-        const localMessages = JSON.parse(localStorage.getItem('localMessages')) || [];
-        localMessages.push(newMessage);
-        localStorage.setItem('localMessages', JSON.stringify(localMessages));
+        try {
+            await fetch(SHEET_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(messageData)
+            });
 
-        // 模擬 Google Sheet API 呼叫
-        // sendToGoogleSheet(newMessage);
+            alert('留言成功！感謝您的祝福 ❤️');
+            messageInput.value = '';
+            messageModal.hide();
+            setTimeout(loadMessages, 1500);
 
-        messages.push(newMessage);
-        displayMessages();
-        messageInput.value = '';
-
-        // 顯示成功訊息
-        showSuccessMessage();
-    }
-
-    function showSuccessMessage() {
-        const successDiv = document.createElement('div');
-        successDiv.className = 'success-message';
-        successDiv.textContent = '留言已送出！';
-        document.body.appendChild(successDiv);
-
-        setTimeout(() => {
-            successDiv.remove();
-        }, 3000);
-    }
-
-    // Google Apps Script 串接函式 (需要實際部署)
-    function sendToGoogleSheet(messageData) {
-        fetch(SHEET_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(messageData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('留言已送出到 Google Sheet:', data);
-        })
-        .catch(error => {
+        } catch (error) {
             console.error('送出留言時發生錯誤:', error);
-        });
+            alert('留言送出失敗，請稍後再試');
+        }
     }
 
-    // 事件監聽器
+    openModalBtn.addEventListener('click', () => messageModal.show());
     submitBtn.addEventListener('click', submitMessage);
-    
-    messageInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
+
+    messageInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
             submitMessage();
         }
     });
 
     backBtn.addEventListener('click', () => window.location.href = 'map.html');
 
-    // 初始化載入留言
     loadMessages();
-
-    // 每30秒重新載入留言 (實際部署時啟用)
-    // setInterval(loadMessages, 30000);
+    setInterval(loadMessages, 60000);
 });
