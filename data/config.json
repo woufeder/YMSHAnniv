@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "gameTitle": "YMSH 5週年紀念",
+  "gameTitle": "YMSH 周年紀念",
   "totalBadges": 5,
   "requiredGames": ["classroom", "garden", "lab"],
   "optionalAreas": ["principal", "hall", "extras"],
@@ -186,7 +186,7 @@
     "createdDate": "2024-10-01",
     "lastUpdated": "2024-10-01",
     "version": "1.0.0",
-    "author": "YMSH 5週年紀念團隊",
-    "description": "YMSH 學校 5 週年紀念互動遊戲設定檔"
+    "author": "YMSH 周年紀念團隊",
+    "description": "YMSH 學校周年紀念互動遊戲設定檔"
   }
 }

@@ -240,7 +240,7 @@ function debugLog(message, level = 'info') {
     const levels = ['debug', 'info', 'warn', 'error'];
     
     if (levels.indexOf(level) >= levels.indexOf(logLevel)) {
-        console[level](`[YMSH-5th] ${message}`);
+        console[level](`[YMSH-Anniversary] ${message}`);
     }
 }
 

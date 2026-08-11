@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ctx.fillStyle = '#0d47a1';
         ctx.font = 'bold 28px Arial';
         ctx.textAlign = 'center';
-        ctx.fillText('YMSH 5週年紀念卡', canvas.width / 2, 60);
+        ctx.fillText('YMSH 周年紀念卡', canvas.width / 2, 60);
 
         // 使用者名稱
         ctx.font = 'bold 24px Arial';
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function downloadCard() {
         // 創建下載連結
         const link = document.createElement('a');
-        link.download = `YMSH_5週年紀念卡_${userName}.png`;
+        link.download = `YMSH_周年紀念卡_${userName}.png`;
         link.href = canvas.toDataURL();
         link.click();
     }
