@@ -9,12 +9,19 @@
 </head>
 <body>
     <div class="classroom-game">
-        <h1>教室 - 翻牌遊戲</h1>
+        <h1 class="game-title">教室 - 回憶碎片收集</h1>
         <div class="game-info">
             <span id="score">分數: 0</span>
             <span id="moves">步數: 0</span>
             <span id="timer">時間: 00:00</span>
+            <span id="combo">Combo: 0</span>
         </div>
+
+        <!-- 回憶對話框 -->
+        <div id="memoryPopup" class="memory-popup"></div>
+        <!-- Combo 特效容器 -->
+        <div id="comboContainer" class="combo-container"></div>
+
         <div class="card-grid" id="cardGrid">
             <!-- 翻牌卡片將由 JavaScript 動態生成 -->
         </div>
