@@ -436,3 +436,46 @@
         color: #90caf9;
     }
 }
+
+/* 留言板容器，必須是 relative 且有足夠高度 */
+.messages-canvas {
+    position: relative;
+    width: 100%;
+    min-height: 80vh; /* 確保有足夠空間讓便條紙分佈 */
+    overflow: hidden;  /* 防止便條紙超出邊界導致出現滾動條 */
+}
+
+/* 便條紙基礎樣式 */
+.sticky-note {
+    cursor: default;
+    transition: transform 0.2s ease;
+    font-family: 'Comic Sans MS', 'Kaiti', '楷體', cursive; /* 讓留言看起來更像手寫 */
+}
+
+.sticky-note:hover {
+    transform: scale(1.1) rotate(0deg) !important; /* 滑鼠移上去時放大並正向 */
+    z-index: 1000 !important;
+}
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+}
+
+.note-author {
+    font-weight: bold;
+}
+
+.note-time {
+    opacity: 0.6;
+}
+
+.note-content {
+    font-size: 1rem;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
