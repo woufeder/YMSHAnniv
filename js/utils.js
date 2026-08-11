@@ -1,4 +1,64 @@
 // utils.js - 通用工具函式
+const STORAGE_EXPIRY_MINUTES = 30;
+const STORAGE_EXPIRY_MS = STORAGE_EXPIRY_MINUTES * 60 * 1000;
+const STORAGE_LAST_CLOSED_KEY = 'ymsh:lastClosedAt';
+const STORAGE_SESSION_MARKER_KEY = 'ymsh:sessionActive';
+const PLAYER_INPUT_KEY = 'playerInput';
+
+function clearExpiredLocalStorage() {
+  try {
+    const isNewSession = !sessionStorage.getItem(STORAGE_SESSION_MARKER_KEY);
+    if (!isNewSession) {
+      return;
+    }
+
+    const lastClosedAt = parseInt(localStorage.getItem(STORAGE_LAST_CLOSED_KEY), 10);
+    if (Number.isFinite(lastClosedAt) && Date.now() - lastClosedAt >= STORAGE_EXPIRY_MS) {
+      localStorage.clear();
+    }
+
+    sessionStorage.setItem(STORAGE_SESSION_MARKER_KEY, '1');
+    localStorage.removeItem(STORAGE_LAST_CLOSED_KEY);
+  } catch (error) {
+    console.error('Error clearing expired localStorage:', error);
+  }
+}
+
+function markLocalStorageClosedAt() {
+  try {
+    localStorage.setItem(STORAGE_LAST_CLOSED_KEY, Date.now().toString());
+  } catch (error) {
+    console.error('Error writing localStorage close timestamp:', error);
+  }
+}
+
+function guardPlayerInputAccess() {
+  try {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const exemptPages = new Set(['index.html', 'hall.html', 'whoAreYou.html']);
+
+    if (exemptPages.has(currentPage)) {
+      return;
+    }
+
+    const playerInput = localStorage.getItem(PLAYER_INPUT_KEY);
+    if (playerInput && playerInput.trim()) {
+      return;
+    }
+
+    const isGamePage = window.location.pathname.includes('/games/');
+    const fallbackPath = isGamePage ? '../whoAreYou.html' : 'whoAreYou.html';
+    window.location.replace(fallbackPath);
+  } catch (error) {
+    console.error('Error guarding playerInput access:', error);
+  }
+}
+
+clearExpiredLocalStorage();
+guardPlayerInputAccess();
+window.addEventListener('pagehide', markLocalStorageClosedAt);
+window.addEventListener('beforeunload', markLocalStorageClosedAt);
+
 // 取得 localStorage 資料的安全方法
 function getStorageData(key, defaultValue = null) {
   try {

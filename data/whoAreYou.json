@@ -1,0 +1,7 @@
+{
+  "default": [
+    {"char": "guard.png", "name": "警衛", "text": "<wait=1000>喂喂喂你是哪位？你怎麼進來的？<wait>來來來先來警衛室填名字。","effect": "shake"}
+  ]
+}
+
+
