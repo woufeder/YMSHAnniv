@@ -1,171 +1,182 @@
-// lab.js - 電路解謎遊戲
+// lab.js - 翻牌遊戲邏輯 (原 classroom.js 搬移)
 document.addEventListener('DOMContentLoaded', function() {
-    const circuitBoard = document.querySelector('.circuit-grid');
-    const testBtn = document.getElementById('testCircuit');
-    const resetBtn = document.getElementById('resetCircuit');
-    const hintBtn = document.getElementById('hintBtn');
-    const statusLight = document.getElementById('statusLight');
-    const statusText = document.getElementById('statusText');
+    const cardGrid = document.getElementById('cardGrid');
+    const scoreElement = document.getElementById('score');
+    const movesElement = document.getElementById('moves');
+    const timerElement = document.getElementById('timer');
+    const comboElement = document.getElementById('combo');
+    const memoryPopup = document.getElementById('memoryPopup');
+    const comboContainer = document.getElementById('comboContainer');
+    const resetBtn = document.getElementById('resetGame');
     const backBtn = document.getElementById('backToMap');
 
-    let circuitGrid = [];
-    let solution = [];
-    let hintCount = 0;
-    const maxHints = 3;
+    let cards = [];
+    let flippedCards = [];
+    let matchedPairs = 0;
+    let moves = 0;
+    let score = 0;
+    let combo = 0;
+    let startTime = null;
+    let timerInterval = null;
 
-    // 電路元件類型
-    const components = {
-        empty: '⬜',
-        wire: '━',
-        corner: '┗',
-        battery: '🔋',
-        bulb: '💡',
-        switch: '🔘'
-    };
+    const memories = [
+        "記得在實驗室裡那些神奇的化學反應嗎？",
+        "那些對著顯微鏡發呆的午後...",
+        "實驗失敗時的驚慌失措，現在想來很有趣。",
+        "白袍雖然有些大，但穿上就覺得自己像科學家。",
+        "一次次地嘗試，直到最後終於成功亮燈。",
+        "與夥伴共同討論報告的深夜，是成長的證明。",
+        "那些年，我們對未知的好奇心。",
+        "老師耐心的指導，讓我們學會思考。",
+        "實驗室裡的空氣中，總是瀰漫著好奇的味道。",
+        "這間房間，記錄了我們對科學最純粹的熱愛。"
+    ];
 
-    // 可由玩家放置/循環切換的元件清單
-    const placeableComponents = ['empty', 'wire', 'corner'];
+    const cardData = [
+        '🏫', '📚', '✏️', '🎓', '🔬', '🌸', '⚽', '🎨',
+        '🏫', '📚', '✏️', '🎓', '🔬', '🌸', '⚽', '🎨'
+    ];
 
-    function initCircuit() {
-        // 創建一個簡單的電路謎題
-        circuitGrid = [
-            ['battery', 'empty', 'empty', 'empty'],
-            ['empty', 'empty', 'empty', 'empty'],
-            ['empty', 'empty', 'empty', 'empty'],
-            ['empty', 'empty', 'empty', 'bulb']
-        ];
-
-        // 正確解答
-        solution = [
-            ['battery', 'wire', 'wire', 'corner'],
-            ['empty', 'empty', 'empty', 'wire'],
-            ['empty', 'empty', 'empty', 'wire'],
-            ['corner', 'wire', 'wire', 'bulb']
-        ];
-
-        createCircuitBoard();
-        updateStatus('未連接', 'red');
+    function shuffle(array) {
+        let currentIndex = array.length;
+        while (currentIndex !== 0) {
+            let randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+        return array;
     }
 
-    function createCircuitBoard() {
-        circuitBoard.innerHTML = '';
-        
-        for (let row = 0; row < 4; row++) {
-            for (let col = 0; col < 4; col++) {
-                const cell = document.createElement('div');
-                cell.className = 'circuit-cell';
-                cell.dataset.row = row;
-                cell.dataset.col = col;
-                
-                const component = circuitGrid[row][col];
-                cell.textContent = components[component];
-                
-                // 允許可放置元件的格子點擊切換（empty/wire/corner）
-                if (placeableComponents.includes(component)) {
-                    cell.classList.add('clickable');
-                    cell.addEventListener('click', () => placeComponent(row, col));
+    function initGame() {
+        cards = shuffle([...cardData]);
+        flippedCards = [];
+        matchedPairs = 0;
+        moves = 0;
+        score = 0;
+        combo = 0;
+        startTime = Date.now();
+
+        updateUI();
+        createCards();
+        startTimer();
+    }
+
+    function createCards() {
+        cardGrid.innerHTML = '';
+        cards.forEach((symbol, index) => {
+            const card = document.createElement('div');
+            card.className = 'memory-card';
+            card.dataset.index = index;
+            card.innerHTML = `
+                <div class="card-front">?</div>
+                <div class="card-back"></div>
+            `;
+            card.addEventListener('click', flipCard);
+            cardGrid.appendChild(card);
+        });
+    }
+
+    function flipCard() {
+        if (flippedCards.length >= 2) return;
+        if (this.classList.contains('flipped') || this.classList.contains('matched')) return;
+
+        const symbol = cards[this.dataset.index];
+        this.querySelector('.card-back').textContent = symbol;
+
+        this.classList.add('flipped');
+        flippedCards.push(this);
+
+        if (flippedCards.length === 2) {
+            moves++;
+            updateUI();
+            checkMatch();
+        }
+    }
+
+    function checkMatch() {
+        const [card1, card2] = flippedCards;
+        const symbol1 = cards[card1.dataset.index];
+        const symbol2 = cards[card2.dataset.index];
+
+        setTimeout(() => {
+            if (symbol1 === symbol2) {
+                card1.classList.add('matched');
+                card2.classList.add('matched');
+                card1.querySelector('.card-back').textContent = '✅';
+                card2.querySelector('.card-back').textContent = '✅';
+                matchedPairs++;
+
+                combo++;
+                const comboBonus = combo * 5;
+                score += (10 + comboBonus);
+
+                triggerComboEffect();
+                showRandomMemory();
+
+                if (matchedPairs === cards.length / 2) {
+                    gameComplete();
                 }
-                
-                circuitBoard.appendChild(cell);
+            } else {
+                card1.classList.remove('flipped');
+                card2.classList.remove('flipped');
+                card1.querySelector('.card-back').textContent = '';
+                card2.querySelector('.card-back').textContent = '';
+                combo = 0;
             }
-        }
+
+            flippedCards = [];
+            updateUI();
+        }, 800);
     }
 
-    function placeComponent(row, col) {
-        // 循環切換電路元件
-        const currentIndex = placeableComponents.indexOf(circuitGrid[row][col]);
-        const nextIndex = (currentIndex + 1) % placeableComponents.length;
-        
-        circuitGrid[row][col] = placeableComponents[nextIndex];
-        createCircuitBoard();
+    function triggerComboEffect() {
+        if (combo < 2) return;
+        const text = document.createElement('div');
+        text.className = 'combo-text';
+        text.textContent = `Combo x${combo}!`;
+        const x = 20 + Math.random() * 60;
+        const y = 20 + Math.random() * 60;
+        text.style.left = `${x}%`;
+        text.style.top = `${y}%`;
+        comboContainer.appendChild(text);
+        setTimeout(() => text.remove(), 800);
     }
 
-    function testCircuit() {
-        let isCorrect = true;
-        
-        // 檢查電路是否與解答匹配
-        for (let row = 0; row < 4; row++) {
-            for (let col = 0; col < 4; col++) {
-                if (circuitGrid[row][col] !== solution[row][col]) {
-                    isCorrect = false;
-                    break;
-                }
-            }
-            if (!isCorrect) break;
-        }
-
-        if (isCorrect) {
-            updateStatus('電路接通！', 'green');
-            setTimeout(() => {
-                alert('恭喜！電路解謎完成！');
-                markGameComplete();
-            }, 1000);
-        } else {
-            updateStatus('電路未接通', 'orange');
-            // 檢查部分正確
-            const correctCount = checkPartialCorrect();
-            if (correctCount > 0) {
-                setTimeout(() => {
-                    updateStatus(`${correctCount} 個元件位置正確`, 'yellow');
-                }, 1000);
-            }
-        }
+    function showRandomMemory() {
+        const memory = memories[Math.floor(Math.random() * memories.length)];
+        memoryPopup.textContent = memory;
+        memoryPopup.classList.add('show');
+        setTimeout(() => memoryPopup.classList.remove('show'), 3000);
     }
 
-    function checkPartialCorrect() {
-        let correct = 0;
-        for (let row = 0; row < 4; row++) {
-            for (let col = 0; col < 4; col++) {
-                if (circuitGrid[row][col] === solution[row][col]) {
-                    correct++;
-                }
-            }
-        }
-        return correct;
-    }
+    function gameComplete() {
+        clearInterval(timerInterval);
+        const endTime = Date.now();
+        const totalTime = Math.floor((endTime - startTime) / 1000);
 
-    function resetCircuit() {
-        circuitGrid = [
-            ['battery', 'empty', 'empty', 'empty'],
-            ['empty', 'empty', 'empty', 'empty'],
-            ['empty', 'empty', 'empty', 'empty'],
-            ['empty', 'empty', 'empty', 'bulb']
-        ];
-        createCircuitBoard();
-        updateStatus('未連接', 'red');
-    }
+        let rank = 'C';
+        const efficiency = moves + Math.floor(totalTime / 10);
+        if (efficiency < 25) rank = 'S';
+        else if (efficiency < 35) rank = 'A';
+        else if (efficiency < 50) rank = 'B';
 
-    function showHint() {
-        if (hintCount >= maxHints) {
-            alert('提示次數已用完！');
-            return;
-        }
+        const overlay = document.createElement('div');
+        overlay.className = 'game-complete';
+        overlay.innerHTML = `
+            <div class="complete-popup">
+                <h2>回憶碎片收集完成！</h2>
+                <div class="rank-display">${rank}</div>
+                <div class="complete-stats">
+                    <div class="stat-item"><div>得分</div><div class="stat-value">${score}</div></div>
+                    <div class="stat-item"><div>步數</div><div class="stat-value">${moves}</div></div>
+                    <div class="stat-item"><div>時間</div><div class="stat-value">${Math.floor(totalTime/60)}分${totalTime%60}秒</div></div>
+                    <div class="stat-item"><div>最高Combo</div><div class="stat-value">${combo}</div></div>
+                </div>
+                <button class="btn btn-primary" onclick="location.reload()">再次挑戰</button>
+            </div>
+        `;
+        document.body.appendChild(overlay);
 
-        hintCount++;
-        
-        // 提供不同的提示
-        const hints = [
-            '提示 1: 電流需要從電池流向燈泡',
-            '提示 2: 使用直線和轉角連接電路路徑',
-            '提示 3: 記住電流必須形成完整的迴路'
-        ];
-
-        alert(hints[hintCount - 1]);
-        
-        if (hintCount >= maxHints) {
-            hintBtn.disabled = true;
-            hintBtn.textContent = '提示已用完';
-        } else {
-            hintBtn.textContent = `提示 (${maxHints - hintCount} 次剩餘)`;
-        }
-    }
-
-    function updateStatus(text, color) {
-        statusText.textContent = `電路狀態: ${text}`;
-        statusLight.style.backgroundColor = color;
-    }
-
-    function markGameComplete() {
         let completedGames = JSON.parse(localStorage.getItem('completedGames')) || [];
         if (!completedGames.includes('lab')) {
             completedGames.push('lab');
@@ -173,12 +184,27 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 事件監聽器
-    testBtn.addEventListener('click', testCircuit);
-    resetBtn.addEventListener('click', resetCircuit);
-    hintBtn.addEventListener('click', showHint);
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            timerElement.textContent = `時間: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }, 1000);
+    }
+
+    function updateUI() {
+        scoreElement.textContent = `分數: ${score}`;
+        movesElement.textContent = `步數: ${moves}`;
+        comboElement.textContent = `Combo: ${combo}`;
+        if (combo > 0) {
+            comboElement.classList.add('bump');
+            setTimeout(() => comboElement.classList.remove('bump'), 200);
+        }
+    }
+
+    resetBtn.addEventListener('click', initGame);
     backBtn.addEventListener('click', () => window.location.href = '../map.html');
 
-    // 初始化
-    initCircuit();
+    initGame();
 });
