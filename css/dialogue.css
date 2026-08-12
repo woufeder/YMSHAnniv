@@ -1,23 +1,29 @@
-body {
-  margin: 0;
-  /* background: #000; */
-  font-family: "LXGW WenKai Mono TC", "Noto Sans TC", sans-serif;
-  overflow: hidden;
+:root {
+  --dialogue-panel-bg: linear-gradient(
+    to top,
+    rgba(132, 149, 177, 0.72),
+    rgba(189, 212, 238, 0.96)
+  );
+  --dialogue-header-bg: #343742;
+  --dialogue-text-color: #04020e;
+  --dialogue-accent-color: #9cf;
+  --dialogue-max-width: 960px;
 }
 
-#game {
+#game,
+.scene-container {
   position: relative;
   width: 100vw;
   height: 100vh;
-  color: #fff;
+  color: var(--dialogue-text-color);
+  overflow: hidden;
 }
 
-/* 背景層 */
 .background-layer,
-.character-layer {
+.character-layer,
+.dialogue-layer {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  inset: 0;
 }
 
 .background-layer img {
@@ -35,60 +41,71 @@ body {
 }
 
 .character-layer img {
+  max-width: 90vw;
   height: 80vh;
+  object-fit: contain;
   transition: opacity 0.5s ease;
 }
 
-/* 對話框 */
+.dialogue-layer {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 20px 24px;
+  pointer-events: none;
+  z-index: 5;
+}
+
 .dialogue-box {
-  position: absolute;
-  bottom: 20px;
-  width: 100%;
-  background: linear-gradient(to top, rgba(132, 149, 177, 0.6), rgba(189, 212, 238, 1));
-  padding: 20px 24px;
+  position: relative;
+  width: min(100%, var(--dialogue-max-width));
+  min-height: 158px;
+  padding: 24px 50px 20px;
   box-sizing: border-box;
-  border-radius: 5px;
-  padding: 20px 50px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 8px;
+  background: var(--dialogue-panel-bg);
+  box-shadow: 0 18px 48px rgba(14, 20, 38, 0.28);
+  color: var(--dialogue-text-color);
+  pointer-events: auto;
 }
 
 .dialogue-header {
   position: absolute;
   top: -50px;
   left: 25px;
-  padding: 3px 50px;
-  border-radius: 5px;
-  background-color: #343742;
-  border-top: 1px solid #ffffff;
-  border-right: 1px solid #ffffff;
-  border-bottom: 1px solid #ffffff;
-
-  /* font-weight: bold; */
-  margin-bottom: 8px;
-  font-size: 1.3rem;
+  min-width: 150px;
+  min-height: 38px;
+  padding: 4px 50px;
+  border: 1px solid #fff;
+  border-left: 0;
+  border-radius: 8px;
+  background-color: var(--dialogue-header-bg);
   color: #fff;
+  font-size: 24px;
+  line-height: 1.4;
+}
 
-  &::before {
-    content: "";
-    position: absolute;
-    background: url(../assets/images/ui/dialogLogo.png);
-    background-size: cover;
-    width: 50px;
-    height: 50px;
-    top: 40%;
-    left: -25px;
-    transform: translateY(-50%);
-  }
+.dialogue-header::before {
+  content: "";
+  position: absolute;
+  top: 40%;
+  left: -25px;
+  width: 50px;
+  height: 50px;
+  background: url(../assets/images/ui/dialogLogo.png) center / cover no-repeat;
+  transform: translateY(-50%);
 }
 
 .dialogue-text {
-
-  min-height: 100px;
-  font-size: 20px;
-  line-height: 1.5;
-  letter-spacing: 0.5px;
+  min-height: 92px;
+  color: var(--dialogue-text-color);
+  font-size: 22px;
+  line-height: 1.6;
+  letter-spacing: 0;
+  white-space: pre-wrap;
 }
 
-/* 名字輸入 */
 .input-area {
   display: flex;
   gap: 10px;
@@ -97,23 +114,25 @@ body {
   transition: opacity 0.5s ease;
 }
 
-/* .input-area.hidden {
+.input-area.hidden {
   display: none;
-} */
+}
+
 .input-area input {
   flex: 1;
-  padding: 6px 10px;
-  border-radius: 4px;
+  min-width: 0;
+  padding: 8px 12px;
   border: none;
+  border-radius: 4px;
   font-size: 1rem;
 }
 
 .input-area button {
-  padding: 6px 12px;
+  padding: 8px 14px;
   border: none;
+  border-radius: 4px;
   background: #2f7cf6;
   color: #fff;
-  border-radius: 4px;
   cursor: pointer;
 }
 
@@ -121,36 +140,64 @@ body {
   background: #2261c4;
 }
 
-/* 控制區 */
 .control-area {
-  text-align: right;
+  min-height: 32px;
   margin-top: 8px;
+  text-align: right;
 }
 
 .next-btn {
-  background: none;
+  width: 40px;
+  height: 32px;
+  padding: 0;
   border: none;
-  color: #fff;
-  font-size: 1.4rem;
+  background: none;
+  color: var(--dialogue-text-color);
+  font-size: 26px;
+  line-height: 1;
   cursor: pointer;
 }
 
 .next-btn:hover {
-  color: #9cf;
+  color: var(--dialogue-accent-color);
 }
 
-/* 漸變動畫 */
-.fade-in {
-  opacity: 0;
-  animation: fadeIn 0.5s forwards;
+#whoAreYou {
+  background: #1f1f22;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
+#whoAreYou .scene-container {
+  background: linear-gradient(180deg, #24262b 0%, #141518 100%);
+}
+
+
+
+@media (max-width: 640px) {
+  .dialogue-layer {
+    padding: 0 12px 16px;
   }
 
-  to {
-    opacity: 1;
+  .dialogue-box {
+    min-height: 146px;
+    padding: 22px 22px 16px;
+  }
+
+  .dialogue-header {
+    top: -44px;
+    left: 18px;
+    min-width: 120px;
+    padding: 4px 34px;
+    font-size: 1.1rem;
+  }
+
+  .dialogue-header::before {
+    left: -21px;
+    width: 42px;
+    height: 42px;
+  }
+
+  .dialogue-text {
+    min-height: 88px;
+    font-size: 18px;
   }
 }

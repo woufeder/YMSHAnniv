@@ -4,18 +4,26 @@ document.addEventListener('DOMContentLoaded', async function() {
     // 1. 對話系統啟動邏輯
     // -------------------------------------------------------------------------
     const role = localStorage.getItem('playerRole') || 'student';
+    const introStorageKey = 'seen_intro_classroom';
+    const introCompletedAtKey = 'seen_intro_classroom_completed_at';
+
+    if (localStorage.getItem(introStorageKey) === 'true' && !localStorage.getItem(introCompletedAtKey)) {
+        localStorage.removeItem(introStorageKey);
+    }
 
     async function handleIntro() {
-        if (!localStorage.getItem('seen_intro_classroom')) {
+        if (!localStorage.getItem(introStorageKey)) {
             console.log('🎬 啟動對話系統...');
             try {
                 const intro = new DialogueCore({
                     container: '#game',
-                    data: 'data/intro_classroom.json',
+                    data: '../data/intro_classroom.json',
+                    role,
                     onFinish: () => {
                         console.log('✅ 對話完整結束，標記為已閱並進入遊戲');
                         // 只有在對話真正結束後才標記為 true
-                        localStorage.setItem('seen_intro_classroom', 'true');
+                        localStorage.setItem(introStorageKey, 'true');
+                        localStorage.setItem(introCompletedAtKey, Date.now().toString());
                         startQuiz();
                     }
                 });

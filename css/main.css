@@ -5,9 +5,11 @@
   --primary500: #8495B1;
   --primary700: #474D64;
   --primary900: #343742;
-  --text-color: #fff;
+  --text-color: #111111;
 
 }
+
+
 
 h1 {
   font-size: 72px;

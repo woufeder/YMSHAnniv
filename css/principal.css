@@ -16,7 +16,7 @@
 }
 
 #memoryCard {
-    border: 3px solid var(--primary-color);
+    border: 3px solid var(--primary300);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-heavy);
     margin: 20px auto;
@@ -45,13 +45,13 @@
 }
 
 #generateCard {
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(45deg, var(--primary300), var(--secondary-color));
     border: none;
     color: white;
 }
 
 #generateCard:hover {
-    background: linear-gradient(45deg, var(--school-blue), var(--primary-color));
+    background: linear-gradient(45deg, var(--primary700), var(--primary300));
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(21, 101, 192, 0.3);
 }
@@ -75,7 +75,7 @@
 }
 
 #backToMap:hover {
-    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    background: linear-gradient(45deg, var(--primary300), var(--secondary-color));
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(66, 165, 245, 0.3);
 }
@@ -259,13 +259,13 @@
     padding: 15px;
     border-radius: var(--border-radius);
     margin: 20px 0;
-    border-left: 4px solid var(--primary-color);
+    border-left: 4px solid var(--primary300);
 }
 
 .user-name {
     font-size: 18px;
     font-weight: bold;
-    color: var(--school-blue);
+    color: var(--primary700);
     margin-bottom: 5px;
 }
 
@@ -308,7 +308,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     font-weight: bold;
-    color: var(--school-blue);
+    color: var(--primary700);
 }
 
 /* 響應式設計 */
@@ -408,7 +408,7 @@
 }
 
 .badge-circle:focus {
-    outline: 2px solid var(--primary-color);
+    outline: 2px solid var(--primary300);
     outline-offset: 2px;
 }
 

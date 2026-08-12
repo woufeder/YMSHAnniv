@@ -7,6 +7,9 @@
   <title>YMSH Anniversary</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -14,36 +17,6 @@
     rel="stylesheet">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/dialogue.css">
-  <style>
-    #whoAreYou {
-      background: #1f1f22;
-    }
-
-    #whoAreYou .scene-container {
-      background: linear-gradient(180deg, #24262b 0%, #141518 100%);
-    }
-
-    #whoAreYou .dialogue-box {
-      background: linear-gradient(to top, rgba(45, 47, 54, 0.86), rgba(82, 86, 98, 0.96));
-    }
-
-    #whoAreYou .dialogue-text {
-      font-size: 28px;
-      line-height: 1.7;
-      letter-spacing: 0.8px;
-    }
-
-    #whoAreYou .dialogue-header {
-      font-size: 1.5rem;
-    }
-
-    #whoAreYou .next-btn {
-      font-size: 1.8rem;
-    }
-    .dialogue-text{
-        color: #fff;
-    }
-  </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
 
@@ -69,13 +42,14 @@
 
 
         <div class="control-area ">
-          <button id="nextBtn" class="next-btn ">▶</button>
+          <button id="nextBtn" class="next-btn "><i class="fa-solid fa-play"></i></button>
         </div>
       </div>
     </div>
   </div>
   <!-- <script src="js/main.js"></script> -->
   <script src="js/utils.js"></script>
+  <script src="js/dialogue.js"></script>
   <script src="js/whoAreYou.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
