@@ -3,28 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YMSH 周年紀念 - 實驗室電路解謎</title>
+    <title>YMSH 周年紀念 - 實驗室回憶碎片收集</title>
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/lab.css">
 </head>
 <body>
-    <div class="lab-game">
-        <h1>實驗室 - 電路解謎</h1>
-        <div class="circuit-board" id="circuitBoard">
-            <div class="circuit-grid">
-                <!-- 電路元件將由 JavaScript 動態生成 -->
-            </div>
+    <div class="classroom-game">
+        <h1 class="game-title">實驗室 - 回憶碎片收集</h1>
+        <div class="game-info">
+            <span id="score">分數: 0</span>
+            <span id="moves">步數: 0</span>
+            <span id="timer">時間: 00:00</span>
+            <span id="combo">Combo: 0</span>
         </div>
-        <div class="lab-controls">
-            <button id="testCircuit" class="lab-btn">測試電路</button>
-            <button id="resetCircuit" class="lab-btn">重置電路</button>
-            <button id="hintBtn" class="lab-btn">提示</button>
+
+        <!-- 回憶對話框 -->
+        <div id="memoryPopup" class="memory-popup"></div>
+        <!-- Combo 特效容器 -->
+        <div id="comboContainer" class="combo-container"></div>
+
+        <div class="card-grid" id="cardGrid">
+            <!-- 翻牌卡片將由 JavaScript 動態生成 -->
         </div>
-        <div class="circuit-status">
-            <div class="status-light" id="statusLight"></div>
-            <span id="statusText">電路狀態: 未連接</span>
+        <div class="game-controls">
+            <button id="resetGame">重新開始</button>
+            <button id="backToMap">返回地圖</button>
         </div>
-        <button id="backToMap" class="back-btn">返回地圖</button>
     </div>
     <script src="../js/utils.js"></script>
     <script src="../js/config.js"></script>
