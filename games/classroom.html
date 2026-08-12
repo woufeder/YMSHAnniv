@@ -3,35 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YMSH 周年紀念 - 教室翻牌遊戲</title>
+    <title>YMSH 周年紀念 - 教室快問快答</title>
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/classroom.css">
+    <link rel="stylesheet" href="../css/dialogue.css">
 </head>
-<body>
-    <div class="classroom-game">
-        <h1 class="game-title">教室 - 回憶碎片收集</h1>
-        <div class="game-info">
-            <span id="score">分數: 0</span>
-            <span id="moves">步數: 0</span>
-            <span id="timer">時間: 00:00</span>
-            <span id="combo">Combo: 0</span>
+<body style="margin: 0; overflow-x: hidden;">
+    <!-- 對話系統容器 -->
+    <div id="game"></div>
+
+    <div class="quiz-container" id="quizContainer" style="display: none;">
+        <h1 class="game-title">教室 - 回憶小測驗</h1>
+
+        <div class="quiz-info">
+            <span id="score">得分: 0</span>
+            <span id="progress">進度: 0 / 0</span>
         </div>
 
-        <!-- 回憶對話框 -->
-        <div id="memoryPopup" class="memory-popup"></div>
-        <!-- Combo 特效容器 -->
-        <div id="comboContainer" class="combo-container"></div>
-
-        <div class="card-grid" id="cardGrid">
-            <!-- 翻牌卡片將由 JavaScript 動態生成 -->
+        <div id="quiz-card" class="quiz-card">
+            <div id="question-text" class="question-text">載入中...</div>
+            <div id="options-grid" class="options-grid">
+                <!-- 選項按鈕將由 JavaScript 動態生成 -->
+            </div>
         </div>
+
+        <div id="feedback" class="feedback-message"></div>
+
         <div class="game-controls">
-            <button id="resetGame">重新開始</button>
-            <button id="backToMap">返回地圖</button>
+            <button id="resetGame" class="control-btn">重新挑戰</button>
+            <button id="backToMap" class="back-btn">返回地圖</button>
         </div>
     </div>
+
     <script src="../js/utils.js"></script>
     <script src="../js/config.js"></script>
+    <script src="../js/dialogue.js"></script>
     <script src="../js/classroom.js"></script>
 </body>
 </html>
