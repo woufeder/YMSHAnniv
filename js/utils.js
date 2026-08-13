@@ -263,7 +263,7 @@ function isMobile() {
 // 播放音效 (如果音檔存在)
 function playSound(soundName) {
   try {
-    const audio = new Audio(`assets/audio/${soundName}.mp3`);
+    const audio = new Audio(`/assets/audio/${soundName}.mp3`);
     audio.volume = 0.5;
     audio.play().catch(e => console.log('Audio play failed:', e));
   } catch (error) {
