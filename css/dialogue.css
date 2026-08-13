@@ -47,6 +47,40 @@
   transition: opacity 0.5s ease;
 }
 
+/* --- 角色專用動畫 --- */
+.char-shake {
+  animation: char-shake 0.3s ease-in-out;
+}
+
+.char-shake-strong {
+  animation: char-shake-strong 0.3s ease-in-out;
+}
+
+.char-jump {
+  animation: char-jump 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes char-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+@keyframes char-shake-strong {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-20px); }
+  40% { transform: translateX(20px); }
+  60% { transform: translateX(-10px); }
+  80% { transform: translateX(10px); }
+}
+
+@keyframes char-jump {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-50px); }
+  100% { transform: translateY(0); }
+}
+/* ------------------ */
+
 .dialogue-layer {
   display: flex;
   align-items: flex-end;
@@ -169,7 +203,6 @@
 #whoAreYou .scene-container {
   background: linear-gradient(180deg, #24262b 0%, #141518 100%);
 }
-
 
 
 @media (max-width: 640px) {
