@@ -131,10 +131,29 @@ class DialogueCore {
 
   getDisplayText(text) {
     return this.replaceVars(text || '')
-      .replace(/<wait=?\d*>/g, '')
+      .replace(/<[^>]*>/g, '')
       .replace(/\|/g, '');
   }
 
+  /**
+   * 逐字播放文字並解析行內指令
+   *
+   * 支援指令清單：
+   * 1. 節奏控制：
+   *    - <wait=ms>  : 暫停指定毫秒 (例如 <wait=500>)，不填數字預設 300ms
+   *    - |          : 快捷停頓 500ms
+   * 2. 音效觸發：
+   *    - <sound=name> : 播放指定音效 (需對應 utils.js 的 playSound 名稱)
+   * 3. 視覺特效 (全螢幕)：
+   *    - <shake>      : 輕微螢幕震動
+   *    - <shakeStrong> : 強烈螢幕震動
+   *    - <flash>       : 螢幕閃爍
+   * 4. 角色專用特效 (僅角色圖片)：
+   *    - <char:shake>      : 角色輕微震動
+   *    - <char:shakeStrong> : 角色強烈震動
+   *    - <char:jump>        : 角色往上跳
+   *    (格式為 <char:特效名稱>)
+   */
   typeText(text) {
     this.textBox.textContent = '';
     const parsed = this.replaceVars(text || '');
@@ -149,12 +168,33 @@ class DialogueCore {
 
       const remaining = parsed.slice(index);
 
-      if (remaining.startsWith('<wait')) {
-        const match = remaining.match(/^<wait=?(\d*)>/);
-        if (match) {
-          const delay = match[1] ? parseInt(match[1], 10) : 300;
-          pauseUntil = Date.now() + delay;
-          index += match[0].length;
+      if (remaining.startsWith('<')) {
+        const closingIndex = remaining.indexOf('>');
+        if (closingIndex !== -1) {
+          const command = remaining.slice(1, closingIndex);
+
+          if (command.startsWith('wait')) {
+            const match = command.match(/=(\d+)/);
+            const delay = match ? parseInt(match[1], 10) : 300;
+            pauseUntil = Date.now() + delay;
+            index += closingIndex + 1;
+            return;
+          } else if (command.startsWith('sound')) {
+            const match = command.match(/=(\w+)/);
+            if (match && typeof playSound === 'function') {
+              playSound(match[1]);
+            }
+          } else if (command.startsWith('char:')) {
+            // 處理角色專用特效
+            const charEffect = command.slice(5); // 去掉 "char:"
+            this.triggerCharEffect(charEffect);
+          } else {
+            // 處理全螢幕視覺效果
+            if (typeof triggerEffect === 'function') {
+              triggerEffect(command);
+            }
+          }
+          index += closingIndex + 1;
           return;
         }
       }
@@ -172,6 +212,24 @@ class DialogueCore {
         clearInterval(this.typingTimer);
       }
     }, this.textSpeed);
+  }
+
+  triggerCharEffect(effect) {
+    if (!this.charImg) return;
+
+    let className = '';
+    switch (effect) {
+      case 'shake': className = 'char-shake'; break;
+      case 'shakeStrong': className = 'char-shake-strong'; break;
+      case 'jump': className = 'char-jump'; break;
+      default: return;
+    }
+
+    // 移除舊類名以重新觸發動畫
+    this.charImg.classList.remove('char-shake', 'char-shake-strong', 'char-jump');
+    // 強制重繪 (Reflow) 以便重新觸發動畫
+    void this.charImg.offsetWidth;
+    this.charImg.classList.add(className);
   }
 
   showLine() {
