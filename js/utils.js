@@ -263,13 +263,81 @@ function isMobile() {
 // 播放音效 (如果音檔存在)
 function playSound(soundName) {
   try {
+    const seVolume = parseFloat(localStorage.getItem('ymsh:setting_seVolume') || '0.5');
     const audio = new Audio(`/assets/audio/${soundName}.mp3`);
-    audio.volume = 0.5;
+    audio.volume = seVolume;
     audio.play().catch(e => console.log('Audio play failed:', e));
   } catch (error) {
     console.log('Sound not available:', soundName);
   }
 }
+
+/**
+ * 設定管理器 - 負責音量與速度的持久化
+ */
+const SettingsManager = {
+  get(key, defaultValue) {
+    const val = localStorage.getItem(`ymsh:setting_${key}`);
+    return val !== null ? parseFloat(val) : defaultValue;
+  },
+  set(key, value) {
+    localStorage.setItem(`ymsh:setting_${key}`, value.toString());
+  }
+};
+
+/**
+ * BGM 管理器 - 實現跨頁接續播放
+ */
+class BGMManager {
+  constructor(audioSrc, volume = 0.5) {
+    this.audio = new Audio(audioSrc);
+    this.audio.loop = true;
+    this.storageKey = 'ymsh:bgm_currentTime';
+    this.isInitialized = false;
+  }
+
+  init() {
+    if (this.isInitialized) return;
+
+    // 1. 從 localStorage 恢復播放進度
+    const savedTime = localStorage.getItem(this.storageKey);
+    if (savedTime) {
+      this.audio.currentTime = parseFloat(savedTime);
+    }
+
+    // 2. 定時儲存目前進度 (每 1 秒存一次)
+    setInterval(() => {
+      localStorage.setItem(this.storageKey, this.audio.currentTime.toString());
+    }, 1000);
+
+    this.updateVolume();
+    this.isInitialized = true;
+  }
+
+  async play() {
+    try {
+      await this.audio.play();
+    } catch (e) {
+      console.log('BGM Autoplay blocked. Waiting for user interaction.');
+      document.addEventListener('click', () => {
+        this.audio.play();
+      }, { once: true });
+    }
+  }
+
+  stop() {
+    this.audio.pause();
+  }
+
+  updateVolume() {
+    const vol = SettingsManager.get('bgmVolume', 0.5);
+    this.audio.volume = vol;
+  }
+}
+
+// 建立單例供全站使用 (請確認路徑與檔名正確)
+const bgm = new BGMManager('/assets/audio/main_bgm.mp3');
+
 
 // 顯示載入中動畫
 function showLoading(container) {
