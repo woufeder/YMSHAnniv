@@ -19,7 +19,9 @@ class DialogueCore {
     this.dialogueKey = options.dialogueKey || null;
     this.playerInfo = options.playerInfo || {};
     this.reuseExistingLayout = Boolean(options.reuseExistingLayout);
-    this.typeTextSpeed = options.textSpeed || 50;
+
+    // 從 SettingsManager 獲取速度設定，若無則使用預設值 50
+    this.typeTextSpeed = SettingsManager.get('textSpeed', 50);
     this.onFinish = options.onFinish || function () {};
 
     // 狀態
