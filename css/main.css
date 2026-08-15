@@ -6,7 +6,31 @@
   --primary700: #474D64;
   --primary900: #343742;
   --text-color: #111111;
+  --dark-color: #343742;
+  --secondary-color: #64B5F6;
+  --success-color: #4CAF50;
+  --error-color: #EF5350;
+  --info-color: #2196F3;
+  --school-gold: #FFC107;
+  --school-green: #2E7D32;
+  --school-light-blue: #E7F1FF;
 
+  --border-radius: 6px;
+  --border-radius-large: 8px;
+  --shadow-light: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 15px rgba(0, 0, 0, 0.15);
+  --shadow-heavy: 0 10px 30px rgba(0, 0, 0, 0.2);
+  --transition: all 0.3s ease;
+
+  --dialogue-panel-bg: linear-gradient(
+    to top,
+    rgba(132, 149, 177, 0.72),
+    rgba(189, 212, 238, 0.96)
+  );
+  --dialogue-header-bg: #343742;
+  --dialogue-text-color: #04020e;
+  --dialogue-accent-color: #9cf;
+  --dialogue-max-width: 960px;
 }
 
 

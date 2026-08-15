@@ -1,172 +1,206 @@
 /* classroom.css - 快問快答溫馨版 */
 
 .quiz-background {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
 }
 
 .quiz-background img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 #game,
 .quiz-container {
-    position: relative;
-    z-index: 1;
+  position: relative;
+  z-index: 1;
 }
 
 .quiz-container {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    text-align: center;
-    font-family: '楷體', 'Kaiti', serif;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  text-align: center;
+  font-family: "LXGW WenKai Mono TC", "Noto Sans TC";
 }
 
 .game-title {
-    color: #007bff;
-    margin-bottom: 30px;
-    font-size: 2.2rem;
+  color: #007bff;
+  margin-bottom: 30px;
+  font-size: 2.2rem;
 }
 
 .quiz-info {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
 }
 
 .quiz-info span {
-    background: #e7f1ff;
-    color: #007bff;
-    padding: 8px 20px;
-    border-radius: 20px;
-    font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  background: #e7f1ff;
+  color: #007bff;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 /* 問題卡片區 */
 .quiz-card {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 40px;
-    border-radius: 30px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    border: 3px solid #fdfcf0;
-    margin-bottom: 30px;
-    transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 40px;
+  border-radius: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 3px solid #fdfcf0;
+  margin-bottom: 30px;
+  transition: all 0.3s ease;
 }
 
 .question-text {
-    font-size: 1.5rem;
-    color: #5d4037;
-    margin-bottom: 30px;
-    line-height: 1.6;
-    min-height: 3em;
+  font-size: 1.5rem;
+  color: #5d4037;
+  margin-bottom: 30px;
+  line-height: 1.6;
+  min-height: 3em;
 }
 
 /* 選項網格 */
 .options-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
 }
 
 .option-btn {
-    background: white;
-    border: 2px solid #e0e0e0;
-    padding: 15px 20px;
-    border-radius: 15px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    color: #666;
-    font-family: inherit;
+  background: white;
+  border: 2px solid #e0e0e0;
+  padding: 15px 20px;
+  border-radius: 15px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #666;
+  font-family: inherit;
 }
 
 .option-btn:hover {
-    background: #fdfcf0;
-    border-color: #ffd700;
-    color: #007bff;
-    transform: translateY(-2px);
+  background: #fdfcf0;
+  border-color: #ffd700;
+  color: #007bff;
+  transform: translateY(-2px);
 }
 
 .option-btn.correct {
-    background: #e8f5e9;
-    border-color: #4caf50;
-    color: #2e7d32;
-    font-weight: bold;
+  background: #e8f5e9;
+  border-color: #4caf50;
+  color: #2e7d32;
+  font-weight: bold;
 }
 
 .option-btn.wrong {
-    background: #ffebee;
-    border-color: #ef5350;
-    color: #c62828;
+  background: #ffebee;
+  border-color: #ef5350;
+  color: #c62828;
 }
 
 /* 反饋文字 */
 .feedback-message {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    min-height: 1.5em;
-    color: #8d6e63;
-    font-style: italic;
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  width: min(420px, calc(100vw - 32px));
+  box-sizing: border-box;
+  margin: 0;
+  padding: 15px 25px;
+  border: 2px solid #e7f1ff;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  font-size: 1.2rem;
+  color: #8d6e63;
+  line-height: 1.6;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+  z-index: 2000;
+}
+
+.feedback-message.show {
+  opacity: 1;
+  transform: translate(-50%, -60%);
 }
 
 .game-controls {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 
 .control-btn {
-    padding: 10px 25px;
-    border-radius: 20px;
-    border: none;
-    background: #ffc107;
-    color: #333;
-    cursor: pointer;
-    font-weight: bold;
-    transition: 0.3s;
+  padding: 10px 25px;
+  border-radius: 20px;
+  border: none;
+  background: #ffc107;
+  color: #333;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
 }
 
 .control-btn:hover {
-    background: #f57c00;
-    color: white;
+  background: #f57c00;
+  color: white;
 }
 
 .back-btn {
-    padding: 10px 25px;
-    border-radius: 20px;
-    border: 1px solid #ccc;
-    background: white;
-    cursor: pointer;
+  padding: 10px 25px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
 }
 
 /* 動畫 */
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-5px); }
-    75% { transform: translateX(5px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
 }
 
 .shake {
-    animation: shake 0.4s ease;
+  animation: shake 0.4s ease;
 }
 
 @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .bounce {
-    animation: bounce 0.5s ease;
+  animation: bounce 0.5s ease;
 }
 
 @media (max-width: 600px) {
-    .options-grid {
-        grid-template-columns: 1fr;
-    }
+  .options-grid {
+    grid-template-columns: 1fr;
+  }
 }
