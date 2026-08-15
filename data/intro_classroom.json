@@ -1,7 +1,8 @@
 {
   "default": [
     {
-      "text": "你隨意地走到某棟樓的走廊，大多數的教室都已經上鎖。"
+      "text": "你隨意地走到某棟樓的走廊，大多數的教室都已經上鎖。",
+      "bg": "../assets/images/classroom.jpg"
     },
     {
       "text": "畢竟是假日嘛，學生們都不在學校裡。門上鎖也是應該的，你不禁這麼想著。"
@@ -16,12 +17,11 @@
   ],
   "student": [
     {
-      "text": "<wait=1000>你走到熟悉的教室面前，<wait>伸手轉了一下喇叭鎖"
+      "text": "<wait=1000>你走到熟悉的教室面前，<wait>伸手轉了一下喇叭鎖",
+      "bg": "../assets/images/classroom.jpg"
     },
     {
-      "text": "<sound=doorlocked><wait=1200>理所當然地沒有動。",
-      "bg": "",
-      "effect": ""
+      "text": "<sound=akanaidoor3><wait=1200>門是鎖著的。"
     },
     {
       "text": "想起晚自習或下課結束<wait>，老師總會提醒要鎖門<wait>，避免東西不見。<wait>"
@@ -36,7 +36,7 @@
       "text": "……。"
     },
     {
-      "text": "從窗戶看進去，<wait>外頭的光太強，<wait=500>玻璃反光讓人看不太清裡面的樣子。"
+      "text": "從窗戶看進去，<wait>教室的陳設好像有些不太一樣。"
     },
     {
       "text": "課桌椅有些換新了，<wait>黑板換成了電子黑板。<wait=1000>不過洗石子地板倒是一樣，<wait>柱子上斑駁的油漆也還在。"
@@ -49,7 +49,7 @@
     },
     {
       "text": "<wait=1000>「咦？<wait>這間教室是開的。」",
-      "effect": "flash"
+      "bg": "../assets/images/classroom-open.jpg"
     },
     {
       "text": "你走了進去，<wait>只看到一份放在講台上的紙。"
@@ -60,7 +60,8 @@
   ],
   "teacher": [
     {
-      "text": "。"
+      "text": "。",
+      "bg": "../assets/images/classroom.jpg"
     }
   ]
 }

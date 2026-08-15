@@ -4,6 +4,14 @@ const STORAGE_EXPIRY_MS = STORAGE_EXPIRY_MINUTES * 60 * 1000;
 const STORAGE_LAST_CLOSED_KEY = 'ymsh:lastClosedAt';
 const STORAGE_SESSION_MARKER_KEY = 'ymsh:sessionActive';
 const PLAYER_INPUT_KEY = 'playerInput';
+const APP_ROOT_URL = (() => {
+  const scriptUrl = document.currentScript?.src;
+  return scriptUrl ? new URL('../', scriptUrl).href : new URL('./', window.location.href).href;
+})();
+
+function resolveAppAsset(path) {
+  return new URL(path, APP_ROOT_URL).href;
+}
 
 function clearExpiredLocalStorage() {
   try {
@@ -264,7 +272,7 @@ function isMobile() {
 function playSound(soundName) {
   try {
     const seVolume = parseFloat(localStorage.getItem('ymsh:setting_seVolume') || '0.5');
-    const audio = new Audio(`/assets/audio/${soundName}.mp3`);
+    const audio = new Audio(resolveAppAsset(`assets/audio/${soundName}.mp3`));
     audio.volume = seVolume;
     audio.play().catch(e => console.log('Audio play failed:', e));
   } catch (error) {
@@ -335,8 +343,15 @@ class BGMManager {
   }
 }
 
-// 建立單例供全站使用 (請確認路徑與檔名正確)
-const bgm = new BGMManager('/assets/audio/main_bgm.mp3');
+// 建立單例供全站使用
+const bgm = new BGMManager(resolveAppAsset('assets/audio/hihamatanoboru.mp3'));
+window.bgm = bgm;
+window.resolveAppAsset = resolveAppAsset;
+
+window.addEventListener('DOMContentLoaded', () => {
+  bgm.init();
+  bgm.play();
+});
 
 
 // 顯示載入中動畫

@@ -31,6 +31,9 @@ class DialogueCore {
     this.studentInfo = null;
     this.typingTimer = null;
     this.textSpeed = this.typeTextSpeed; // 每字間隔
+    this.backgroundImages = [];
+    this.activeBackgroundIndex = 0;
+    this.backgroundRequestId = 0;
   }
 
   async init() {
@@ -82,7 +85,10 @@ class DialogueCore {
 
   buildLayout() {
     this.container.innerHTML = `
-      <div class="background-layer"><img id="bg" /></div>
+      <div class="background-layer">
+        <img id="bg" class="dialogue-background" alt="" />
+        <img class="dialogue-background" alt="" />
+      </div>
       <div class="character-layer"><img id="char" /></div>
       <div class="dialogue-layer">
         <div class="dialogue-box">
@@ -105,7 +111,8 @@ class DialogueCore {
   }
 
   bindLayout() {
-    this.bg = this.container.querySelector('#bg');
+    this.setupBackgroundLayers();
+    this.bg = this.backgroundImages[0] || null;
     this.charImg = this.container.querySelector('#char');
     this.nameBox = this.container.querySelector('#name');
     this.dialogueHeader = this.container.querySelector('.dialogue-header');
@@ -117,6 +124,57 @@ class DialogueCore {
 
     this.nextBtn?.addEventListener('click', () => this.nextLine());
     this.submitName?.addEventListener('click', () => this.handleNameSubmit());
+  }
+
+  setupBackgroundLayers() {
+    const backgroundLayer = this.container.querySelector('.background-layer');
+    if (!backgroundLayer) return;
+
+    const images = [...backgroundLayer.querySelectorAll('img')];
+    while (images.length < 2) {
+      const image = document.createElement('img');
+      image.className = 'dialogue-background';
+      image.alt = '';
+      backgroundLayer.appendChild(image);
+      images.push(image);
+    }
+
+    this.backgroundImages = images.slice(0, 2);
+    this.backgroundImages.forEach((image) => image.classList.add('dialogue-background'));
+
+    const initialIndex = this.backgroundImages.findIndex((image) => image.getAttribute('src'));
+    this.activeBackgroundIndex = initialIndex >= 0 ? initialIndex : 0;
+    if (initialIndex >= 0) {
+      this.backgroundImages[initialIndex].classList.add('is-visible');
+    }
+  }
+
+  setBackground(src) {
+    if (!src || this.backgroundImages.length < 2) return;
+
+    const resolvedSrc = new URL(src, document.baseURI).href;
+    const currentImage = this.backgroundImages[this.activeBackgroundIndex];
+    if (currentImage?.src === resolvedSrc) return;
+
+    const nextIndex = this.activeBackgroundIndex === 0 ? 1 : 0;
+    const nextImage = this.backgroundImages[nextIndex];
+    const requestId = ++this.backgroundRequestId;
+
+    const revealBackground = () => {
+      if (requestId !== this.backgroundRequestId || nextImage.src !== resolvedSrc) return;
+
+      nextImage.classList.add('is-visible');
+      currentImage?.classList.remove('is-visible');
+      this.activeBackgroundIndex = nextIndex;
+    };
+
+    nextImage.onload = revealBackground;
+    nextImage.onerror = () => console.warn(`背景圖片載入失敗：${src}`);
+    nextImage.src = src;
+
+    if (nextImage.complete && nextImage.naturalWidth > 0) {
+      revealBackground();
+    }
   }
 
   replaceVars(str) {
@@ -239,8 +297,8 @@ class DialogueCore {
     if (!line) return this.onFinish();
 
     // 背景、角色
-    if (this.bg && line.bg) {
-      this.bg.src = line.bg;
+    if (line.bg) {
+      this.setBackground(line.bg);
     }
 
     if (this.charImg && line.char) {

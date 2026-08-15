@@ -17,4 +17,5 @@
 
 ## 版權注意
 
-請確保所有音效檔案都有適當的使用授權。
+BGM-真島こころ-陽はまた昇る
+https://flower-prayer.com/bg%ef%bd%8d-vol-16-2/
