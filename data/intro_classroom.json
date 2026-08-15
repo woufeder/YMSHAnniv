@@ -21,7 +21,7 @@
       "bg": "../assets/images/classroom.jpg"
     },
     {
-      "text": "<sound=akanaidoor3><wait=1200>門是鎖著的。"
+      "text": "<sound=akanaidoor><wait=1200>門是鎖著的。"
     },
     {
       "text": "想起晚自習或下課結束<wait>，老師總會提醒要鎖門<wait>，避免東西不見。<wait>"
@@ -48,14 +48,14 @@
       "text": "即使有些東西和印象中不太一樣，<wait=1000>也有些東西，<wait>從未改變過。"
     },
     {
-      "text": "<wait=1000>「咦？<wait>這間教室是開的。」",
+      "text": "<sound=step.wav><wait=1000>「咦？<wait>這間教室是開的。」",
       "bg": "../assets/images/classroom-open.jpg"
     },
     {
       "text": "你走了進去，<wait>只看到一份放在講台上的紙。"
     },
     {
-      "text": "「這是什麼，快問快答？」"
+      "text": "<sound=paper>「這是什麼，快問快答？」"
     }
   ],
   "teacher": [

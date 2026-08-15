@@ -268,12 +268,25 @@ function isMobile() {
   return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
-// 播放音效 (如果音檔存在)
+// 播放音效：未指定副檔名時會依序嘗試 MP3 與 WAV。
 function playSound(soundName) {
   try {
     const seVolume = parseFloat(localStorage.getItem('ymsh:setting_seVolume') || '0.5');
-    const audio = new Audio(resolveAppAsset(`assets/audio/${soundName}.mp3`));
+    const hasExtension = /\.(mp3|wav)$/i.test(soundName);
+    const fileNames = hasExtension
+      ? [soundName]
+      : [`${soundName}.mp3`, `${soundName}.wav`];
+    const audio = document.createElement('audio');
+
+    fileNames.forEach((fileName) => {
+      const source = document.createElement('source');
+      source.src = resolveAppAsset(`assets/audio/${fileName}`);
+      source.type = fileName.toLowerCase().endsWith('.wav') ? 'audio/wav' : 'audio/mpeg';
+      audio.appendChild(source);
+    });
+
     audio.volume = seVolume;
+    audio.load();
     audio.play().catch(e => console.log('Audio play failed:', e));
   } catch (error) {
     console.log('Sound not available:', soundName);

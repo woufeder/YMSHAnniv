@@ -203,7 +203,7 @@ class DialogueCore {
    *    - <wait=ms>  : 暫停指定毫秒 (例如 <wait=500>)，不填數字預設 300ms
    *    - |          : 快捷停頓 500ms
    * 2. 音效觸發：
-   *    - <sound=name> : 播放指定音效 (需對應 utils.js 的 playSound 名稱)
+   *    - <sound=name> : 播放指定音效；可寫成 <sound=name.wav>
    * 3. 視覺特效 (全螢幕)：
    *    - <shake>      : 輕微螢幕震動
    *    - <shakeStrong> : 強烈螢幕震動
@@ -239,8 +239,8 @@ class DialogueCore {
             pauseUntil = Date.now() + delay;
             index += closingIndex + 1;
             return;
-          } else if (command.startsWith('sound')) {
-            const match = command.match(/=(\w+)/);
+          } else if (command.startsWith('sound=')) {
+            const match = command.match(/^sound=([A-Za-z0-9._-]+)$/);
             if (match && typeof playSound === 'function') {
               playSound(match[1]);
             }

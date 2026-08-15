@@ -205,6 +205,7 @@ class SettingsUI {
         ${this.createOptionGroup('vol-bgm', 'BGM 音量', volumeOptions)}
         ${this.createOptionGroup('vol-se', '效果音音量', volumeOptions)}
         ${this.createOptionGroup('speed-text', '文字速度', speedOptions)}
+        <p class="bgm-credit">文字速度變更後請重整頁面才會生效</p>
         <button id="close-settings" class="settings-confirm" type="button">確定</button>
       </div>
     `;
