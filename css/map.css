@@ -60,6 +60,15 @@
   opacity: 1;
 }
 
+.progress-special-egg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--school-gold, #ffc107);
+  font-size: 15px;
+  line-height: 1.2;
+}
+
 .map-area {
   position: fixed;
   inset: 0;

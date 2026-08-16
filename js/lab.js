@@ -1,5 +1,5 @@
 // lab.js - 翻牌遊戲邏輯 (原 classroom.js 搬移)
-document.addEventListener('DOMContentLoaded', function() {
+function initLab() {
     const cardGrid = document.getElementById('cardGrid');
     const scoreElement = document.getElementById('score');
     const movesElement = document.getElementById('moves');
@@ -207,4 +207,6 @@ document.addEventListener('DOMContentLoaded', function() {
     backBtn.addEventListener('click', () => window.location.href = '../map.html');
 
     initGame();
-});
+}
+
+window.initLab = initLab;

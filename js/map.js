@@ -16,6 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // { id: 'extras', name: '彩蛋區', mapX: 5200, mapY: 470, url: 'games/extras.html' }
     ];
     const mainGameIds = ['classroom', 'garden', 'lab'];
+    const specialEggs = [
+        { storageKey: 'ymsh:playgroundEgg', label: '特殊彩蛋：操場' },
+        { storageKey: 'ymsh:musicClassroomEgg', label: '特殊彩蛋：校歌' }
+    ];
     
     // 初始化進度
     let completedGames = JSON.parse(localStorage.getItem('completedGames')) || [];
@@ -72,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!progressChecklist) return;
 
         const mainGames = locations.filter(location => mainGameIds.includes(location.id));
-        progressChecklist.replaceChildren(...mainGames.map(location => {
+        const progressItems = mainGames.map(location => {
             const item = document.createElement('label');
             item.className = 'progress-check-item';
 
@@ -87,6 +91,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
             item.append(checkbox, name);
             return item;
-        }));
+        });
+
+        specialEggs.forEach(egg => {
+            if (localStorage.getItem(egg.storageKey) !== 'true') return;
+
+            const item = document.createElement('div');
+            item.className = 'progress-special-egg';
+            item.innerHTML = '<i class="fa-solid fa-star" aria-hidden="true"></i>';
+
+            const name = document.createElement('span');
+            name.textContent = egg.label;
+            item.append(name);
+            progressItems.push(item);
+        });
+
+        progressChecklist.replaceChildren(...progressItems);
     }
 });

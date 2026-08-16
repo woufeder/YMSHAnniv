@@ -12,6 +12,10 @@ body {
   color: #f6f7fb;
 }
 
+.art-building.is-hidden {
+  display: none;
+}
+
 .art-building-header {
   width: min(760px, 100%);
   margin: 0 auto 44px;

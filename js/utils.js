@@ -315,6 +315,7 @@ class BGMManager {
     this.audio.loop = true;
     this.storageKey = 'ymsh:bgm_currentTime';
     this.isInitialized = false;
+    this.isTemporarilyMuted = false;
   }
 
   init() {
@@ -352,7 +353,12 @@ class BGMManager {
 
   updateVolume() {
     const vol = SettingsManager.get('bgmVolume', 0.5);
-    this.audio.volume = vol;
+    this.audio.volume = this.isTemporarilyMuted ? 0 : vol;
+  }
+
+  setTemporaryMute(shouldMute) {
+    this.isTemporarilyMuted = Boolean(shouldMute);
+    this.updateVolume();
   }
 }
 

@@ -1,3 +1,6 @@
+window.bgm?.setTemporaryMute(true);
+window.addEventListener("pagehide", () => window.bgm?.setTemporaryMute(false), { once: true });
+
 document.addEventListener("DOMContentLoaded", () => {
   const NOTES = [
     { note: "C4", key: "A", frequency: 261.63 },

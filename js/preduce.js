@@ -11,7 +11,13 @@ async function init() {
     role,
     playerInfo: { name, className, role },
     reuseExistingLayout: true,
-    onFinish: () => fadeTo('map.html')
+    onFinish: () => {
+      const currentPage = window.location.pathname.split('/').pop();
+      if (currentPage === 'playground.html') {
+        localStorage.setItem('ymsh:playgroundEgg', 'true');
+      }
+      fadeTo('map.html');
+    }
   });
 
   await dialogue.init();

@@ -1,5 +1,5 @@
 // hall.js - Google Sheet 留言板串接
-document.addEventListener('DOMContentLoaded', function() {
+function initHall() {
     const userNameInput = document.getElementById('userNameInput');
     const messageInput = document.getElementById('messageInput');
     const submitBtn = document.getElementById('submitMessage');
@@ -151,4 +151,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     loadMessages();
     setInterval(loadMessages, 60000);
-});
+}
+
+window.initHall = initHall;

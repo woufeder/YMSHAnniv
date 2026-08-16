@@ -376,3 +376,32 @@ body.fade-in {
   color: var(--primary900);
   outline: none;
 }
+/* Fixed return control for pages opened from the campus map. */
+.map-return-button {
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  z-index: 20;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  background: rgba(20, 27, 39, 0.72);
+  color: #fff;
+  font-size: 18px;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.map-return-button:hover,
+.map-return-button:focus-visible {
+  background: #fff;
+  color: #1f2631;
+  outline: none;
+}
+
+.location-page-content.is-hidden {
+  display: none;
+}

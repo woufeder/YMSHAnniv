@@ -1,5 +1,5 @@
 // principal.js - 紀念卡生成功能
-document.addEventListener('DOMContentLoaded', () => {
+function initPrincipal() {
   const ARTWORK_STORAGE_KEY = 'ymsh:artwork';
   const canvas = document.getElementById('memoryCard');
   const ctx = canvas.getContext('2d');
@@ -153,4 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   generateCard();
-});
+}
+
+window.initPrincipal = initPrincipal;
