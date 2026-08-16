@@ -1,19 +1,16 @@
 /* 全域 */
 :root {
   --white: #fff;
-  --primary300: #BDD4EE;
-  --primary500: #8495B1;
-  --primary700: #474D64;
-  --primary900: #343742;
+  --primary100: #dcecff;
+  --primary300: #bdd4ee;
+  --primary500: #8495b1;
+  --primary700: #474d64;
+  --primary900: #252834;
   --text-color: #111111;
-  --dark-color: #343742;
-  --secondary-color: #64B5F6;
-  --success-color: #4CAF50;
-  --error-color: #EF5350;
-  --info-color: #2196F3;
-  --school-gold: #FFC107;
-  --school-green: #2E7D32;
-  --school-light-blue: #E7F1FF;
+  --success-color: #8ed14b;
+  --error-color: #b95351;
+  --info-color: #2196f3;
+  --warning-color: #ffc107;
 
   --border-radius: 6px;
   --border-radius-large: 8px;
@@ -25,15 +22,12 @@
   --dialogue-panel-bg: linear-gradient(
     to top,
     rgba(132, 149, 177, 0.72),
-    rgba(189, 212, 238, 0.96)
+    rgba(189, 212, 238, 1)
   );
   --dialogue-header-bg: #343742;
-  --dialogue-text-color: #04020e;
-  --dialogue-accent-color: #9cf;
-  --dialogue-max-width: 960px;
+  --dialogue-text-color: #151925;
+  --dialogue-max-width: 1080px;
 }
-
-
 
 h1 {
   font-size: 72px;
@@ -149,8 +143,6 @@ body.fade-in {
     color: var(--text-color);
     cursor: pointer;
     z-index: 2;
-
-
   }
 
   .LOGO-layer {
@@ -171,15 +163,9 @@ body.fade-in {
     h4 {
       clip-path: polygon(0% 0%, 00% 0%, 00% 100%, 0% 100%);
       animation: revealOnce 2s ease 1.5s forwards;
-
     }
   }
-
-
-
 }
-
-
 
 @keyframes revealOnce {
   from {
@@ -191,37 +177,55 @@ body.fade-in {
   }
 }
 
-
-
-
-
-
-
-
-
-
 /* 抖動動畫 */
 @keyframes shake {
-  0%, 100% { transform: translate(0, 0); }
-  20% { transform: translate(-8px, 2px); }
-  40% { transform: translate(8px, -2px); }
-  60% { transform: translate(-5px, 5px); }
-  80% { transform: translate(5px, -5px); }
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-8px, 2px);
+  }
+  40% {
+    transform: translate(8px, -2px);
+  }
+  60% {
+    transform: translate(-5px, 5px);
+  }
+  80% {
+    transform: translate(5px, -5px);
+  }
 }
 
 /* 強烈抖動 */
 @keyframes shakeStrong {
-  0%, 100% { transform: translate(0, 0); }
-  20% { transform: translate(-15px, 5px); }
-  40% { transform: translate(15px, -5px); }
-  60% { transform: translate(-10px, 10px); }
-  80% { transform: translate(10px, -10px); }
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-15px, 5px);
+  }
+  40% {
+    transform: translate(15px, -5px);
+  }
+  60% {
+    transform: translate(-10px, 10px);
+  }
+  80% {
+    transform: translate(10px, -10px);
+  }
 }
 
 /* 閃光效果 */
 @keyframes flash {
-  0%, 100% { filter: brightness(1); }
-  50% { filter: brightness(2); }
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(2);
+  }
 }
 
 .shake {
@@ -243,10 +247,10 @@ body.fade-in {
   right: 20px;
   width: 50px;
   height: 50px;
+  border: 2px solid var(--primary100);
   border-radius: 50%;
-  border: 2px solid #fff;
-  background: rgba(0, 0, 0, 0.5);
-  color: #fff;
+  background: var(--primary500);
+  color: var(--primary100);
   font-size: 24px;
   cursor: pointer;
   z-index: 1000;
@@ -260,6 +264,11 @@ body.fade-in {
   transform: rotate(45deg) scale(1.1);
 }
 
+.settings-btn:focus-visible {
+  outline: 2px solid var(--primary100);
+  outline-offset: 3px;
+}
+
 .settings-modal {
   position: fixed;
   inset: 0;
@@ -270,53 +279,100 @@ body.fade-in {
   z-index: 1001;
 }
 
+.settings-modal.hidden {
+  display: none;
+}
+
 .settings-content {
-  background: #343742;
-  color: #fff;
-  padding: 30px;
-  border-radius: 15px;
-  width: 320px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  width: min(400px, calc(100vw - 32px));
+  padding: 28px;
+  border-radius: var(--border-radius);
+  background: var(--primary300);
+  color: var(--text-color);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  font-family: sans-serif;
+  gap:30px;
+  font-family: "LXGW WenKai Mono TC", "Noto Sans TC";
 }
 
 .settings-content h3 {
-  margin: 0 0 10px;
+  margin: 0;
   text-align: center;
-  color: #BDBDFB;
+  color: var(--text-color);
+  font-weight: bold;
+}
+
+.bgm-credit {
+  margin: -6px 0 0;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.bgm-credit i {
+  margin-right: 6px;
 }
 
 .setting-item {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 2px;
 }
 
 .setting-item label {
+  font-size: 20;
+}
+
+.setting-options {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.setting-option {
+  min-height: 38px;
+  padding: 6px 3px;
+  border: 1px solid var(--primary700);
+  border-radius: var(--border-radius);
+  background: transparent;
+  color: var(--primary700);
+  font: inherit;
   font-size: 16px;
-  display: flex;
-  justify-content: space-between;
+  line-height: 1.2;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
 }
 
-.setting-item input[type="range"] {
-  width: 100%;
-  cursor: pointer;
+.setting-option:hover,
+.setting-option:focus-visible {
+  border-color: var(--primary700);
+  outline: none;
 }
 
-.settings-content button {
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  background: #8495B1;
-  color: #fff;
-  cursor: pointer;
+.setting-option.is-active {
+  border-color: var(--primary700);
+  background: var(--primary700);
+  color: var(--primary100);
   font-weight: bold;
 }
 
-.settings-content button:hover {
-  background: #BDBDFB;
-  color: #343742;
+.settings-confirm {
+  padding: 10px;
+  border: none;
+  border-radius: var(--border-radius-large);
+  background: var(--primary700);
+  color: var(--primary100);
+  cursor: pointer;
+  font: inherit;
+  font-weight: bold;
+}
+
+.settings-confirm:hover,
+.settings-confirm:focus-visible {
+  background: var(--primary500);
+  color: var(--primary900);
+  outline: none;
 }

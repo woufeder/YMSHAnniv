@@ -1,39 +1,84 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YMSH 周年紀念 - 花園種樹</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/garden.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YMSH 周年紀念 - 花圃急救站</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/garden.css">
 </head>
 <body>
-    <div class="garden-game">
-        <h1>花園 - 種植紀念樹</h1>
-        <div class="garden-area">
-            <div class="tree-container" id="treeContainer">
-                <!-- 樹木生長動畫區域 -->
-            </div>
-            <div class="planting-controls">
-                <button id="waterBtn" class="plant-btn">澆水</button>
-                <button id="sunlightBtn" class="plant-btn">給予陽光</button>
-                <button id="fertilizeBtn" class="plant-btn">施肥</button>
-            </div>
+  <main class="garden-game">
+    <header class="garden-header">
+      <h1>花圃急救站</h1>
+      <div class="garden-stats" aria-live="polite">
+        <div class="garden-stat"><span>時間</span><strong id="timeRemaining">60</strong></div>
+        <div class="garden-stat"><span>分數</span><strong id="score">0</strong></div>
+        <div class="garden-stat"><span>連擊</span><strong id="combo">0</strong></div>
+        <div class="garden-stat"><span>健康</span><strong id="health" aria-label="健康值 5 / 5">♥♥♥♥♥</strong></div>
+      </div>
+    </header>
+
+    <section class="garden-area" aria-label="校園花圃">
+      <div id="eventGrid" class="event-grid"></div>
+      <p id="roundMessage" class="round-message" aria-live="polite"></p>
+
+      <div class="toolbelt" role="toolbar" aria-label="園藝工具">
+        <button class="garden-tool is-selected" type="button" data-tool="water" aria-label="澆水" title="澆水">
+          <i class="fa-solid fa-droplet" aria-hidden="true"></i>
+          <span>澆水</span><kbd>1</kbd>
+        </button>
+        <button class="garden-tool" type="button" data-tool="sunlight" aria-label="給予陽光" title="給予陽光">
+          <i class="fa-solid fa-sun" aria-hidden="true"></i>
+          <span>陽光</span><kbd>2</kbd>
+        </button>
+        <button class="garden-tool" type="button" data-tool="fertilize" aria-label="施肥" title="施肥">
+          <i class="fa-solid fa-seedling" aria-hidden="true"></i>
+          <span>施肥</span><kbd>3</kbd>
+        </button>
+        <button class="garden-tool" type="button" data-tool="tidy" aria-label="整理花圃" title="整理花圃">
+          <i class="fa-solid fa-broom" aria-hidden="true"></i>
+          <span>整理</span><kbd>4</kbd>
+        </button>
+      </div>
+
+      <div id="gameIntro" class="game-intro" role="dialog" aria-modal="true" aria-labelledby="introTitle">
+        <div class="intro-content">
+          <h2 id="introTitle">巡園準備</h2>
+          <p>選擇工具後，處理花圃裡隨機出現的狀況。</p>
+          <div class="intro-guide" aria-label="工具對應表">
+            <span><i class="fa-solid fa-droplet" aria-hidden="true"></i> 澆水：乾土</span>
+            <span><i class="fa-solid fa-sun" aria-hidden="true"></i> 陽光：遮蔭</span>
+            <span><i class="fa-solid fa-seedling" aria-hidden="true"></i> 施肥：缺養分</span>
+            <span><i class="fa-solid fa-broom" aria-hidden="true"></i> 整理：雜草、紙條</span>
+          </div>
+          <p class="intro-note">也能按鍵盤 1 至 4 切換工具。事件過期或用錯工具會扣健康；60 秒結束時仍有至少一顆心，即完成巡園。</p>
+          <button id="startGame" type="button">開始巡園</button>
         </div>
-        <div class="progress-info">
-            <div class="growth-bar">
-                <div class="growth-fill" id="growthFill"></div>
-            </div>
-            <span id="growthText">生長進度: 0%</span>
+      </div>
+
+      <div id="roundResult" class="round-result hidden" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
+        <div class="result-copy">
+          <span id="resultFlower" class="result-flower" aria-hidden="true"></span>
+          <h2 id="resultTitle"></h2>
+          <p id="resultSummary"></p>
         </div>
-        <button id="backToMap" class="back-btn">返回地圖</button>
-    </div>
-    <script src="../js/utils.js"></script>
-    <script src="../js/settings.js"></script>
-    <script src="../js/config.js"></script>
-    <script src="../js/garden.js"></script>
+        <div class="result-actions">
+          <button id="restartGame" type="button">再巡一次</button>
+          <button id="backToMap" type="button">返回地圖</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="memoryPopup" class="memory-popup" aria-live="polite"></div>
+  </main>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/settings.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/garden.js"></script>
 </body>
 </html>

@@ -181,14 +181,15 @@
   padding: 0;
   border: none;
   background: none;
-  color: var(--dialogue-text-color);
-  font-size: 26px;
+  color: var(--primary700);
+  font-size: 30px;
   line-height: 1;
   cursor: pointer;
+  transition: var(--transition);
 }
 
 .next-btn:hover {
-  color: var(--dialogue-accent-color);
+  color: var(--primary100);
 }
 
 #whoAreYou {

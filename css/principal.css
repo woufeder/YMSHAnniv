@@ -45,7 +45,7 @@
 }
 
 #generateCard {
-    background: linear-gradient(45deg, var(--primary300), var(--secondary-color));
+    background: linear-gradient(45deg, var(--primary300), var(--primary500));
     border: none;
     color: white;
 }
@@ -63,19 +63,19 @@
 }
 
 #downloadCard:hover {
-    background: linear-gradient(45deg, var(--school-green), var(--success-color));
+    background: linear-gradient(45deg, var(--success-color), var(--success-color));
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
 }
 
 #backToMap {
-    background: linear-gradient(45deg, var(--secondary-color), #90caf9);
+    background: linear-gradient(45deg, var(--primary500), #90caf9);
     border: none;
     color: white;
 }
 
 #backToMap:hover {
-    background: linear-gradient(45deg, var(--primary300), var(--secondary-color));
+    background: linear-gradient(45deg, var(--primary300), var(--primary500));
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(66, 165, 245, 0.3);
 }
@@ -154,7 +154,7 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: linear-gradient(45deg, var(--school-gold), #ffca28);
+    background: linear-gradient(45deg, var(--warning-color), #ffca28);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -255,7 +255,7 @@
 
 /* 使用者資訊顯示 */
 .user-info {
-    background: var(--school-light-blue);
+    background: var(--primary100);
     padding: 15px;
     border-radius: var(--border-radius);
     margin: 20px 0;
@@ -270,7 +270,7 @@
 }
 
 .user-progress {
-    color: var(--dark-color);
+    color: var(--primary900);
     font-size: 14px;
 }
 
@@ -403,7 +403,7 @@
 
 /* 無障礙改善 */
 .controls button:focus {
-    outline: 3px solid var(--school-gold);
+    outline: 3px solid var(--warning-color);
     outline-offset: 2px;
 }
 

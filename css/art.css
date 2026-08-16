@@ -1,0 +1,151 @@
+body {
+  min-height: 100vh;
+  overflow: hidden;
+  background: #1f2631 url('../assets/images/map.png') 8% 14% / cover no-repeat;
+}
+
+.art-building {
+  min-height: 100vh;
+  padding: 48px;
+  box-sizing: border-box;
+  background: rgba(25, 33, 47, 0.72);
+  color: #f6f7fb;
+}
+
+.art-building-header {
+  width: min(760px, 100%);
+  margin: 0 auto 44px;
+  text-align: center;
+}
+
+.art-building-header p {
+  color: #b9d7ff;
+  font-size: 14px;
+  letter-spacing: 0;
+}
+
+.art-building-header h1 {
+  margin-top: 10px;
+  font-size: 72px;
+  color: #fff;
+}
+
+.music-egg-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  color: #dfe6ef;
+  font-size: 15px;
+}
+
+.music-egg-status.is-earned {
+  color: #ffe083;
+}
+
+.art-room-choices {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  width: min(900px, 100%);
+  margin: 0 auto;
+}
+
+.art-room-choice {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+  min-height: 210px;
+  padding: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.42);
+  border-radius: var(--border-radius-large);
+  color: inherit;
+  text-decoration: none;
+  box-shadow: var(--shadow-heavy);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.art-room-choice:hover,
+.art-room-choice:focus-visible {
+  border-color: #fff;
+  outline: none;
+  transform: translateY(-4px);
+}
+
+.music-room {
+  background: rgba(88, 110, 162, 0.9);
+}
+
+.drawing-room {
+  background: rgba(168, 91, 117, 0.9);
+}
+
+.art-room-choice > i:first-child {
+  font-size: 44px;
+}
+
+.art-room-choice > i:last-child {
+  font-size: 18px;
+}
+
+.room-choice-copy strong,
+.room-choice-copy small {
+  display: block;
+}
+
+.room-choice-copy strong {
+  font-size: 27px;
+}
+
+.room-choice-copy small {
+  margin-top: 7px;
+  font-size: 15px;
+}
+
+.art-back {
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 50%;
+  background: rgba(20, 27, 39, 0.68);
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.art-back:hover,
+.art-back:focus-visible {
+  background: #fff;
+  color: #1f2631;
+  outline: none;
+}
+
+@media (max-width: 680px) {
+  .art-building {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 28px 18px;
+  }
+
+  .art-building-header {
+    margin-bottom: 28px;
+  }
+
+  .art-building-header h1 {
+    font-size: 42px;
+  }
+
+  .art-room-choices {
+    grid-template-columns: 1fr;
+  }
+
+  .art-room-choice {
+    min-height: 132px;
+    padding: 22px;
+  }
+}

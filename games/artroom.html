@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YMSH 周年紀念 - 美術教室</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/artroom.css">
+</head>
+<body>
+  <main class="artroom">
+    <header class="artroom-header">
+      <div>
+        <p>ART BUILDING / ART ROOM</p>
+        <h1>美術教室</h1>
+      </div>
+      <p id="saveStatus" class="save-status" aria-live="polite"></p>
+    </header>
+
+    <section class="drawing-workspace" aria-label="繪圖畫布">
+      <div class="drawing-toolbar">
+        <div class="color-swatches" aria-label="顏色">
+          <button class="color-swatch is-selected" type="button" data-color="#252834" style="--swatch:#252834" aria-label="深灰色"></button>
+          <button class="color-swatch" type="button" data-color="#d6535d" style="--swatch:#d6535d" aria-label="紅色"></button>
+          <button class="color-swatch" type="button" data-color="#e6a63d" style="--swatch:#e6a63d" aria-label="金色"></button>
+          <button class="color-swatch" type="button" data-color="#529c69" style="--swatch:#529c69" aria-label="綠色"></button>
+          <button class="color-swatch" type="button" data-color="#4f80c6" style="--swatch:#4f80c6" aria-label="藍色"></button>
+          <input id="customColor" type="color" value="#252834" aria-label="自訂顏色">
+        </div>
+        <label class="brush-size" for="brushSize">
+          <i class="fa-solid fa-pen" aria-hidden="true"></i>
+          <input id="brushSize" type="range" min="2" max="32" value="8">
+        </label>
+        <div class="brush-tools" role="toolbar" aria-label="繪圖工具">
+          <button class="tool-action is-active" type="button" data-tool="brush" data-brush="round" aria-label="圓筆刷" title="圓筆刷"><i class="fa-solid fa-pen-nib" aria-hidden="true"></i></button>
+          <button class="tool-action" type="button" data-tool="brush" data-brush="marker" aria-label="麥克筆" title="麥克筆"><i class="fa-solid fa-highlighter" aria-hidden="true"></i></button>
+          <button class="tool-action" type="button" data-tool="brush" data-brush="spray" aria-label="噴漆筆" title="噴漆筆"><i class="fa-solid fa-spray-can" aria-hidden="true"></i></button>
+          <button class="tool-action" type="button" data-tool="bucket" aria-label="油漆桶填色" title="油漆桶填色"><i class="fa-solid fa-fill-drip" aria-hidden="true"></i></button>
+          <button id="eraser" class="tool-action" type="button" data-tool="eraser" aria-label="橡皮擦" title="橡皮擦"><i class="fa-solid fa-eraser" aria-hidden="true"></i></button>
+        </div>
+        <div class="drawing-actions">
+          <button id="undo" class="tool-action" type="button" aria-label="復原" title="復原"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i></button>
+          <button id="redo" class="tool-action" type="button" aria-label="重做" title="重做"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i></button>
+          <button id="clearCanvas" class="tool-action" type="button" aria-label="清空畫布" title="清空畫布"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
+          <button id="saveArtwork" class="save-artwork" type="button"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> 儲存作品</button>
+        </div>
+      </div>
+      <div class="canvas-frame">
+        <canvas id="drawingCanvas" width="960" height="640" aria-label="可繪圖畫布"></canvas>
+      </div>
+    </section>
+
+    <button id="backToArt" class="artroom-back" type="button" aria-label="返回藝術大樓" title="返回藝術大樓">
+      <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+    </button>
+  </main>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/settings.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/artroom.js"></script>
+</body>
+</html>

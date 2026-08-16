@@ -1,157 +1,259 @@
-// garden.js - 種樹互動遊戲
-document.addEventListener('DOMContentLoaded', function() {
-    const treeContainer = document.getElementById('treeContainer');
-    const waterBtn = document.getElementById('waterBtn');
-    const sunlightBtn = document.getElementById('sunlightBtn');
-    const fertilizeBtn = document.getElementById('fertilizeBtn');
-    const growthFill = document.getElementById('growthFill');
-    const growthText = document.getElementById('growthText');
-    const backBtn = document.getElementById('backToMap');
+// garden.js - 花圃急救站
+document.addEventListener('DOMContentLoaded', () => {
+  const ROUND_DURATION = 60;
+  const MAX_HEALTH = 5;
+  const MAX_ACTIVE_EVENTS = 4;
+  const SPAWN_INTERVAL = 1900;
+  const eventGrid = document.getElementById('eventGrid');
+  const timeElement = document.getElementById('timeRemaining');
+  const scoreElement = document.getElementById('score');
+  const comboElement = document.getElementById('combo');
+  const healthElement = document.getElementById('health');
+  const roundMessage = document.getElementById('roundMessage');
+  const memoryPopup = document.getElementById('memoryPopup');
+  const roundResult = document.getElementById('roundResult');
+  const gameIntro = document.getElementById('gameIntro');
+  const startButton = document.getElementById('startGame');
+  const resultFlower = document.getElementById('resultFlower');
+  const resultTitle = document.getElementById('resultTitle');
+  const resultSummary = document.getElementById('resultSummary');
+  const restartButton = document.getElementById('restartGame');
+  const backButton = document.getElementById('backToMap');
+  const toolButtons = [...document.querySelectorAll('.garden-tool')];
 
-    let treeGrowth = parseInt(localStorage.getItem('treeGrowth')) || 0;
-    let lastWatered = localStorage.getItem('lastWatered') || 0;
-    let lastSunlight = localStorage.getItem('lastSunlight') || 0;
-    let lastFertilized = localStorage.getItem('lastFertilized') || 0;
+  const eventTypes = [
+    { id: 'dry', label: '乾土', icon: '💧', tool: 'water', points: 10, lifetime: 9000, success: '水分補充完成' },
+    { id: 'shade', label: '遮蔭', icon: '☁️', tool: 'sunlight', points: 12, lifetime: 8500, success: '陽光回到花圃了' },
+    { id: 'hungry', label: '缺養分', icon: '🍂', tool: 'fertilize', points: 14, lifetime: 8800, success: '土壤恢復精神' },
+    { id: 'weeds', label: '雜草', icon: '🌿', tool: 'tidy', points: 12, lifetime: 8200, success: '花圃整理乾淨了' },
+    { id: 'memory', label: '回憶紙條', icon: '✉️', tool: 'tidy', points: 18, lifetime: 9800, success: '找到一張回憶紙條' }
+  ];
+  const memories = [
+    '午休後的花圃，總有一點剛澆完水的味道。',
+    '有人把花圃當成通往教室前最後一段慢下來的路。',
+    '記得那年校慶，花圃旁的笑聲比花還熱鬧。',
+    '看似不起眼的角落，也收著一段段校園日常。',
+    '風一吹，花圃裡的葉子像在替大家打招呼。'
+  ];
 
-    const growthStages = [
-        '🌱', // 種子
-        '🌿', // 幼苗
-        '🌳', // 小樹
-        '🌲', // 大樹
-        '🎄'  // 完全成長
-    ];
+  let selectedTool = 'water';
+  let score = 0;
+  let combo = 0;
+  let health = MAX_HEALTH;
+  let timeRemaining = ROUND_DURATION;
+  let gameActive = false;
+  let slots = [];
+  let spawnTimer = null;
+  let countdownTimer = null;
+  let memoryTimer = null;
+  const activeEvents = new Map();
 
-    function initGarden() {
-        updateTreeDisplay();
-        updateGrowthBar();
-        checkButtonStates();
-    }
+  function randomItem(items) {
+    return items[Math.floor(Math.random() * items.length)];
+  }
 
-    function updateTreeDisplay() {
-        const stageIndex = Math.min(Math.floor(treeGrowth / 20), growthStages.length - 1);
-        treeContainer.innerHTML = `
-            <div class="tree-stage" style="font-size: ${2 + stageIndex}em;">
-                ${growthStages[stageIndex]}
-            </div>
-        `;
-    }
-
-    function updateGrowthBar() {
-        const percentage = Math.min(treeGrowth, 100);
-        growthFill.style.width = percentage + '%';
-        growthText.textContent = `生長進度: ${percentage}%`;
-        
-        if (percentage >= 100) {
-            growthText.textContent += ' - 樹木已完全成長！';
-            markGameComplete();
-        }
-    }
-
-    function checkButtonStates() {
-        const now = Date.now();
-        const cooldown = 5000; // 5秒冷卻時間
-
-        // 檢查按鈕是否需要冷卻
-        if (now - lastWatered < cooldown) {
-            waterBtn.disabled = true;
-            setTimeout(() => {
-                waterBtn.disabled = false;
-            }, cooldown - (now - lastWatered));
-        }
-
-        if (now - lastSunlight < cooldown) {
-            sunlightBtn.disabled = true;
-            setTimeout(() => {
-                sunlightBtn.disabled = false;
-            }, cooldown - (now - lastSunlight));
-        }
-
-        if (now - lastFertilized < cooldown) {
-            fertilizeBtn.disabled = true;
-            setTimeout(() => {
-                fertilizeBtn.disabled = false;
-            }, cooldown - (now - lastFertilized));
-        }
-    }
-
-    function growTree(amount, action) {
-        treeGrowth = Math.min(treeGrowth + amount, 100);
-        localStorage.setItem('treeGrowth', treeGrowth);
-        
-        updateTreeDisplay();
-        updateGrowthBar();
-        
-        // 顯示動畫效果
-        showGrowthEffect(action);
-    }
-
-    function showGrowthEffect(action) {
-        const effect = document.createElement('div');
-        effect.className = 'growth-effect';
-        effect.textContent = getActionEffect(action);
-        treeContainer.appendChild(effect);
-        
-        setTimeout(() => {
-            effect.remove();
-        }, 2000);
-    }
-
-    function getActionEffect(action) {
-        const effects = {
-            water: '💧 澆水中...',
-            sunlight: '☀️ 陽光照射...',
-            fertilize: '🌰 施肥中...'
-        };
-        return effects[action] || '';
-    }
-
-    function markGameComplete() {
-        let completedGames = JSON.parse(localStorage.getItem('completedGames')) || [];
-        if (!completedGames.includes('garden')) {
-            completedGames.push('garden');
-            localStorage.setItem('completedGames', JSON.stringify(completedGames));
-        }
-    }
-
-    // 事件監聽器
-    waterBtn.addEventListener('click', function() {
-        if (!this.disabled) {
-            growTree(15, 'water');
-            lastWatered = Date.now();
-            localStorage.setItem('lastWatered', lastWatered);
-            this.disabled = true;
-            setTimeout(() => {
-                this.disabled = false;
-            }, 5000);
-        }
+  function createGrid() {
+    eventGrid.replaceChildren();
+    slots = Array.from({ length: 16 }, (_, index) => {
+      const slot = document.createElement('div');
+      slot.className = 'garden-slot';
+      slot.dataset.slot = index;
+      eventGrid.appendChild(slot);
+      return slot;
     });
+  }
 
-    sunlightBtn.addEventListener('click', function() {
-        if (!this.disabled) {
-            growTree(10, 'sunlight');
-            lastSunlight = Date.now();
-            localStorage.setItem('lastSunlight', lastSunlight);
-            this.disabled = true;
-            setTimeout(() => {
-                this.disabled = false;
-            }, 5000);
-        }
+  function startRound() {
+    stopTimers();
+    activeEvents.forEach(event => clearTimeout(event.timeoutId));
+    activeEvents.clear();
+    score = 0;
+    combo = 0;
+    health = MAX_HEALTH;
+    timeRemaining = ROUND_DURATION;
+    gameActive = true;
+    gameIntro.classList.add('hidden');
+    roundResult.classList.add('hidden');
+    hideMemory();
+    createGrid();
+    selectTool('water');
+    setRoundMessage('巡園開始');
+    renderStats();
+    spawnEvent();
+    spawnTimer = setInterval(spawnEvent, SPAWN_INTERVAL);
+    countdownTimer = setInterval(tick, 1000);
+  }
+
+  function stopTimers() {
+    clearInterval(spawnTimer);
+    clearInterval(countdownTimer);
+    spawnTimer = null;
+    countdownTimer = null;
+  }
+
+  function tick() {
+    timeRemaining -= 1;
+    renderStats();
+    if (timeRemaining <= 0) {
+      endRound(health > 0);
+    }
+  }
+
+  function spawnEvent() {
+    if (!gameActive || activeEvents.size >= MAX_ACTIVE_EVENTS) return;
+
+    const availableSlots = slots.filter((_, index) => !activeEvents.has(index));
+    if (!availableSlots.length) return;
+
+    const slot = randomItem(availableSlots);
+    const slotIndex = Number(slot.dataset.slot);
+    const eventType = randomItem(eventTypes);
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = `garden-event garden-event--${eventType.id}`;
+    button.setAttribute('aria-label', eventType.label);
+    button.innerHTML = `<span class="event-icon" aria-hidden="true">${eventType.icon}</span><span>${eventType.label}</span>`;
+
+    const event = { slotIndex, eventType, button, timeoutId: null };
+    button.addEventListener('click', () => handleEvent(event));
+    slot.appendChild(button);
+    activeEvents.set(slotIndex, event);
+    event.timeoutId = setTimeout(() => expireEvent(event), eventType.lifetime);
+  }
+
+  function handleEvent(event) {
+    if (!gameActive || activeEvents.get(event.slotIndex) !== event) return;
+
+    if (selectedTool === event.eventType.tool) {
+      const comboBonus = Math.min(combo, 5) * 2;
+      score += event.eventType.points + comboBonus;
+      combo += 1;
+      setRoundMessage(`${event.eventType.success} +${event.eventType.points + comboBonus}`);
+      event.button.classList.add('is-resolved');
+      if (event.eventType.id === 'memory') {
+        showMemory();
+        playSound?.('paper');
+      } else {
+        playSound?.('step');
+      }
+    } else {
+      health -= 1;
+      combo = 0;
+      setRoundMessage('工具不對，花圃健康下降');
+      event.button.classList.add('is-missed');
+    }
+
+    resolveEvent(event);
+    renderStats();
+    if (health <= 0) {
+      endRound(false);
+    }
+  }
+
+  function expireEvent(event) {
+    if (!gameActive || activeEvents.get(event.slotIndex) !== event) return;
+
+    health -= 1;
+    combo = 0;
+    setRoundMessage(`${event.eventType.label}來不及處理`);
+    resolveEvent(event);
+    renderStats();
+    if (health <= 0) {
+      endRound(false);
+    }
+  }
+
+  function resolveEvent(event) {
+    clearTimeout(event.timeoutId);
+    activeEvents.delete(event.slotIndex);
+    setTimeout(() => event.button.remove(), 180);
+  }
+
+  function selectTool(tool) {
+    selectedTool = tool;
+    toolButtons.forEach(button => {
+      const isSelected = button.dataset.tool === tool;
+      button.classList.toggle('is-selected', isSelected);
+      button.setAttribute('aria-pressed', isSelected.toString());
     });
+  }
 
-    fertilizeBtn.addEventListener('click', function() {
-        if (!this.disabled) {
-            growTree(20, 'fertilize');
-            lastFertilized = Date.now();
-            localStorage.setItem('lastFertilized', lastFertilized);
-            this.disabled = true;
-            setTimeout(() => {
-                this.disabled = false;
-            }, 5000);
-        }
+  function renderStats() {
+    timeElement.textContent = timeRemaining;
+    scoreElement.textContent = score;
+    comboElement.textContent = combo;
+    healthElement.textContent = `${'♥'.repeat(health)}${'♡'.repeat(MAX_HEALTH - health)}`;
+    healthElement.setAttribute('aria-label', `健康值 ${health} / ${MAX_HEALTH}`);
+  }
+
+  function setRoundMessage(message) {
+    roundMessage.textContent = message;
+    roundMessage.classList.remove('is-visible');
+    void roundMessage.offsetWidth;
+    roundMessage.classList.add('is-visible');
+  }
+
+  function showMemory() {
+    memoryPopup.textContent = randomItem(memories);
+    memoryPopup.classList.add('show');
+    clearTimeout(memoryTimer);
+    memoryTimer = setTimeout(hideMemory, 2800);
+  }
+
+  function hideMemory() {
+    memoryPopup.classList.remove('show');
+  }
+
+  function endRound(completed) {
+    if (!gameActive) return;
+
+    gameActive = false;
+    stopTimers();
+    activeEvents.forEach(event => {
+      clearTimeout(event.timeoutId);
+      event.button.disabled = true;
     });
+    activeEvents.clear();
 
-    backBtn.addEventListener('click', () => window.location.href = '../map.html');
+    const flower = score >= 160 ? '🌻' : score >= 100 ? '🌷' : '🌼';
+    resultFlower.textContent = completed ? flower : '🥀';
+    resultTitle.textContent = completed ? '巡園完成' : '花圃需要再照顧';
+    resultSummary.textContent = completed
+      ? `你守住了花圃，獲得 ${score} 分。`
+      : `這次獲得 ${score} 分，換個節奏再試一次。`;
+    roundResult.classList.remove('hidden');
 
-    // 初始化
-    initGarden();
+    if (completed) {
+      markGameComplete();
+    }
+  }
+
+  function markGameComplete() {
+    const completedGames = JSON.parse(localStorage.getItem('completedGames')) || [];
+    if (!completedGames.includes('garden')) {
+      completedGames.push('garden');
+      localStorage.setItem('completedGames', JSON.stringify(completedGames));
+    }
+  }
+
+  toolButtons.forEach(button => {
+    button.addEventListener('click', () => selectTool(button.dataset.tool));
+  });
+  document.addEventListener('keydown', event => {
+    if (!gameActive || event.altKey || event.ctrlKey || event.metaKey) return;
+
+    const toolButton = toolButtons[Number(event.key) - 1];
+    if (!toolButton) return;
+
+    event.preventDefault();
+    selectTool(toolButton.dataset.tool);
+    setRoundMessage(`已選擇${toolButton.getAttribute('aria-label')}`);
+  });
+  startButton.addEventListener('click', startRound);
+  restartButton.addEventListener('click', startRound);
+  backButton.addEventListener('click', () => window.location.href = '../map.html');
+
+  createGrid();
+  renderStats();
+  setRoundMessage('選擇工具後開始巡園');
 });

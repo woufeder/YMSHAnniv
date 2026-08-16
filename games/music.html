@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YMSH 周年紀念 - 音樂教室</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/main.css">
+  <link rel="stylesheet" href="../css/music.css">
+</head>
+<body>
+  <main class="music-classroom">
+    <header class="music-header">
+      <div>
+        <p>ART BUILDING / MUSIC ROOM</p>
+        <h1>音樂教室</h1>
+      </div>
+      <div id="eggBadge" class="egg-badge" aria-live="polite"></div>
+    </header>
+
+    <section class="music-stage" aria-label="琴譜演奏">
+      <p class="score-label">永明高中校歌・C 大調簡化版・節奏不限</p>
+      <p id="measureProgress" class="measure-progress" aria-live="polite"></p>
+      <div id="sheetMusic" class="sheet-music" aria-label="琴譜"></div>
+      <p id="musicMessage" class="music-message" aria-live="polite"></p>
+      <div id="piano" class="piano" aria-label="鋼琴鍵盤"></div>
+      <button id="restartScore" class="new-melody" type="button">重新開始</button>
+    </section>
+
+    <button id="backToArt" class="music-back" type="button" aria-label="返回藝術大樓" title="返回藝術大樓">
+      <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+    </button>
+  </main>
+
+  <script src="../js/utils.js"></script>
+  <script src="../js/settings.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/music.js"></script>
+</body>
+</html>

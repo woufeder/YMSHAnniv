@@ -275,6 +275,8 @@ window.memberData = [
 { "name": "安晨海", "class": "二年級理組班", "role": "student" },
 { "name": "吳暐雄", "class": "二年級理組班", "role": "student" },
 { "name": "許安生", "class": "二年級理組班", "role": "student" },
+{ "name": "言絕", "class": "二年級", "role": "student" },
+{ "name": "輝耀", "class": "永明", "role": "student" },
 // 二年信班
 { "name": "林甦玥", "class": "二年信班", "role": "student" },
 { "name": "黎冠廷", "class": "二年信班", "role": "student" },

@@ -1,0 +1,228 @@
+body {
+  min-height: 100vh;
+  overflow: hidden;
+  background: #f2ece2;
+}
+
+.artroom {
+  min-height: 100vh;
+  padding: 28px;
+  box-sizing: border-box;
+  background: linear-gradient(135deg, #e7b9aa 0%, #f4dfaa 50%, #b9d8c2 100%);
+}
+
+.artroom-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto 18px;
+}
+
+.artroom-header p {
+  color: #634f4a;
+  font-size: 13px;
+}
+
+.artroom-header h1 {
+  margin-top: 8px;
+  color: #452f3d;
+  font-size: 42px;
+}
+
+.save-status {
+  max-width: 260px;
+  margin: 0;
+  color: #513d35;
+  font-size: 14px;
+  line-height: 1.45;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.save-status.is-visible {
+  opacity: 1;
+}
+
+.drawing-workspace {
+  max-width: 1200px;
+  margin: 0 auto;
+  border: 1px solid rgba(69, 47, 61, 0.22);
+  border-radius: var(--border-radius-large);
+  background: rgba(255, 255, 255, 0.58);
+  box-shadow: var(--shadow-heavy);
+  overflow: hidden;
+}
+
+.drawing-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(69, 47, 61, 0.16);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.color-swatches,
+.brush-tools,
+.drawing-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.color-swatch {
+  width: 26px;
+  height: 26px;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  background: var(--swatch);
+  cursor: pointer;
+}
+
+.color-swatch.is-selected {
+  border-color: #fff;
+  box-shadow: 0 0 0 2px #452f3d;
+}
+
+#customColor {
+  width: 27px;
+  height: 27px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+}
+
+.brush-size {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #634f4a;
+}
+
+#brushSize {
+  width: 110px;
+  accent-color: #a3586c;
+}
+
+.tool-action,
+.save-artwork {
+  height: 36px;
+  border: 1px solid #b98c87;
+  border-radius: var(--border-radius);
+  background: #fff;
+  color: #593e48;
+  font: inherit;
+  cursor: pointer;
+}
+
+.tool-action {
+  width: 36px;
+}
+
+.tool-action.is-active,
+.tool-action:hover,
+.tool-action:focus-visible {
+  background: #f4dca6;
+  outline: none;
+}
+
+.tool-action:disabled {
+  border-color: #d8cbc4;
+  background: #f3efeb;
+  color: #b4a8a2;
+  cursor: not-allowed;
+}
+
+.save-artwork {
+  padding: 0 12px;
+  background: #a3586c;
+  color: #fff;
+}
+
+.save-artwork:hover,
+.save-artwork:focus-visible {
+  background: #7f4054;
+  outline: none;
+}
+
+.canvas-frame {
+  padding: 20px;
+  background-image: linear-gradient(rgba(91, 62, 72, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(91, 62, 72, 0.05) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+#drawingCanvas {
+  display: block;
+  width: 100%;
+  max-height: calc(100vh - 205px);
+  aspect-ratio: 3 / 2;
+  touch-action: none;
+  border: 1px solid #d4c3b5;
+  background: #fff;
+  cursor: crosshair;
+}
+
+#drawingCanvas.is-bucket {
+  cursor: cell;
+}
+
+.artroom-back {
+  position: fixed;
+  top: 24px;
+  left: 24px;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  background: rgba(69, 47, 61, 0.66);
+  color: #fff;
+  cursor: pointer;
+}
+
+.artroom-back:hover,
+.artroom-back:focus-visible {
+  background: #fff;
+  color: #452f3d;
+  outline: none;
+}
+
+@media (max-width: 760px) {
+  .artroom {
+    padding: 18px 10px;
+  }
+
+  .artroom-header {
+    padding-left: 52px;
+  }
+
+  .artroom-header h1 {
+    font-size: 32px;
+  }
+
+  .save-status {
+    display: none;
+  }
+
+  .drawing-toolbar {
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .drawing-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .canvas-frame {
+    padding: 10px;
+  }
+
+  #drawingCanvas {
+    max-height: calc(100vh - 275px);
+  }
+}

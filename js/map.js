@@ -1,20 +1,21 @@
 // map.js - 地圖互動與進度管理
 document.addEventListener('DOMContentLoaded', function() {
-    const userName = localStorage.getItem('userName') || '訪客';
-    const progressText = document.getElementById('progress-text');
+    const progressChecklist = document.getElementById('progress-checklist');
     const campusMap = document.getElementById('campusMap');
     const markers = document.querySelector('.location-markers');
     const MAP_WIDTH = 5959;
     const MAP_HEIGHT = 4092;
     const locations = [
-        { id: 'classroom', name: '教室', mapX: 565, mapY: 3000, url: 'games/classroom.html' },
-        { id: 'garden', name: '花圃', mapX: 2000, mapY: 1025, url: 'games/garden.html' },
-        { id: 'lab', name: '實驗室', mapX: 2550, mapY: 2600, url: 'games/lab.html' },
+        { id: 'art', name: '藝術大樓', event: '藝術大樓', mapX: 950, mapY: 1000, url: 'art.html' },
+        { id: 'classroom', name: '教室', event:"快問快答", mapX: 565, mapY: 3000, url: 'games/classroom.html' },
+        { id: 'garden', name: '花圃', event:"花園急救站", mapX: 2000, mapY: 1025, url: 'games/garden.html' },
+        { id: 'lab', name: '實驗室', event:"記憶翻牌", mapX: 2550, mapY: 2600, url: 'games/lab.html' },
         { id: 'principal', name: '校長室', mapX: 3500, mapY: 3200, url: 'principal.html' },
         { id: 'hall', name: '穿堂', mapX: 3360, mapY: 2600, url: 'hall.html' },
         { id: 'playground', name: '操場', mapX: 4850, mapY: 1600, url: 'playground.html' },
         // { id: 'extras', name: '彩蛋區', mapX: 5200, mapY: 470, url: 'games/extras.html' }
     ];
+    const mainGameIds = ['classroom', 'garden', 'lab'];
     
     // 初始化進度
     let completedGames = JSON.parse(localStorage.getItem('completedGames')) || [];
@@ -68,16 +69,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateProgress() {
-        const total = 3; // 主要遊戲數量
-        const completed = completedGames.filter(game => 
-            ['classroom', 'garden', 'lab'].includes(game)
-        ).length;
-        
-        progressText.textContent = `進度: ${completed}/${total}`;
-        
-        // 如果全部完成，顯示特殊訊息
-        if (completed === total) {
-            progressText.textContent += ' - 恭喜完成所有挑戰！';
-        }
+        if (!progressChecklist) return;
+
+        const mainGames = locations.filter(location => mainGameIds.includes(location.id));
+        progressChecklist.replaceChildren(...mainGames.map(location => {
+            const item = document.createElement('label');
+            item.className = 'progress-check-item';
+
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.checked = completedGames.includes(location.id);
+            checkbox.disabled = true;
+            checkbox.setAttribute('aria-label', `${location.name}${checkbox.checked ? '已完成' : '未完成'}`);
+
+            const name = document.createElement('span');
+            name.textContent = location.event;
+
+            item.append(checkbox, name);
+            return item;
+        }));
     }
 });

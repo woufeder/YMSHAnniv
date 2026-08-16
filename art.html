@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YMSH 周年紀念 - 藝術大樓</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/art.css">
+</head>
+<body>
+  <main class="art-building">
+    <header class="art-building-header">
+      <p>YMSH ART BUILDING</p>
+      <h1>藝術大樓</h1>
+      <div id="musicEggStatus" class="music-egg-status" aria-live="polite"></div>
+    </header>
+
+    <section class="art-room-choices" aria-label="選擇教室">
+      <a class="art-room-choice music-room" href="games/music.html">
+        <i class="fa-solid fa-music" aria-hidden="true"></i>
+        <span class="room-choice-copy">
+          <strong>音樂教室</strong>
+          <small>跟著琴譜演奏</small>
+        </span>
+        <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a class="art-room-choice drawing-room" href="games/artroom.html">
+        <i class="fa-solid fa-palette" aria-hidden="true"></i>
+        <span class="room-choice-copy">
+          <strong>美術教室</strong>
+          <small>留下你的校園作品</small>
+        </span>
+        <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+      </a>
+    </section>
+
+    <button id="backToMap" class="art-back" type="button" aria-label="返回校園地圖" title="返回校園地圖">
+      <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+    </button>
+  </main>
+
+  <script src="js/utils.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/art.js"></script>
+</body>
+</html>

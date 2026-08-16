@@ -40,7 +40,7 @@
 
 #submitMessage {
   padding: 15px 30px;
-  background: linear-gradient(45deg, var(--primary300), var(--secondary-color));
+  background: linear-gradient(45deg, var(--primary300), var(--primary500));
   color: white;
   border: none;
   border-radius: 25px;
@@ -107,7 +107,7 @@
 }
 
 .message-content {
-  color: var(--dark-color);
+  color: var(--primary900);
   line-height: 1.6;
   font-size: 15px;
   word-wrap: break-word;
@@ -225,7 +225,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px;
-  background: var(--school-light-blue);
+  background: var(--primary100);
   border-radius: var(--border-radius);
   margin-bottom: 20px;
   font-size: 14px;
@@ -253,7 +253,7 @@
 }
 
 .messages-list::-webkit-scrollbar-thumb {
-  background: var(--secondary-color);
+  background: var(--primary500);
   border-radius: 4px;
 }
 
@@ -263,7 +263,7 @@
 
 /* 留言氣泡效果 */
 .message-item.user-message {
-  background: linear-gradient(135deg, var(--school-light-blue), #ffffff);
+  background: linear-gradient(135deg, var(--primary100), #ffffff);
   border-left: 4px solid var(--primary300);
 }
 
@@ -366,7 +366,7 @@
 }
 
 #submitMessage:focus {
-  outline: 3px solid var(--school-gold);
+  outline: 3px solid var(--warning-color);
   outline-offset: 2px;
 }
 
