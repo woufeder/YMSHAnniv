@@ -341,3 +341,8 @@
     transform: translate(-50%, -50%) scale(1);
   }
 }
+
+/* Markers are positioned only after the dialogue layer is removed. */
+.location-marker {
+  animation: none;
+}

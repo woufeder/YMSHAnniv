@@ -12,10 +12,27 @@
   <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/map.css">
+  <link rel="stylesheet" href="css/dialogue.css">
 </head>
 
 <body>
-  <div class="map-container">
+  <div id="mapIntro" class="scene-container">
+    <div class="background-layer">
+      <img id="bg" src="assets/images/gate.png" alt="">
+    </div>
+    <div class="character-layer"></div>
+    <div class="dialogue-layer">
+      <div class="dialogue-box">
+        <div class="dialogue-header"><span id="name"></span></div>
+        <div id="text" class="dialogue-text"></div>
+        <div class="control-area">
+          <button id="nextBtn" class="next-btn" type="button" aria-label="下一句"><i class="fa-solid fa-play" aria-hidden="true"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="mapContent" class="map-container location-page-content is-hidden">
     <div class="map-header">
       <h1>校園地圖</h1>
       <hr class="my-3 text-light">
@@ -32,7 +49,9 @@
   <script src="js/utils.js"></script>
   <script src="js/settings.js"></script>
   <script src="js/config.js"></script>
+  <script src="js/dialogue.js"></script>
   <script src="js/map.js"></script>
+  <script src="js/map-intro.js"></script>
 
 </body>
 

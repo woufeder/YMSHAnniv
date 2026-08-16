@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     createLocationMarkers();
     positionLocationMarkers();
     window.addEventListener('resize', positionLocationMarkers);
+    window.addEventListener('ymsh:map-revealed', positionLocationMarkers);
     campusMap?.addEventListener('load', positionLocationMarkers);
 
     function createLocationMarkers() {

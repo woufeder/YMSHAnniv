@@ -46,7 +46,7 @@
       <div class="input-group input-group-lg mt-4">
         <input id="playerName" type="text" class="form-control" placeholder="請輸入您的姓名" aria-label="Recipient’s username"
           aria-describedby="submitName">
-        <a id="submitName" class="btn btn-primary" type="button" href="preduce.html">確認</a>
+        <a id="submitName" class="btn btn-primary" type="button" href="map.html">確認</a>
       </div>
     </div>
   </div>
@@ -164,7 +164,8 @@
         localStorage.setItem('playerName', name); // 沒找到就沿用輸入值
       }
 
-      window.location.href = 'preduce.html';
+      sessionStorage.removeItem('ymsh:mapIntroSeen');
+      window.location.href = 'map.html';
     });
 
 

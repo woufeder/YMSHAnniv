@@ -2,7 +2,7 @@
 async function init() {
   const dialogue = new DialogueCore({
     container: '.scene-container',
-    data: 'data/precede.json',
+    data: 'data/map_intro.json',
     dialogueKey: 'warning',
     reuseExistingLayout: true,
     onFinish: () => fadeTo('gate.html')
