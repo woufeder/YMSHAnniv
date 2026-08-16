@@ -1,5 +1,10 @@
-window.bgm?.setTemporaryMute(true);
-window.addEventListener("pagehide", () => window.bgm?.setTemporaryMute(false), { once: true });
+function muteMusicClassroomBgm() {
+  window.bgm?.setTemporaryMute(true);
+}
+
+muteMusicClassroomBgm();
+window.addEventListener("pageshow", muteMusicClassroomBgm);
+window.addEventListener("pagehide", () => window.bgm?.setTemporaryMute(false));
 
 document.addEventListener("DOMContentLoaded", () => {
   const NOTES = [

@@ -327,10 +327,10 @@ class BGMManager {
       this.audio.currentTime = parseFloat(savedTime);
     }
 
-    // 2. 定時儲存目前進度 (每 1 秒存一次)
+    // 2. 定時儲存目前進度 (每 0.5 秒存一次)
     setInterval(() => {
       localStorage.setItem(this.storageKey, this.audio.currentTime.toString());
-    }, 1000);
+    }, 500);
 
     this.updateVolume();
     this.isInitialized = true;
@@ -369,6 +369,14 @@ window.resolveAppAsset = resolveAppAsset;
 
 window.addEventListener('DOMContentLoaded', () => {
   bgm.init();
+  bgm.play();
+});
+
+// Browser history can restore a page from bfcache without firing DOMContentLoaded again.
+window.addEventListener('pageshow', (event) => {
+  if (!event.persisted) return;
+  bgm.init();
+  bgm.updateVolume();
   bgm.play();
 });
 
