@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmIUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YMSH 周年紀念 - 花圃急救站</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/garden.css">
 </head>
+
 <body>
   <a class="map-return-button" href="../map.html" aria-label="返回校園地圖" title="返回校園地圖"><i class="fa-solid fa-map" aria-hidden="true"></i></a>
   <main class="garden-game">
@@ -45,22 +45,37 @@
           <span>施肥</span><kbd>3</kbd>
         </button>
         <button class="garden-tool" type="button" data-tool="tidy" aria-label="整理花圃" title="整理花圃">
-          <i class="fa-solid fa-broom" aria-hidden="true"></i>
-          <span>整理</span><kbd>4</kbd>
+          <i class="fa-solid fa-hand-sparkles" aria-hidden="true"></i>
+            <span>整理</span><kbd>4</kbd>
         </button>
       </div>
 
       <div id="gameIntro" class="game-intro" role="dialog" aria-modal="true" aria-labelledby="introTitle">
         <div class="intro-content">
           <h2 id="introTitle">巡園準備</h2>
-          <p>選擇工具後，處理花圃裡隨機出現的狀況。</p>
+          <p class="intro-note">選擇工具，處理花圃裡隨機出現的狀況。</p>
+          <p class="intro-note">可按鍵盤1至4切換工具。<br>事件過期或用錯工具會扣健康；60 秒結束時仍有至少一顆心，即算通關。</p>
           <div class="intro-guide" aria-label="工具對應表">
-            <span><i class="fa-solid fa-droplet" aria-hidden="true"></i> 澆水：乾土</span>
-            <span><i class="fa-solid fa-sun" aria-hidden="true"></i> 陽光：遮蔭</span>
-            <span><i class="fa-solid fa-seedling" aria-hidden="true"></i> 施肥：缺養分</span>
-            <span><i class="fa-solid fa-broom" aria-hidden="true"></i> 整理：雜草、紙條</span>
+            <div class="d-flex flex-row align-items-center gap-2 nowrap">
+              <span class="tool"><i class="fa-solid fa-droplet" aria-hidden="true"></i>澆水：</span>
+              <span class="quiz"><i class="fa-solid fa-plant-wilt" aria-hidden="true"></i>土太乾了</span>
+
+            </div>
+            <div class="d-flex flex-row align-items-center gap-2 nowrap">
+              <span class="tool"><i class="fa-solid fa-sun" aria-hidden="true"></i>陽光：</span>
+              <span class="quiz"><i class="fa-solid fa-cloud-rain" aria-hidden="true"></i>天氣不好</span>
+            </div>
+            <div class="d-flex flex-row align-items-center gap-2 nowrap">
+              <span class="tool"><i class="fa-solid fa-seedling" aria-hidden="true"></i>施肥：</span>
+              <span class="quiz"><i class="fa-solid fa-seedling" aria-hidden="true"></i>養分不夠</span>
+
+            </div>
+            <div>
+              <span class="tool"><i class="fa-solid fa-hand-sparkles" aria-hidden="true"></i>整理：</span>
+              <span class="quiz"><i class="fa-solid fa-seedling" aria-hidden="true"></i>雜草太多、<i class="fa-solid fa-note-sticky"></i>有張紙條</span>
+            </div>
           </div>
-          <p class="intro-note">也能按鍵盤 1 至 4 切換工具。事件過期或用錯工具會扣健康；60 秒結束時仍有至少一顆心，即完成巡園。</p>
+
           <button id="startGame" type="button">開始巡園</button>
         </div>
       </div>
@@ -86,4 +101,5 @@
   <script src="../js/config.js"></script>
   <script src="../js/garden.js"></script>
 </body>
+
 </html>
