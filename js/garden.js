@@ -21,19 +21,63 @@ document.addEventListener('DOMContentLoaded', () => {
   const backButton = document.getElementById('backToMap');
   const toolButtons = [...document.querySelectorAll('.garden-tool')];
 
+  // 事件類型定義：在此修改每個隨機事件的圖示(icon)、名稱(label)與所需工具(tool)
   const eventTypes = [
-    { id: 'dry', label: '乾土', icon: '💧', tool: 'water', points: 10, lifetime: 9000, success: '水分補充完成' },
-    { id: 'shade', label: '遮蔭', icon: '☁️', tool: 'sunlight', points: 12, lifetime: 8500, success: '陽光回到花圃了' },
-    { id: 'hungry', label: '缺養分', icon: '🍂', tool: 'fertilize', points: 14, lifetime: 8800, success: '土壤恢復精神' },
-    { id: 'weeds', label: '雜草', icon: '🌿', tool: 'tidy', points: 12, lifetime: 8200, success: '花圃整理乾淨了' },
-    { id: 'memory', label: '回憶紙條', icon: '✉️', tool: 'tidy', points: 18, lifetime: 9800, success: '找到一張回憶紙條' }
+    {
+      id: "dry",
+      label: "土太乾了",
+      icon: '<i class="fa-solid fa-plant-wilt"></i>',
+      tool: "water",
+      points: 10,
+      lifetime: 9000,
+      success: "喝水咕嚕咕嚕",
+    },
+    {
+      id: "shade",
+      label: "天氣不好",
+      icon: '<i class="fa-solid fa-cloud-rain"></i>',
+      tool: "sunlight",
+      points: 12,
+      lifetime: 8500,
+      success: "Do RE MI SO太陽出來囉",
+    },
+    {
+      id: "hungry",
+      label: "養分不夠",
+      icon: '<i class="fa-solid fa-plant-wilt"></i>',
+      tool: "fertilize",
+      points: 14,
+      lifetime: 8800,
+      success: "土壤恢復精神",
+    },
+    {
+      id: "weeds",
+      label: "雜草太多",
+      icon: '<i class="fa-solid fa-seedling"></i>',
+      tool: "tidy",
+      points: 12,
+      lifetime: 8200,
+      success: "花圃整理乾淨了",
+    },
+    {
+      id: "memory",
+      label: "有張紙條",
+      icon: '<i class="fa-solid fa-note-sticky"></i>',
+      tool: "tidy",
+      points: 18,
+      lifetime: 9800,
+      success: "找到一張匿名紙條",
+    },
   ];
   const memories = [
-    '午休後的花圃，總有一點剛澆完水的味道。',
-    '有人把花圃當成通往教室前最後一段慢下來的路。',
-    '記得那年校慶，花圃旁的笑聲比花還熱鬧。',
-    '看似不起眼的角落，也收著一段段校園日常。',
-    '風一吹，花圃裡的葉子像在替大家打招呼。'
+    "無論生活把你栽種在哪，優雅地綻放。",
+    "種樹的最佳時間是十年前，其次是現在。",
+    "每個人都有自己綻放的時刻。",
+    "最好的肥料是園丁的影子。",
+    "願你如花，即使面對揉碎它的手，依然留下滿掌餘香。",
+    "強大如地球，也需要經歷四季更迭方能變化。",
+    "像花一樣，永遠向陽。",
+    "未見之處，皆是繁花",
   ];
 
   let selectedTool = 'water';
@@ -139,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       health -= 1;
       combo = 0;
-      setRoundMessage('工具不對，花圃健康下降');
+      setRoundMessage('工具不對！，花圃健康下降');
       event.button.classList.add('is-missed');
     }
 
