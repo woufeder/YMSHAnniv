@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const game = document.getElementById('game');
   const building = document.querySelector('.art-building');
   const eggStatus = document.getElementById('musicEggStatus');
-  const backButton = document.getElementById('backToMap');
   const hasMusicEgg = localStorage.getItem('ymsh:musicClassroomEgg') === 'true';
 
   function showBuilding() {
@@ -34,13 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   eggStatus.innerHTML = hasMusicEgg
-    ? '<i class="fa-solid fa-star" aria-hidden="true"></i><span>音樂教室彩蛋已獲得</span>'
-    : '<i class="fa-regular fa-star" aria-hidden="true"></i><span>音樂教室彩蛋尚未獲得</span>';
+    ? '<i class="fa-solid fa-star" aria-hidden="true"></i>'
+    : '';
   eggStatus.classList.toggle('is-earned', hasMusicEgg);
-
-  backButton.addEventListener('click', () => {
-    window.location.href = 'map.html';
-  });
 
   playIntro();
 });

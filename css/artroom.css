@@ -1,14 +1,14 @@
 body {
   min-height: 100vh;
   overflow: hidden;
-  background: #f2ece2;
+  background: #f2ece2 url('../assets/images/classroom-art.jpg') center / cover no-repeat;
 }
 
 .artroom {
   min-height: 100vh;
   padding: 28px;
   box-sizing: border-box;
-  background: linear-gradient(135deg, #e7b9aa 0%, #f4dfaa 50%, #b9d8c2 100%);
+  background: rgba(248, 239, 226, 0.62);
 }
 
 .artroom-header {
@@ -171,25 +171,6 @@ body {
   cursor: cell;
 }
 
-.artroom-back {
-  position: fixed;
-  top: 24px;
-  left: 24px;
-  width: 44px;
-  height: 44px;
-  border: 1px solid #fff;
-  border-radius: 50%;
-  background: rgba(69, 47, 61, 0.66);
-  color: #fff;
-  cursor: pointer;
-}
-
-.artroom-back:hover,
-.artroom-back:focus-visible {
-  background: #fff;
-  color: #452f3d;
-  outline: none;
-}
 
 @media (max-width: 760px) {
   .artroom {

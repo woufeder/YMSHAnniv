@@ -3,11 +3,13 @@
 body {
   height: 100vh;
   overflow: hidden;
-  background: #dbeeff;
+  background: #dbeeff url('../assets/images/garden.jpg') center / cover no-repeat;
 }
 
 .garden-game {
   display: grid;
+  position: relative;
+  z-index: 3;
   grid-template-rows: auto minmax(0, 1fr);
   gap: 18px;
   width: 100%;
@@ -71,7 +73,7 @@ body {
   overflow: hidden;
   border: 2px solid rgba(40, 88, 68, 0.28);
   border-radius: var(--border-radius-large);
-  background: linear-gradient(#b9def7 0 28%, #9fdc87 28% 48%, #5c9d58 48% 100%);
+  background: linear-gradient(rgba(185, 222, 247, 0.3), rgba(61, 121, 66, 0.38)), url('../assets/images/garden.jpg') center / cover no-repeat;
   box-shadow: var(--shadow-heavy);
 }
 

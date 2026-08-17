@@ -1,5 +1,15 @@
 /* hall.css - 留言板樣式 */
 
+.hall-body {
+  min-height: 100vh;
+  background: #1d242f;
+}
+
+#hallContent {
+  min-height: 100vh;
+  background: #1d242f url('../assets/images/hall-brick.jpg') center / cover fixed no-repeat;
+}
+
 .hall-container {
   max-width: 800px;
   margin: 0 auto;

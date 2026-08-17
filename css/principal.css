@@ -1,10 +1,21 @@
 /* principal.css - 校長室卡片樣式 */
 
+body {
+    min-height: 100vh;
+    background: #26313a url('../assets/images/principal.jpg') center / cover fixed no-repeat;
+}
+
 .principal-room {
     max-width: 900px;
+    min-height: 100vh;
     margin: 0 auto;
     padding: 20px;
     text-align: center;
+}
+
+.principal-room > h1 {
+    color: #ffffff;
+    text-shadow: 0 2px 12px rgba(17, 29, 37, 0.72);
 }
 
 .card-generator {

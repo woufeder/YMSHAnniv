@@ -10,13 +10,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YMSH 周年紀念 - 花圃急救站</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <link rel="stylesheet" href="../css/main.css">
-  <link rel="stylesheet" href="../css/garden.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/garden.css">
+    <link rel="stylesheet" href="../css/dialogue.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
 
 <body>
-  <a class="map-return-button" href="../map.html" aria-label="返回校園地圖" title="返回校園地圖"><i class="fa-solid fa-map" aria-hidden="true"></i></a>
-  <main class="garden-game">
+  <a class="return-button" href="../map.html" aria-label="返回校園地圖" title="返回校園地圖"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></a>
+  <div class="outdoor-particles" aria-hidden="true"></div>
+  <div id="game"></div>
+  <main id="gardenContent" class="garden-game location-page-content is-hidden">
     <header class="garden-header">
       <h1>花圃急救站</h1>
       <div class="garden-stats" aria-live="polite">
@@ -99,7 +103,11 @@
   <script src="../js/utils.js"></script>
   <script src="../js/settings.js"></script>
   <script src="../js/config.js"></script>
+  <script src="../js/dialogue.js"></script>
+  <script src="../js/outdoor-effects.js"></script>
   <script src="../js/garden.js"></script>
+  <script src="../js/location-intro.js"></script>
+  <script>startLocationIntro({ data: '../data/intro_garden.json', storageKey: 'seen_intro_garden', contentSelector: '#gardenContent' });</script>
 </body>
 
 </html>

@@ -1,9 +1,9 @@
 [
   {
-    "text": "\u5be6\u9a57\u5ba4\u88e1\uff0c\u7ffb\u627e\u820a\u6a94\u6848\u7684\u8072\u97f3\u5f9e\u684c\u908a\u50b3\u4f86\u3002",
-    "bg": "../assets/images/map.png"
+    "text": "實驗室裡，翻找舊檔案的聲音從桌邊傳來。",
+    "bg": "../assets/images/lab.png"
   },
   {
-    "text": "\u628a\u6563\u843d\u7684\u8a18\u61b6\u4e00\u4e00\u914d\u5c0d\uff0c\u770b\u770b\u80fd\u627e\u56de\u591a\u5c11\u6821\u5712\u7247\u6bb5\u3002"
+    "text": "把散落的實驗紀錄一一校對，看看能找回多少線索。"
   }
 ]

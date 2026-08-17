@@ -1,12 +1,12 @@
 [
   {
-    "text": "\u6cbf\u8457\u6821\u5712\u7684\u5c0f\u5f91\uff0c\u4f60\u4f86\u5230\u4e86\u85dd\u8853\u5927\u6a13\u3002",
-    "bg": "assets/images/map.png"
+    "text": "沿著校園的小徑，你來到了藝術大樓。",
+    "bg": "assets/images/art-building.jpg"
   },
   {
-    "text": "\u8d70\u5eca\u53e6\u4e00\u7aef\u50b3\u4f86\u7434\u8072\uff0c\u7a7a\u6c23\u88e1\u4e5f\u98c4\u8457\u65b0\u984f\u6599\u7684\u5473\u9053\u3002"
+    "text": "走廊另一端傳來琴聲，空氣裡也飄著新顏料的味道。"
   },
   {
-    "text": "\u4eca\u5929\u60f3\u5148\u8d70\u9032\u97f3\u6a02\u6559\u5ba4\uff0c\u9084\u662f\u5230\u7f8e\u8853\u6559\u5ba4\u7559\u4e0b\u81ea\u5df1\u7684\u4f5c\u54c1\u5462\uff1f"
+    "text": "今天想先走進音樂教室，還是到美術教室留下自己的作品呢？"
   }
 ]

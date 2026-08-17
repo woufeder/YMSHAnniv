@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YMSH 周年紀念 - 藝術大樓</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
@@ -15,13 +14,15 @@
   <link rel="stylesheet" href="css/dialogue.css">
   <link rel="stylesheet" href="css/art.css">
 </head>
+
 <body>
+  <a class="return-button" href="map.html" aria-label="返回校園地圖" title="返回校園地圖"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></a>
   <div id="game"></div>
   <main class="art-building is-hidden">
     <header class="art-building-header">
       <p>YMSH ART BUILDING</p>
       <h1>藝術大樓</h1>
-      <div id="musicEggStatus" class="music-egg-status" aria-live="polite"></div>
+
     </header>
 
     <section class="art-room-choices" aria-label="選擇教室">
@@ -29,6 +30,7 @@
         <i class="fa-solid fa-music" aria-hidden="true"></i>
         <span class="room-choice-copy">
           <strong>音樂教室</strong>
+          <div id="musicEggStatus" class="music-egg-status" aria-live="polite"></div>
           <small>跟著琴譜演奏</small>
         </span>
         <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
@@ -43,9 +45,6 @@
       </a>
     </section>
 
-    <button id="backToMap" class="art-back" type="button" aria-label="返回校園地圖" title="返回校園地圖">
-      <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
-    </button>
   </main>
 
   <script src="js/utils.js"></script>
@@ -54,4 +53,5 @@
   <script src="js/dialogue.js"></script>
   <script src="js/art.js"></script>
 </body>
+
 </html>

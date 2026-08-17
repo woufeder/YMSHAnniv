@@ -1,212 +1,256 @@
-// lab.js - 翻牌遊戲邏輯 (原 classroom.js 搬移)
 function initLab() {
-    const cardGrid = document.getElementById('cardGrid');
-    const scoreElement = document.getElementById('score');
-    const movesElement = document.getElementById('moves');
-    const timerElement = document.getElementById('timer');
-    const comboElement = document.getElementById('combo');
-    const memoryPopup = document.getElementById('memoryPopup');
-    const comboContainer = document.getElementById('comboContainer');
-    const resetBtn = document.getElementById('resetGame');
-    const backBtn = document.getElementById('backToMap');
+  const cardGrid = document.getElementById('cardGrid');
+  const progressElement = document.getElementById('progress');
+  const movesElement = document.getElementById('moves');
+  const timerElement = document.getElementById('timer');
+  const comboElement = document.getElementById('combo');
+  const logElement = document.getElementById('labLog');
+  const resetButton = document.getElementById('resetGame');
+  const backButton = document.getElementById('backToMap');
 
-    let cards = [];
-    let flippedCards = [];
-    let matchedPairs = 0;
-    let moves = 0;
-    let score = 0;
-    let combo = 0;
-    let startTime = null;
-    let timerInterval = null;
+  const experimentPairs = [
+    {
+      id: 'indicator',
+      icon: 'fa-flask',
+      label: '酚酞試液',
+      type: '材料',
+      matchIcon: 'fa-droplet',
+      matchLabel: '鹼性時呈桃紅',
+      matchType: '觀察',
+      note: '指示劑能用顏色協助判斷溶液的酸鹼性。'
+    },
+    {
+      id: 'microscope',
+      icon: 'fa-microscope',
+      label: '顯微鏡',
+      type: '儀器',
+      matchIcon: 'fa-seedling',
+      matchLabel: '洋蔥表皮細胞',
+      matchType: '標本',
+      note: '薄薄的洋蔥表皮，是常見的細胞觀察材料。'
+    },
+    {
+      id: 'magnet',
+      icon: 'fa-magnet',
+      label: '磁鐵',
+      type: '器材',
+      matchIcon: 'fa-burst',
+      matchLabel: '吸引鐵屑',
+      matchType: '現象',
+      note: '鐵屑會沿著磁場方向排列，形成有趣的紋路。'
+    },
+    {
+      id: 'circuit',
+      icon: 'fa-battery-half',
+      label: '電池',
+      type: '元件',
+      matchIcon: 'fa-lightbulb',
+      matchLabel: '點亮燈泡',
+      matchType: '結果',
+      note: '形成閉合迴路後，電流才能讓燈泡發亮。'
+    },
+    {
+      id: 'thermometer',
+      icon: 'fa-temperature-half',
+      label: '溫度計',
+      type: '儀器',
+      matchIcon: 'fa-gauge-high',
+      matchLabel: '量測溫度',
+      matchType: '用途',
+      note: '讀取液柱上緣時，視線要和刻度保持水平。'
+    },
+    {
+      id: 'balance',
+      icon: 'fa-scale-balanced',
+      label: '天平',
+      type: '儀器',
+      matchIcon: 'fa-weight-hanging',
+      matchLabel: '測量質量',
+      matchType: '用途',
+      note: '測量前先歸零，才能讓實驗紀錄更可靠。'
+    }
+  ];
 
-    const memories = [
-        "記得在實驗室裡那些神奇的化學反應嗎？",
-        "那些對著顯微鏡發呆的午後...",
-        "實驗失敗時的驚慌失措，現在想來很有趣。",
-        "白袍雖然有些大，但穿上就覺得自己像科學家。",
-        "一次次地嘗試，直到最後終於成功亮燈。",
-        "與夥伴共同討論報告的深夜，是成長的證明。",
-        "那些年，我們對未知的好奇心。",
-        "老師耐心的指導，讓我們學會思考。",
-        "實驗室裡的空氣中，總是瀰漫著好奇的味道。",
-        "這間房間，記錄了我們對科學最純粹的熱愛。"
-    ];
+  let cards = [];
+  let flippedCards = [];
+  let matchedPairs = 0;
+  let moves = 0;
+  let combo = 0;
+  let bestCombo = 0;
+  let startTime = 0;
+  let timerInterval = null;
+  let resolveTimeout = null;
+  let completionTimeout = null;
+  let isResolving = false;
 
-    const cardData = [
-        '🏫', '📚', '✏️', '🎓', '🔬', '🌸', '⚽', '🎨',
-        '🏫', '📚', '✏️', '🎓', '🔬', '🌸', '⚽', '🎨'
-    ];
+  function shuffle(items) {
+    const shuffled = [...items];
+    for (let index = shuffled.length - 1; index > 0; index -= 1) {
+      const randomIndex = Math.floor(Math.random() * (index + 1));
+      [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+    }
+    return shuffled;
+  }
 
-    function shuffle(array) {
-        let currentIndex = array.length;
-        while (currentIndex !== 0) {
-            let randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex--;
-            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-        }
-        return array;
+  function createDeck() {
+    return shuffle(experimentPairs.flatMap((pair) => [
+      { pairId: pair.id, icon: pair.icon, label: pair.label, type: pair.type, note: pair.note },
+      { pairId: pair.id, icon: pair.matchIcon, label: pair.matchLabel, type: pair.matchType, note: pair.note }
+    ]));
+  }
+
+  function renderCards() {
+    cardGrid.innerHTML = '';
+    cards.forEach((data, index) => {
+      const card = document.createElement('button');
+      card.className = 'experiment-card';
+      card.type = 'button';
+      card.dataset.index = String(index);
+      card.setAttribute('aria-label', `實驗資料卡 ${index + 1}`);
+      card.innerHTML = `
+        <span class="card-face card-front" aria-hidden="true">
+          <i class="fa-solid fa-flask-vial"></i>
+          <span>YMSH LAB</span>
+        </span>
+        <span class="card-face card-back">
+          <i class="fa-solid ${data.icon}" aria-hidden="true"></i>
+          <span class="card-type">${data.type}</span>
+          <strong>${data.label}</strong>
+        </span>
+      `;
+      card.addEventListener('click', flipCard);
+      cardGrid.appendChild(card);
+    });
+  }
+
+  function flipCard(event) {
+    const card = event.currentTarget;
+    if (isResolving || flippedCards.length >= 2 || card.classList.contains('is-flipped') || card.classList.contains('is-matched')) {
+      return;
     }
 
-    function initGame() {
-        cards = shuffle([...cardData]);
-        flippedCards = [];
-        matchedPairs = 0;
-        moves = 0;
-        score = 0;
+    card.classList.add('is-flipped');
+    card.setAttribute('aria-label', cards[Number(card.dataset.index)].label);
+    flippedCards.push(card);
+
+    if (flippedCards.length === 2) {
+      moves += 1;
+      updateStatus();
+      resolvePair();
+    }
+  }
+
+  function resolvePair() {
+    isResolving = true;
+    const [firstCard, secondCard] = flippedCards;
+    const firstData = cards[Number(firstCard.dataset.index)];
+    const secondData = cards[Number(secondCard.dataset.index)];
+    const isMatch = firstData.pairId === secondData.pairId;
+
+    resolveTimeout = window.setTimeout(() => {
+      if (isMatch) {
+        firstCard.classList.add('is-matched');
+        secondCard.classList.add('is-matched');
+        firstCard.disabled = true;
+        secondCard.disabled = true;
+        matchedPairs += 1;
+        combo += 1;
+        bestCombo = Math.max(bestCombo, combo);
+        logElement.textContent = `校對成功：${firstData.note}`;
+
+        if (matchedPairs === experimentPairs.length) {
+          updateStatus();
+          completionTimeout = window.setTimeout(showCompletion, 550);
+        }
+      } else {
+        firstCard.classList.remove('is-flipped');
+        secondCard.classList.remove('is-flipped');
+        firstCard.setAttribute('aria-label', `實驗資料卡 ${Number(firstCard.dataset.index) + 1}`);
+        secondCard.setAttribute('aria-label', `實驗資料卡 ${Number(secondCard.dataset.index) + 1}`);
         combo = 0;
-        startTime = Date.now();
+        logElement.textContent = '紀錄不相符，換一組資料再試試。';
+      }
 
-        updateUI();
-        createCards();
-        startTimer();
+      flippedCards = [];
+      isResolving = false;
+      updateStatus();
+    }, 850);
+  }
+
+  function updateStatus() {
+    progressElement.textContent = `校對進度 ${matchedPairs} / ${experimentPairs.length}`;
+    movesElement.textContent = `翻閱 ${moves}`;
+    comboElement.textContent = `連續成功 ${combo}`;
+  }
+
+  function startTimer() {
+    window.clearInterval(timerInterval);
+    timerInterval = window.setInterval(() => {
+      const seconds = Math.floor((Date.now() - startTime) / 1000);
+      const minutes = Math.floor(seconds / 60);
+      timerElement.textContent = `時間 ${String(minutes).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+    }, 1000);
+  }
+
+  function showCompletion() {
+    window.clearInterval(timerInterval);
+    const totalSeconds = Math.floor((Date.now() - startTime) / 1000);
+    const efficiency = moves + Math.floor(totalSeconds / 12);
+    const rank = efficiency <= 10 ? 'S' : efficiency <= 15 ? 'A' : efficiency <= 21 ? 'B' : 'C';
+    const overlay = document.createElement('div');
+    overlay.className = 'game-complete';
+    overlay.innerHTML = `
+      <section class="complete-popup" role="dialog" aria-modal="true" aria-labelledby="completeTitle">
+        <p class="complete-kicker">YMSH LAB / RECORD 04</p>
+        <h2 id="completeTitle">實驗紀錄校對完成</h2>
+        <div class="rank-display">${rank}</div>
+        <div class="complete-stats">
+          <div class="stat-item"><span>翻閱次數</span><strong>${moves}</strong></div>
+          <div class="stat-item"><span>完成時間</span><strong>${Math.floor(totalSeconds / 60)} 分 ${totalSeconds % 60} 秒</strong></div>
+          <div class="stat-item"><span>最佳連續</span><strong>${bestCombo}</strong></div>
+          <div class="stat-item"><span>資料完整度</span><strong>100%</strong></div>
+        </div>
+        <button class="complete-restart" type="button">重新校對</button>
+      </section>
+    `;
+    overlay.querySelector('.complete-restart').addEventListener('click', () => {
+      overlay.remove();
+      initGame();
+    });
+    document.body.appendChild(overlay);
+
+    const completedGames = JSON.parse(localStorage.getItem('completedGames')) || [];
+    if (!completedGames.includes('lab')) {
+      completedGames.push('lab');
+      localStorage.setItem('completedGames', JSON.stringify(completedGames));
     }
+  }
 
-    function createCards() {
-        cardGrid.innerHTML = '';
-        cards.forEach((symbol, index) => {
-            const card = document.createElement('div');
-            card.className = 'memory-card';
-            card.dataset.index = index;
-            card.innerHTML = `
-                <div class="card-front">?</div>
-                <div class="card-back"></div>
-            `;
-            card.addEventListener('click', flipCard);
-            cardGrid.appendChild(card);
-        });
-    }
+  function initGame() {
+    document.querySelector('.game-complete')?.remove();
+    window.clearTimeout(resolveTimeout);
+    window.clearTimeout(completionTimeout);
+    cards = createDeck();
+    flippedCards = [];
+    matchedPairs = 0;
+    moves = 0;
+    combo = 0;
+    bestCombo = 0;
+    isResolving = false;
+    startTime = Date.now();
+    timerElement.textContent = '時間 00:00';
+    logElement.textContent = '請翻開兩份資料，找出正確的實驗關聯。';
+    renderCards();
+    updateStatus();
+    startTimer();
+  }
 
-    function flipCard() {
-        if (flippedCards.length >= 2) return;
-        if (this.classList.contains('flipped') || this.classList.contains('matched')) return;
+  resetButton.addEventListener('click', initGame);
+  backButton.addEventListener('click', () => {
+    window.location.href = '../map.html';
+  });
 
-        const symbol = cards[this.dataset.index];
-        this.querySelector('.card-back').textContent = symbol;
-
-        this.classList.add('flipped');
-        flippedCards.push(this);
-
-        if (flippedCards.length === 2) {
-            moves++;
-            updateUI();
-            checkMatch();
-        }
-    }
-
-    function checkMatch() {
-        const [card1, card2] = flippedCards;
-        const symbol1 = cards[card1.dataset.index];
-        const symbol2 = cards[card2.dataset.index];
-
-        setTimeout(() => {
-            if (symbol1 === symbol2) {
-                card1.classList.add('matched');
-                card2.classList.add('matched');
-                card1.querySelector('.card-back').textContent = '✅';
-                card2.querySelector('.card-back').textContent = '✅';
-                matchedPairs++;
-
-                combo++;
-                const comboBonus = combo * 5;
-                score += (10 + comboBonus);
-
-                triggerComboEffect();
-                showRandomMemory();
-
-                if (matchedPairs === cards.length / 2) {
-                    gameComplete();
-                }
-            } else {
-                card1.classList.remove('flipped');
-                card2.classList.remove('flipped');
-                card1.querySelector('.card-back').textContent = '';
-                card2.querySelector('.card-back').textContent = '';
-                combo = 0;
-            }
-
-            flippedCards = [];
-            updateUI();
-        }, 800);
-    }
-
-    function triggerComboEffect() {
-        if (combo < 2) return;
-        const text = document.createElement('div');
-        text.className = 'combo-text';
-        text.textContent = `Combo x${combo}!`;
-        const x = 20 + Math.random() * 60;
-        const y = 20 + Math.random() * 60;
-        text.style.left = `${x}%`;
-        text.style.top = `${y}%`;
-        comboContainer.appendChild(text);
-        setTimeout(() => text.remove(), 800);
-    }
-
-    function showRandomMemory() {
-        const memory = memories[Math.floor(Math.random() * memories.length)];
-        memoryPopup.textContent = memory;
-        memoryPopup.classList.add('show');
-        setTimeout(() => memoryPopup.classList.remove('show'), 3000);
-    }
-
-    function gameComplete() {
-        clearInterval(timerInterval);
-        const endTime = Date.now();
-        const totalTime = Math.floor((endTime - startTime) / 1000);
-
-        let rank = 'C';
-        const efficiency = moves + Math.floor(totalTime / 10);
-        if (efficiency < 25) rank = 'S';
-        else if (efficiency < 35) rank = 'A';
-        else if (efficiency < 50) rank = 'B';
-
-        const overlay = document.createElement('div');
-        overlay.className = 'game-complete';
-        overlay.innerHTML = `
-            <div class="complete-popup">
-                <h2>回憶碎片收集完成！</h2>
-                <div class="rank-display">${rank}</div>
-                <div class="complete-stats">
-                    <div class="stat-item"><div>得分</div><div class="stat-value">${score}</div></div>
-                    <div class="stat-item"><div>步數</div><div class="stat-value">${moves}</div></div>
-                    <div class="stat-item"><div>時間</div><div class="stat-value">${Math.floor(totalTime/60)}分${totalTime%60}秒</div></div>
-                    <div class="stat-item"><div>最高Combo</div><div class="stat-value">${combo}</div></div>
-                </div>
-                <button class="btn btn-primary" onclick="location.reload()">再次挑戰</button>
-            </div>
-        `;
-        document.body.appendChild(overlay);
-
-        let completedGames = JSON.parse(localStorage.getItem('completedGames')) || [];
-        if (!completedGames.includes('lab')) {
-            completedGames.push('lab');
-            localStorage.setItem('completedGames', JSON.stringify(completedGames));
-        }
-    }
-
-    function startTimer() {
-        timerInterval = setInterval(() => {
-            const elapsed = Math.floor((Date.now() - startTime) / 1000);
-            const minutes = Math.floor(elapsed / 60);
-            const seconds = elapsed % 60;
-            timerElement.textContent = `時間: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        }, 1000);
-    }
-
-    function updateUI() {
-        scoreElement.textContent = `分數: ${score}`;
-        movesElement.textContent = `步數: ${moves}`;
-        comboElement.textContent = `Combo: ${combo}`;
-        if (combo > 0) {
-            comboElement.classList.add('bump');
-            setTimeout(() => comboElement.classList.remove('bump'), 200);
-        }
-    }
-
-    resetBtn.addEventListener('click', initGame);
-    backBtn.addEventListener('click', () => window.location.href = '../map.html');
-
-    initGame();
+  initGame();
 }
 
 window.initLab = initLab;

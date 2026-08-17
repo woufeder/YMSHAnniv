@@ -1,7 +1,7 @@
 body {
   min-height: 100vh;
   overflow: hidden;
-  background: #1f2631 url('../assets/images/map.png') 8% 14% / cover no-repeat;
+  background: #1f2631 url('../assets/images/art-building.jpg') center / cover no-repeat;
 }
 
 .art-building {
@@ -105,27 +105,6 @@ body {
 .room-choice-copy small {
   margin-top: 7px;
   font-size: 15px;
-}
-
-.art-back {
-  position: fixed;
-  top: 24px;
-  left: 24px;
-  width: 44px;
-  height: 44px;
-  border: 1px solid rgba(255, 255, 255, 0.72);
-  border-radius: 50%;
-  background: rgba(20, 27, 39, 0.68);
-  color: #fff;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.art-back:hover,
-.art-back:focus-visible {
-  background: #fff;
-  color: #1f2631;
-  outline: none;
 }
 
 @media (max-width: 680px) {

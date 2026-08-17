@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YMSH 周年紀念 - 實驗室回憶碎片收集</title>
+    <title>YMSH 周年紀念 - 實驗紀錄校對</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -16,30 +16,31 @@
     <link rel="stylesheet" href="../css/dialogue.css">
 </head>
 <body>
-    <a class="map-return-button" href="../map.html" aria-label="返回校園地圖" title="返回校園地圖"><i class="fa-solid fa-map" aria-hidden="true"></i></a>
+    <a class="return-button" href="../map.html" aria-label="返回校園地圖" title="返回校園地圖"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></a>
     <div id="game"></div>
-    <div id="labContent" class="classroom-game location-page-content is-hidden">
-        <h1 class="game-title">實驗室 - 回憶碎片收集</h1>
+    <main id="labContent" class="lab-game location-page-content is-hidden">
+        <header class="lab-header">
+            <div>
+                <p class="lab-eyebrow">YMSH LAB / RECORD 04</p>
+                <h1 class="game-title">實驗紀錄校對</h1>
+            </div>
+            <p class="lab-objective">翻開兩份資料，找出彼此有關聯的實驗紀錄。</p>
+        </header>
         <div class="game-info">
-            <span id="score">分數: 0</span>
-            <span id="moves">步數: 0</span>
-            <span id="timer">時間: 00:00</span>
-            <span id="combo">Combo: 0</span>
+            <span id="progress">校對進度 0 / 6</span>
+            <span id="moves">翻閱 0</span>
+            <span id="timer">時間 00:00</span>
+            <span id="combo">連續成功 0</span>
         </div>
 
-        <!-- 回憶對話框 -->
-        <div id="memoryPopup" class="memory-popup"></div>
-        <!-- Combo 特效容器 -->
-        <div id="comboContainer" class="combo-container"></div>
+        <p id="labLog" class="lab-log" aria-live="polite"></p>
 
-        <div class="card-grid" id="cardGrid">
-            <!-- 翻牌卡片將由 JavaScript 動態生成 -->
-        </div>
+        <div class="card-grid" id="cardGrid" aria-label="實驗資料卡"></div>
         <div class="game-controls">
             <button id="resetGame">重新開始</button>
             <button id="backToMap">返回地圖</button>
         </div>
-    </div>
+    </main>
     <script src="../js/utils.js"></script>
     <script src="../js/settings.js"></script>
     <script src="../js/config.js"></script>

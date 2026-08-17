@@ -1,14 +1,14 @@
 body {
   min-height: 100vh;
   overflow: hidden;
-  background: #252b3b;
+  background: #252b3b url('../assets/images/classroom-music.jpg') center / cover no-repeat;
 }
 
 .music-classroom {
   min-height: 100vh;
   padding: 42px;
   box-sizing: border-box;
-  background: linear-gradient(150deg, #252b3b 0%, #596f9f 52%, #d4a568 100%);
+  background: linear-gradient(150deg, rgba(25, 36, 61, 0.7), rgba(61, 83, 125, 0.6));
   color: #fff;
 }
 
@@ -253,25 +253,6 @@ body {
   outline: none;
 }
 
-.music-back {
-  position: fixed;
-  top: 24px;
-  left: 24px;
-  width: 44px;
-  height: 44px;
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  border-radius: 50%;
-  background: rgba(21, 25, 34, 0.45);
-  color: #fff;
-  cursor: pointer;
-}
-
-.music-back:hover,
-.music-back:focus-visible {
-  background: #fff;
-  color: #252b3b;
-  outline: none;
-}
 
 @media (max-width: 680px) {
   .music-classroom {
