@@ -32,7 +32,7 @@ function initPrincipal() {
       { name: '記憶大師', icon: 'M', completed: completedGames.includes('classroom') },
       { name: '綠手指', icon: 'G', completed: completedGames.includes('garden') },
       { name: '小愛迪生', icon: 'L', completed: completedGames.includes('lab') },
-      { name: '音樂彩蛋', icon: '♪', completed: localStorage.getItem('ymsh:musicClassroomEgg') === 'true' }
+      { name: '校歌演奏', icon: '♪', completed: window.YMSHAchievements?.has('school-song') === true }
     ];
 
     achievements.forEach((achievement, index) => {

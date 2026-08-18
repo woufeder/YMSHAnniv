@@ -1,107 +1,65 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YMSH Anniversary</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <title>YMSH 周年紀念 - 操場護犬隊</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&family=Noto+Sans+TC:wght@100..900&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/dialogue.css">
+  <link rel="stylesheet" href="css/playground.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
-
 </head>
-
 <body id="playground">
   <a class="return-button" href="map.html" aria-label="返回校園地圖" title="返回校園地圖"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></a>
-  <div class="outdoor-particles snow-container" aria-hidden="true"></div>
-  <div class="scene-container">
-    <!-- 背景層 -->
-    <div class="background-layer">
-      <img id="bg" src="assets/images/playground.jpg" alt="操場" />
-    </div>
-    <!-- 人物層 -->
-    <div class="character-layer">
-      <!-- <img id="char" src="" alt="角色" /> -->
-    </div>
+  <div class="outdoor-particles" aria-hidden="true"></div>
+  <div id="game" class="playground-ending-dialogue"></div>
 
-    <!-- 對話層 -->
-    <div class="d-flex justify-content-center align-items-end dialogue-layer">
-      <div class="dialogue-box container">
-        <div class="dialogue-header">
-          <span id="name" class="speaker"></span>
+  <main class="playground-rescue" aria-labelledby="gameTitle">
+    <section class="rescue-panel">
+      <header class="rescue-header">
+        <div>
+          <p id="gameKicker" class="game-kicker"></p>
+          <h1 id="gameTitle"></h1>
         </div>
-        <div id="text" class="dialogue-text"></div>
-
-
-        <div class="control-area ">
-          <button id="nextBtn" class="next-btn "><i class="fa-solid fa-play"></i></button>
+        <div class="game-stats">
+          <div class="lead-meter" aria-label="成功口令">
+            <span>成功口令</span>
+            <strong id="leadCount" aria-live="polite">0 / 12</strong>
+          </div>
+          <div class="time-meter" aria-label="剩餘時間">
+            <span>剩餘時間</span>
+            <strong id="timeCount" aria-live="polite">30</strong>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-  <!-- <script src="js/main.js"></script> -->
+      </header>
+
+      <section class="rescue-scene" aria-live="polite">
+        <div id="sceneIcon" class="scene-icon" aria-hidden="true"></div>
+        <p id="sceneLabel" class="scene-label"></p>
+        <h2 id="sceneHeading"></h2>
+        <p id="sceneText" class="scene-text"></p>
+        <div id="gameBoard" class="game-board"></div>
+        <p id="gameFeedback" class="game-feedback" aria-live="assertive"></p>
+        <div id="gameActions" class="game-actions"></div>
+      </section>
+
+      <section class="capture-note" aria-labelledby="captureNoteTitle">
+        <h2 id="captureNoteTitle"><i class="fa-solid fa-wave-square" aria-hidden="true"></i> 節拍口令</h2>
+        <p id="captureHint"></p>
+      </section>
+    </section>
+  </main>
+
   <script src="js/utils.js"></script>
   <script src="js/settings.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/outdoor-effects.js"></script>
   <script src="js/dialogue.js"></script>
   <script src="js/playground.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
-    crossorigin="anonymous"></script>
-  <script>
-    const snowContainer = document.querySelector(".snow-container");
-    const NUM = 30;
-    for (let i = 0; i < NUM; i++) {
-      const flake = document.createElement("div");
-      flake.classList.add("snowflake");
-      flake.textContent = "●";
-      snowContainer.appendChild(flake);
-
-      const size = Math.random() * 1 + 5;
-      const startY = Math.random() * window.innerHeight;   // 從畫面上方不同高度進場
-      const drift = Math.random() * 700 + 300;             // 控制整體風向
-      const duration = Math.random() * 5 + 6;
-      const delay = Math.random() * 5;
-
-      gsap.set(flake, {
-        fontSize: size,
-        x: -40,                      // 從畫面左外側開始
-        y: startY,
-        opacity: Math.random() * 0.6 + 0.1
-      });
-
-      // 主動畫：水平橫掃
-      gsap.to(flake, {
-        x: window.innerWidth + 40,   // 掃到畫面右外
-        y: startY + drift,           // 帶一點斜率，整體略往下或上
-        rotation: Math.random() * 180 - 90,
-        duration,
-        delay,
-        repeat: -1,
-        ease: "none"
-      });
-
-      // 疊加上下輕微晃動（模擬風浪）
-      gsap.to(flake, {
-        y: `+=${Math.random() * 200 - 100}`,
-        duration: Math.random() * 3 + 2,
-        yoyo: true,
-        repeat: -1,
-        ease: "sine.inOut"
-      });
-    }
-
-  </script>
 </body>
-
 </html>

@@ -120,7 +120,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const measureProgress = document.getElementById("measureProgress");
   const piano = document.getElementById("piano");
   const musicMessage = document.getElementById("musicMessage");
-  const eggBadge = document.getElementById("eggBadge");
   const restartButton = document.getElementById("restartScore");
   const backButton = document.getElementById("backToArt");
   const notesByName = new Map(NOTES.map((item) => [item.note, item]));
@@ -132,14 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let progress = 0;
   let audioContext = null;
-
-  function updateEggBadge() {
-    const earned = localStorage.getItem("ymsh:musicClassroomEgg") === "true";
-    eggBadge.classList.toggle("is-earned", earned);
-    eggBadge.innerHTML = earned
-      ? '<i class="fa-solid fa-star" aria-hidden="true"></i> 校歌彩蛋已獲得'
-      : '<i class="fa-regular fa-star" aria-hidden="true"></i> 完成校歌可獲得彩蛋';
-  }
 
   function buildPiano() {
     piano.innerHTML = "";
@@ -231,9 +222,8 @@ document.addEventListener("DOMContentLoaded", () => {
       progress += 1;
 
       if (progress === score.length) {
-        localStorage.setItem("ymsh:musicClassroomEgg", "true");
-        musicMessage.textContent = "校歌演奏完成，已獲得彩蛋標記。";
-        updateEggBadge();
+        window.YMSHAchievements?.earn("school-song");
+        musicMessage.textContent = "校歌演奏完成。";
       } else {
         musicMessage.textContent = "正確，繼續下一個音。";
       }
@@ -268,6 +258,5 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   buildPiano();
-  updateEggBadge();
   restartScore();
 });

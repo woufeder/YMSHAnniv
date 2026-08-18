@@ -275,6 +275,10 @@ document.addEventListener("DOMContentLoaded", async function () {
       completedGames.push("classroom");
       localStorage.setItem("completedGames", JSON.stringify(completedGames));
     }
+
+    if (score === shuffledQuestions.length * 10) {
+      window.YMSHAchievements?.earn("classroom-perfect");
+    }
   }
 
   resetBtn.addEventListener("click", initGame);

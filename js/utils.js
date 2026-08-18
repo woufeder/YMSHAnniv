@@ -362,6 +362,37 @@ class BGMManager {
   }
 }
 
+const HIDDEN_ACHIEVEMENTS = Object.freeze([
+  { id: 'school-song', title: '完成校歌演奏', storageKey: 'ymsh:achievement_school_song' },
+  { id: 'playground-dog', title: '抓到小狗', storageKey: 'ymsh:achievement_playground_dog' },
+  { id: 'garden-perfect', title: '花圃五顆心通關', storageKey: 'ymsh:achievement_garden_perfect' },
+  { id: 'classroom-perfect', title: '快問快答滿分', storageKey: 'ymsh:achievement_classroom_perfect' },
+  { id: 'lab-grade-a', title: '實驗紀錄獲得 A', storageKey: 'ymsh:achievement_lab_grade_a' }
+]);
+
+function findHiddenAchievement(id) {
+  return HIDDEN_ACHIEVEMENTS.find((achievement) => achievement.id === id);
+}
+
+function hasHiddenAchievement(id) {
+  const achievement = findHiddenAchievement(id);
+  return Boolean(achievement) && localStorage.getItem(achievement.storageKey) === 'true';
+}
+
+function earnHiddenAchievement(id) {
+  const achievement = findHiddenAchievement(id);
+  if (!achievement) return false;
+
+  localStorage.setItem(achievement.storageKey, 'true');
+  return true;
+}
+
+window.YMSHAchievements = Object.freeze({
+  all: HIDDEN_ACHIEVEMENTS,
+  earn: earnHiddenAchievement,
+  has: hasHiddenAchievement
+});
+
 // 建立單例供全站使用
 const bgm = new BGMManager(resolveAppAsset('assets/audio/hihamatanoboru.mp3'));
 window.bgm = bgm;

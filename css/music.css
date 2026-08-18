@@ -30,19 +30,6 @@ body {
   font-size: 42px;
 }
 
-.egg-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  min-height: 32px;
-  color: #fff;
-  font-size: 14px;
-}
-
-.egg-badge.is-earned {
-  color: #ffe083;
-}
-
 .music-stage {
   width: min(900px, 100%);
   margin: 9vh auto 0;
@@ -265,12 +252,6 @@ body {
 
   .music-header h1 {
     font-size: 32px;
-  }
-
-  .egg-badge {
-    align-items: end;
-    flex-direction: column;
-    text-align: right;
   }
 
   .music-stage {

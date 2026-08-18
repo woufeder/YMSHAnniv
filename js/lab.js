@@ -197,6 +197,9 @@ function initLab() {
     const totalSeconds = Math.floor((Date.now() - startTime) / 1000);
     const efficiency = moves + Math.floor(totalSeconds / 12);
     const rank = efficiency <= 10 ? 'S' : efficiency <= 15 ? 'A' : efficiency <= 21 ? 'B' : 'C';
+    if (rank === 'A') {
+      window.YMSHAchievements?.earn('lab-grade-a');
+    }
     const overlay = document.createElement('div');
     overlay.className = 'game-complete';
     overlay.innerHTML = `

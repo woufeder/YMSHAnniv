@@ -2,8 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const introStorageKey = 'seen_intro_art';
   const game = document.getElementById('game');
   const building = document.querySelector('.art-building');
-  const eggStatus = document.getElementById('musicEggStatus');
-  const hasMusicEgg = localStorage.getItem('ymsh:musicClassroomEgg') === 'true';
 
   function showBuilding() {
     game.style.display = 'none';
@@ -31,11 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
       showBuilding();
     }
   }
-
-  eggStatus.innerHTML = hasMusicEgg
-    ? '<i class="fa-solid fa-star" aria-hidden="true"></i>'
-    : '';
-  eggStatus.classList.toggle('is-earned', hasMusicEgg);
 
   playIntro();
 });

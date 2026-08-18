@@ -34,19 +34,6 @@ body {
   color: #fff;
 }
 
-.music-egg-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 20px;
-  color: #dfe6ef;
-  font-size: 15px;
-}
-
-.music-egg-status.is-earned {
-  color: #ffe083;
-}
-
 .art-room-choices {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

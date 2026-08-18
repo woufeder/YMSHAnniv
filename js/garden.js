@@ -269,6 +269,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (completed) {
       markGameComplete();
+      if (health === MAX_HEALTH) {
+        window.YMSHAchievements?.earn('garden-perfect');
+      }
     }
   }
 
