@@ -1,12 +1,14 @@
 // utils.js - 通用工具函式
 const STORAGE_EXPIRY_MINUTES = 30;
 const STORAGE_EXPIRY_MS = STORAGE_EXPIRY_MINUTES * 60 * 1000;
-const STORAGE_LAST_CLOSED_KEY = 'ymsh:lastClosedAt';
-const STORAGE_SESSION_MARKER_KEY = 'ymsh:sessionActive';
-const PLAYER_INPUT_KEY = 'playerInput';
+const STORAGE_LAST_CLOSED_KEY = "ymsh:lastClosedAt";
+const STORAGE_SESSION_MARKER_KEY = "ymsh:sessionActive";
+const PLAYER_INPUT_KEY = "playerInput";
 const APP_ROOT_URL = (() => {
   const scriptUrl = document.currentScript?.src;
-  return scriptUrl ? new URL('../', scriptUrl).href : new URL('./', window.location.href).href;
+  return scriptUrl
+    ? new URL("../", scriptUrl).href
+    : new URL("./", window.location.href).href;
 })();
 
 function resolveAppAsset(path) {
@@ -20,15 +22,21 @@ function clearExpiredLocalStorage() {
       return;
     }
 
-    const lastClosedAt = parseInt(localStorage.getItem(STORAGE_LAST_CLOSED_KEY), 10);
-    if (Number.isFinite(lastClosedAt) && Date.now() - lastClosedAt >= STORAGE_EXPIRY_MS) {
+    const lastClosedAt = parseInt(
+      localStorage.getItem(STORAGE_LAST_CLOSED_KEY),
+      10,
+    );
+    if (
+      Number.isFinite(lastClosedAt) &&
+      Date.now() - lastClosedAt >= STORAGE_EXPIRY_MS
+    ) {
       localStorage.clear();
     }
 
-    sessionStorage.setItem(STORAGE_SESSION_MARKER_KEY, '1');
+    sessionStorage.setItem(STORAGE_SESSION_MARKER_KEY, "1");
     localStorage.removeItem(STORAGE_LAST_CLOSED_KEY);
   } catch (error) {
-    console.error('Error clearing expired localStorage:', error);
+    console.error("Error clearing expired localStorage:", error);
   }
 }
 
@@ -36,14 +44,15 @@ function markLocalStorageClosedAt() {
   try {
     localStorage.setItem(STORAGE_LAST_CLOSED_KEY, Date.now().toString());
   } catch (error) {
-    console.error('Error writing localStorage close timestamp:', error);
+    console.error("Error writing localStorage close timestamp:", error);
   }
 }
 
 function guardPlayerInputAccess() {
   try {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    const exemptPages = new Set(['index.html', 'hall.html', 'whoAreYou.html']);
+    const currentPage =
+      window.location.pathname.split("/").pop() || "index.html";
+    const exemptPages = new Set(["index.html", "hall.html", "whoAreYou.html"]);
 
     if (exemptPages.has(currentPage)) {
       return;
@@ -54,18 +63,18 @@ function guardPlayerInputAccess() {
       return;
     }
 
-    const isGamePage = window.location.pathname.includes('/games/');
-    const fallbackPath = isGamePage ? '../whoAreYou.html' : 'whoAreYou.html';
+    const isGamePage = window.location.pathname.includes("/games/");
+    const fallbackPath = isGamePage ? "../whoAreYou.html" : "whoAreYou.html";
     window.location.replace(fallbackPath);
   } catch (error) {
-    console.error('Error guarding playerInput access:', error);
+    console.error("Error guarding playerInput access:", error);
   }
 }
 
 clearExpiredLocalStorage();
 guardPlayerInputAccess();
-window.addEventListener('pagehide', markLocalStorageClosedAt);
-window.addEventListener('beforeunload', markLocalStorageClosedAt);
+window.addEventListener("pagehide", markLocalStorageClosedAt);
+window.addEventListener("beforeunload", markLocalStorageClosedAt);
 
 // 取得 localStorage 資料的安全方法
 function getStorageData(key, defaultValue = null) {
@@ -92,7 +101,7 @@ function setStorageData(key, value) {
 // 動畫工具 - 淡入效果
 function fadeIn(element, duration = 300) {
   element.style.opacity = 0;
-  element.style.display = 'block';
+  element.style.display = "block";
 
   const start = performance.now();
 
@@ -125,7 +134,7 @@ function fadeOut(element, duration = 300) {
       requestAnimationFrame(animate);
     } else {
       element.style.opacity = 0;
-      element.style.display = 'none';
+      element.style.display = "none";
     }
   }
 
@@ -133,17 +142,17 @@ function fadeOut(element, duration = 300) {
 }
 
 // 滑動效果
-function slideIn(element, direction = 'left', duration = 300) {
+function slideIn(element, direction = "left", duration = 300) {
   const directions = {
-    left: { from: '-100%', to: '0%', property: 'translateX' },
-    right: { from: '100%', to: '0%', property: 'translateX' },
-    up: { from: '-100%', to: '0%', property: 'translateY' },
-    down: { from: '100%', to: '0%', property: 'translateY' }
+    left: { from: "-100%", to: "0%", property: "translateX" },
+    right: { from: "100%", to: "0%", property: "translateX" },
+    up: { from: "-100%", to: "0%", property: "translateY" },
+    down: { from: "100%", to: "0%", property: "translateY" },
   };
 
   const config = directions[direction];
   element.style.transform = `${config.property}(${config.from})`;
-  element.style.display = 'block';
+  element.style.display = "block";
 
   const start = performance.now();
 
@@ -165,7 +174,7 @@ function slideIn(element, direction = 'left', duration = 300) {
 
 // 彈跳效果
 function bounce(element, scale = 1.1, duration = 200) {
-  const originalTransform = element.style.transform || 'scale(1)';
+  const originalTransform = element.style.transform || "scale(1)";
 
   element.style.transform = `scale(${scale})`;
   element.style.transition = `transform ${duration}ms ease-out`;
@@ -173,17 +182,17 @@ function bounce(element, scale = 1.1, duration = 200) {
   setTimeout(() => {
     element.style.transform = originalTransform;
     setTimeout(() => {
-      element.style.transition = '';
+      element.style.transition = "";
     }, duration);
   }, duration);
 }
 
 // 震動效果
 function shake(element, intensity = 10, duration = 300) {
-  const originalPosition = element.style.position || 'static';
-  const originalLeft = element.style.left || '0px';
+  const originalPosition = element.style.position || "static";
+  const originalLeft = element.style.left || "0px";
 
-  element.style.position = 'relative';
+  element.style.position = "relative";
 
   const start = performance.now();
 
@@ -192,8 +201,9 @@ function shake(element, intensity = 10, duration = 300) {
     const progress = elapsed / duration;
 
     if (progress < 1) {
-      const offset = Math.sin(progress * Math.PI * 10) * intensity * (1 - progress);
-      element.style.left = parseFloat(originalLeft) + offset + 'px';
+      const offset =
+        Math.sin(progress * Math.PI * 10) * intensity * (1 - progress);
+      element.style.left = parseFloat(originalLeft) + offset + "px";
       requestAnimationFrame(animate);
     } else {
       element.style.position = originalPosition;
@@ -226,7 +236,7 @@ function shuffleArray(array) {
 
 // 延遲執行
 function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 // 防抖動函式
@@ -251,7 +261,7 @@ function throttle(func, limit) {
     if (!inThrottle) {
       func.apply(context, args);
       inThrottle = true;
-      setTimeout(() => inThrottle = false, limit);
+      setTimeout(() => (inThrottle = false), limit);
     }
   };
 }
@@ -260,36 +270,42 @@ function throttle(func, limit) {
 function formatTime(seconds) {
   const mins = Math.floor(seconds / 60);
   const secs = seconds % 60;
-  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 }
 
 // 檢查是否為行動裝置
 function isMobile() {
-  return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent,
+  );
 }
 
 // 播放音效：未指定副檔名時會依序嘗試 MP3 與 WAV。
 function playSound(soundName) {
   try {
-    const seVolume = parseFloat(localStorage.getItem('ymsh:setting_seVolume') || '0.5');
+    const seVolume = parseFloat(
+      localStorage.getItem("ymsh:setting_seVolume") || "0.5",
+    );
     const hasExtension = /\.(mp3|wav)$/i.test(soundName);
     const fileNames = hasExtension
       ? [soundName]
       : [`${soundName}.mp3`, `${soundName}.wav`];
-    const audio = document.createElement('audio');
+    const audio = document.createElement("audio");
 
     fileNames.forEach((fileName) => {
-      const source = document.createElement('source');
+      const source = document.createElement("source");
       source.src = resolveAppAsset(`assets/audio/${fileName}`);
-      source.type = fileName.toLowerCase().endsWith('.wav') ? 'audio/wav' : 'audio/mpeg';
+      source.type = fileName.toLowerCase().endsWith(".wav")
+        ? "audio/wav"
+        : "audio/mpeg";
       audio.appendChild(source);
     });
 
     audio.volume = seVolume;
     audio.load();
-    audio.play().catch(e => console.log('Audio play failed:', e));
+    audio.play().catch((e) => console.log("Audio play failed:", e));
   } catch (error) {
-    console.log('Sound not available:', soundName);
+    console.log("Sound not available:", soundName);
   }
 }
 
@@ -303,7 +319,7 @@ const SettingsManager = {
   },
   set(key, value) {
     localStorage.setItem(`ymsh:setting_${key}`, value.toString());
-  }
+  },
 };
 
 /**
@@ -313,7 +329,7 @@ class BGMManager {
   constructor(audioSrc, volume = 0.5) {
     this.audio = new Audio(audioSrc);
     this.audio.loop = true;
-    this.storageKey = 'ymsh:bgm_currentTime';
+    this.storageKey = "ymsh:bgm_currentTime";
     this.isInitialized = false;
     this.isTemporarilyMuted = false;
   }
@@ -340,10 +356,14 @@ class BGMManager {
     try {
       await this.audio.play();
     } catch (e) {
-      console.log('BGM Autoplay blocked. Waiting for user interaction.');
-      document.addEventListener('click', () => {
-        this.audio.play();
-      }, { once: true });
+      console.log("BGM Autoplay blocked. Waiting for user interaction.");
+      document.addEventListener(
+        "click",
+        () => {
+          this.audio.play();
+        },
+        { once: true },
+      );
     }
   }
 
@@ -352,7 +372,7 @@ class BGMManager {
   }
 
   updateVolume() {
-    const vol = SettingsManager.get('bgmVolume', 0.5);
+    const vol = SettingsManager.get("bgmVolume", 0.5);
     this.audio.volume = this.isTemporarilyMuted ? 0 : vol;
   }
 
@@ -363,11 +383,31 @@ class BGMManager {
 }
 
 const HIDDEN_ACHIEVEMENTS = Object.freeze([
-  { id: 'school-song', title: '完成校歌演奏', storageKey: 'ymsh:achievement_school_song' },
-  { id: 'playground-dog', title: '抓到小狗', storageKey: 'ymsh:achievement_playground_dog' },
-  { id: 'garden-perfect', title: '花圃五顆心通關', storageKey: 'ymsh:achievement_garden_perfect' },
-  { id: 'classroom-perfect', title: '快問快答滿分', storageKey: 'ymsh:achievement_classroom_perfect' },
-  { id: 'lab-grade-a', title: '實驗紀錄獲得 A', storageKey: 'ymsh:achievement_lab_grade_a' }
+  {
+    id: "school-song",
+    title: "杰倫是你嗎？",
+    storageKey: "achievement_music",
+  },
+  {
+    id: "playground-dog",
+    title: "阿偉～阿偉～",
+    storageKey: "achievement_playground",
+  },
+  {
+    id: "garden-perfect",
+    title: "一定是綠手指的啦",
+    storageKey: "achievement_garden",
+  },
+  {
+    id: "classroom-perfect",
+    title: "微笑Pass噠",
+    storageKey: "achievement_classroom",
+  },
+  {
+    id: "lab-grade-a",
+    title: "眾裡尋牌千百度",
+    storageKey: "achievement_lab",
+  },
 ]);
 
 function findHiddenAchievement(id) {
@@ -376,47 +416,49 @@ function findHiddenAchievement(id) {
 
 function hasHiddenAchievement(id) {
   const achievement = findHiddenAchievement(id);
-  return Boolean(achievement) && localStorage.getItem(achievement.storageKey) === 'true';
+  return (
+    Boolean(achievement) &&
+    localStorage.getItem(achievement.storageKey) === "true"
+  );
 }
 
 function earnHiddenAchievement(id) {
   const achievement = findHiddenAchievement(id);
   if (!achievement) return false;
 
-  localStorage.setItem(achievement.storageKey, 'true');
+  localStorage.setItem(achievement.storageKey, "true");
   return true;
 }
 
 window.YMSHAchievements = Object.freeze({
   all: HIDDEN_ACHIEVEMENTS,
   earn: earnHiddenAchievement,
-  has: hasHiddenAchievement
+  has: hasHiddenAchievement,
 });
 
 // 建立單例供全站使用
-const bgm = new BGMManager(resolveAppAsset('assets/audio/hihamatanoboru.mp3'));
+const bgm = new BGMManager(resolveAppAsset("assets/audio/hihamatanoboru.mp3"));
 window.bgm = bgm;
 window.resolveAppAsset = resolveAppAsset;
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener("DOMContentLoaded", () => {
   bgm.init();
   bgm.play();
 });
 
 // Browser history can restore a page from bfcache without firing DOMContentLoaded again.
-window.addEventListener('pageshow', (event) => {
+window.addEventListener("pageshow", (event) => {
   if (!event.persisted) return;
   bgm.init();
   bgm.updateVolume();
   bgm.play();
 });
 
-
 // 顯示載入中動畫
 function showLoading(container) {
-  const loader = document.createElement('div');
-  loader.className = 'loading-spinner';
-  loader.innerHTML = '載入中...';
+  const loader = document.createElement("div");
+  loader.className = "loading-spinner";
+  loader.innerHTML = "載入中...";
   container.appendChild(loader);
   return loader;
 }
@@ -428,44 +470,47 @@ function hideLoading(loader) {
   }
 }
 
-
 // 淡入淡出
-function fadeTo(url, element = 'scene-container') {
+function fadeTo(url, element = "scene-container") {
   const el = document.querySelector(`.${element}`);
   if (!el) return;
 
-  el.style.transition = 'opacity 0.6s ease';
+  el.style.transition = "opacity 0.6s ease";
   el.style.opacity = 0;
 
-  el.addEventListener('transitionend', () => {
-    window.location.href = url;
-  }, { once: true });
+  el.addEventListener(
+    "transitionend",
+    () => {
+      window.location.href = url;
+    },
+    { once: true },
+  );
 }
-window.addEventListener('DOMContentLoaded', () => {
-  document.body.classList.add('fade-in');
+window.addEventListener("DOMContentLoaded", () => {
+  document.body.classList.add("fade-in");
 });
 
 // 畫面效果動畫
 function triggerEffect(type) {
-  const target = document.querySelector('.scene-container') || document.body;
+  const target = document.querySelector(".scene-container") || document.body;
 
   switch (type) {
-    case 'shake':
-      target.classList.add('shake');
-      setTimeout(() => target.classList.remove('shake'), 600);
+    case "shake":
+      target.classList.add("shake");
+      setTimeout(() => target.classList.remove("shake"), 600);
       break;
 
-    case 'shakeStrong':
-      target.classList.add('shakeStrong');
-      setTimeout(() => target.classList.remove('shakeStrong'), 800);
+    case "shakeStrong":
+      target.classList.add("shakeStrong");
+      setTimeout(() => target.classList.remove("shakeStrong"), 800);
       break;
 
-    case 'flash':
-      target.classList.add('flash');
-      setTimeout(() => target.classList.remove('flash'), 400);
+    case "flash":
+      target.classList.add("flash");
+      setTimeout(() => target.classList.remove("flash"), 400);
       break;
 
     default:
-      console.warn('未知效果:', type);
+      console.warn("未知效果:", type);
   }
 }
