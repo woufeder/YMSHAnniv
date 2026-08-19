@@ -1,12 +1,32 @@
-[
-  {
-    "text": "跑道旁忽然傳來一陣笑聲，還有網球滾過塑膠地面的聲音。",
-    "bg": "assets/images/playground.jpg"
-  },
-  {
-    "text": "一隻小狗叼著球鑽進操場，左右張望後，像是在等大家陪牠玩。"
-  },
-  {
-    "text": "有人開始喊起方向口令。跟上節拍，也許能把牠引到側門附近。"
-  }
-]
+{
+  "default": [
+    {
+      "text": "<wait=1000>2樓的實驗室門開著，<wait>大部分的器材和藥劑都鎖在櫃子裡。"
+    },
+    {
+      "char": "dog.png",
+      "name": "狗狗",
+      "text": "<char:jump><sound=bark>「汪！」"
+    }
+  ],
+  "student": [
+    {
+      "text": "<wait=1000>2樓的實驗室門開著，<wait>大部分的器材和藥劑都鎖在櫃子裡。"
+    },
+    {
+      "char": "dog.png",
+      "name": "狗狗",
+      "text": "<char:jump><sound=bark>「汪！」"
+    }
+  ],
+  "teacher": [
+    {
+      "text": "<wait=1000>2樓的實驗室門開著，<wait>大部分的器材和藥劑都鎖在櫃子裡。"
+    },
+    {
+      "char": "dog.png",
+      "name": "狗狗",
+      "text": "<char:jump><sound=bark>「汪！」"
+    }
+  ]
+}

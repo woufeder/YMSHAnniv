@@ -157,10 +157,11 @@ function initLab() {
         combo += 1;
         bestCombo = Math.max(bestCombo, combo);
         logElement.textContent = `校對成功：${firstData.note}`;
+        playSound('corerect.wav');
 
         if (matchedPairs === experimentPairs.length) {
           updateStatus();
-          completionTimeout = window.setTimeout(showCompletion, 550);
+          completionTimeout = window.setTimeout(showCompletion, 180);
         }
       } else {
         firstCard.classList.remove('is-flipped');
@@ -169,12 +170,13 @@ function initLab() {
         secondCard.setAttribute('aria-label', `實驗資料卡 ${Number(secondCard.dataset.index) + 1}`);
         combo = 0;
         logElement.textContent = '紀錄不相符，換一組資料再試試。';
+        playSound('wrong.wav');
       }
 
       flippedCards = [];
       isResolving = false;
       updateStatus();
-    }, 850);
+    }, 750);
   }
 
   function updateStatus() {
@@ -213,12 +215,18 @@ function initLab() {
           <div class="stat-item"><span>最佳連續</span><strong>${bestCombo}</strong></div>
           <div class="stat-item"><span>資料完整度</span><strong>100%</strong></div>
         </div>
-        <button class="complete-restart" type="button">重新校對</button>
+        <div class="complete-actions">
+          <button class="complete-restart" type="button">重新校對</button>
+          <button class="complete-back" type="button">返回地圖</button>
+        </div>
       </section>
     `;
     overlay.querySelector('.complete-restart').addEventListener('click', () => {
       overlay.remove();
       initGame();
+    });
+    overlay.querySelector('.complete-back').addEventListener('click', () => {
+      window.location.href = '../map.html';
     });
     document.body.appendChild(overlay);
 

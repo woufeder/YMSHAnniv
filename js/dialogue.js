@@ -114,6 +114,15 @@ class DialogueCore {
     this.setupBackgroundLayers();
     this.bg = this.backgroundImages[0] || null;
     this.charImg = this.container.querySelector('#char');
+    if (!this.charImg) {
+      const characterLayer = this.container.querySelector('.character-layer');
+      if (characterLayer) {
+        this.charImg = document.createElement('img');
+        this.charImg.id = 'char';
+        this.charImg.alt = '';
+        characterLayer.appendChild(this.charImg);
+      }
+    }
     this.nameBox = this.container.querySelector('#name');
     this.dialogueHeader = this.container.querySelector('.dialogue-header');
     this.textBox = this.container.querySelector('#text');
@@ -177,6 +186,18 @@ class DialogueCore {
     }
   }
 
+  resolveCharacterSource(src) {
+    if (/^(?:[a-z]+:|\/|\.\/|\.\.\/)/i.test(src)) {
+      return src;
+    }
+
+    if (typeof resolveAppAsset === 'function') {
+      return resolveAppAsset(`assets/images/${src}`);
+    }
+
+    return `assets/images/${src}`;
+  }
+
   replaceVars(str) {
     const info = this.studentInfo || this.playerInfo || {};
     const inputName = localStorage.getItem('playerInput') || info.input || info.name || '';
@@ -212,6 +233,8 @@ class DialogueCore {
    *    - <char:shake>      : 角色輕微震動
    *    - <char:shakeStrong> : 角色強烈震動
    *    - <char:jump>        : 角色往上跳
+   *    - <char:dashAcross>  : 角色由右側畫面外快速穿越至左側畫面外
+   *    - <char:dropPause>  : 角色稍微下移、停頓 0.5 秒後歸位
    *    (格式為 <char:特效名稱>)
    */
   typeText(text) {
@@ -282,14 +305,31 @@ class DialogueCore {
       case 'shake': className = 'char-shake'; break;
       case 'shakeStrong': className = 'char-shake-strong'; break;
       case 'jump': className = 'char-jump'; break;
+      case 'dashAcross': className = 'char-dash-across'; break;
+      case 'dropPause': className = 'char-drop-pause'; break;
       default: return;
     }
 
-    // 移除舊類名以重新觸發動畫
-    this.charImg.classList.remove('char-shake', 'char-shake-strong', 'char-jump');
+    this.charImg.classList.remove(
+      'char-shake',
+      'char-shake-strong',
+      'char-jump',
+      'char-dash-across',
+      'char-drop-pause'
+    );
+    this.charImg.style.transform = effect === 'dashAcross' ? 'translateX(125vw)' : '';
     // 強制重繪 (Reflow) 以便重新觸發動畫
     void this.charImg.offsetWidth;
     this.charImg.classList.add(className);
+  }
+
+  prepareLeadingCharEffect(text) {
+    if (!this.charImg) return;
+
+    const startsWithDash = /^(?:(?:<wait(?:=\d+)?>)|\|)*<char:dashAcross>/.test(text || '');
+    if (startsWithDash) {
+      this.charImg.style.transform = 'translateX(125vw)';
+    }
   }
 
   showLine() {
@@ -302,7 +342,16 @@ class DialogueCore {
     }
 
     if (this.charImg && line.char) {
-      this.charImg.src = line.char;
+      this.charImg.classList.remove(
+        'char-shake',
+        'char-shake-strong',
+        'char-jump',
+        'char-dash-across',
+        'char-drop-pause'
+      );
+      this.charImg.style.transform = '';
+      this.charImg.src = this.resolveCharacterSource(line.char);
+      this.prepareLeadingCharEffect(line.text);
     }
 
     // 名字與文字

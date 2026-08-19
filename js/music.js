@@ -121,6 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const piano = document.getElementById("piano");
   const musicMessage = document.getElementById("musicMessage");
   const restartButton = document.getElementById("restartScore");
+  const mapButton = document.getElementById("backToMap");
   const backButton = document.getElementById("backToArt");
   const notesByName = new Map(NOTES.map((item) => [item.note, item]));
   const score = SCHOOL_SONG_C_MAJOR.flatMap((measure, measureIndex) =>
@@ -253,6 +254,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   restartButton.addEventListener("click", restartScore);
+  mapButton.addEventListener("click", () => {
+    window.location.href = "../map.html";
+  });
   backButton.addEventListener("click", () => {
     window.location.href = "../art.html";
   });

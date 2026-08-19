@@ -9,6 +9,10 @@ function initHall() {
 
     // 初始化 Bootstrap Modal
     const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
+    const messageDetailModal = new bootstrap.Modal(document.getElementById('messageDetailModal'));
+    const messageDetailTitle = document.getElementById('messageDetailTitle');
+    const messageDetailTime = document.getElementById('messageDetailTime');
+    const messageDetailContent = document.getElementById('messageDetailContent');
 
     // Google Apps Script Web App URL
     const SHEET_URL = "https://script.google.com/macros/s/AKfycbyt1y70Lve-DHZ8dpXGPOl3u02ZnCXpNnsxnEztrDWHgsbL-uTRbKJdunXykinjHNw62Q/exec";
@@ -82,32 +86,49 @@ function initHall() {
         messagesList.innerHTML = '';
 
         messages.forEach(msg => {
-            const note = document.createElement('div');
+            const note = document.createElement('button');
+            note.type = 'button';
             note.className = 'sticky-note';
             const style = generateStickyNoteStyle(msg.id || msg.timestamp);
             Object.assign(note.style, style);
 
-            note.innerHTML = `
-                <div class="note-header">
-                    <span class="note-author">${msg.name}</span>
-                    <span class="note-time">${msg.timestamp}</span>
-                </div>
-                <div class="note-content">${msg.message}</div>
-            `;
+            const header = document.createElement('div');
+            header.className = 'note-header';
+            const author = document.createElement('span');
+            author.className = 'note-author';
+            author.textContent = msg.name || '匿名';
+            const content = document.createElement('div');
+            content.className = 'note-content';
+            content.textContent = msg.message || '';
+            note.setAttribute('aria-label', `閱讀 ${author.textContent} 的完整留言`);
+            note.append(header, content);
+            header.append(author);
+            note.addEventListener('click', () => showMessageDetail(msg));
             messagesList.appendChild(note);
         });
     }
 
+    function showMessageDetail(msg) {
+        messageDetailTitle.textContent = msg.name || '匿名';
+        messageDetailTime.textContent = msg.timestamp || '';
+        messageDetailContent.textContent = msg.message || '';
+        messageDetailModal.show();
+    }
+
     async function submitMessage() {
         const name = userNameInput.value.trim();
-        const messageText = messageInput.value.trim();
+        const messageText = messageInput.value;
 
         if (!name) {
             alert('請輸入您的姓名');
             return;
         }
-        if (!messageText) {
+        if (!messageText.trim()) {
             alert('請輸入留言內容');
+            return;
+        }
+        if (messageText.length > 500) {
+            alert('留言最多 500 字');
             return;
         }
 
@@ -139,13 +160,6 @@ function initHall() {
 
     openModalBtn.addEventListener('click', () => messageModal.show());
     submitBtn.addEventListener('click', submitMessage);
-
-    messageInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            submitMessage();
-        }
-    });
 
     backBtn.addEventListener('click', () => window.location.href = 'map.html');
 

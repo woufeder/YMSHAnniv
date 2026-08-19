@@ -327,6 +327,9 @@ const SettingsManager = {
   },
   set(key, value) {
     localStorage.setItem(`ymsh:setting_${key}`, value.toString());
+    window.dispatchEvent(
+      new CustomEvent("ymsh:settings-changed", { detail: { key, value } }),
+    );
   },
 };
 
@@ -340,6 +343,7 @@ class BGMManager {
     this.storageKey = "ymsh:bgm_currentTime";
     this.isInitialized = false;
     this.isTemporarilyMuted = false;
+    this.temporaryVolumeMultiplier = 1;
   }
 
   init() {
@@ -381,11 +385,18 @@ class BGMManager {
 
   updateVolume() {
     const vol = SettingsManager.get("bgmVolume", 0.5);
-    this.audio.volume = this.isTemporarilyMuted ? 0 : vol;
+    this.audio.volume = this.isTemporarilyMuted
+      ? 0
+      : vol * this.temporaryVolumeMultiplier;
   }
 
   setTemporaryMute(shouldMute) {
     this.isTemporarilyMuted = Boolean(shouldMute);
+    this.updateVolume();
+  }
+
+  setTemporaryVolumeMultiplier(multiplier = 1) {
+    this.temporaryVolumeMultiplier = Math.min(Math.max(Number(multiplier) || 0, 0), 1);
     this.updateVolume();
   }
 }
@@ -394,26 +405,31 @@ const HIDDEN_ACHIEVEMENTS = Object.freeze([
   {
     id: "school-song",
     title: "杰倫是你嗎？",
+    reason: "完整演奏了校歌。",
     storageKey: "achievement_music",
   },
   {
     id: "playground-dog",
     title: "阿偉～阿偉～",
+    reason: "在操場成功抓到小狗。",
     storageKey: "achievement_playground",
   },
   {
     id: "garden-perfect",
     title: "一定是綠手指的啦",
+    reason: "以五顆心完成花圃急救。",
     storageKey: "achievement_garden",
   },
   {
     id: "classroom-perfect",
     title: "微笑Pass噠",
+    reason: "快問快答全數答對。",
     storageKey: "achievement_classroom",
   },
   {
     id: "lab-grade-a",
     title: "眾裡尋牌千百度",
+    reason: "以 A 等第完成實驗紀錄校對。",
     storageKey: "achievement_lab",
   },
 ]);
@@ -459,10 +475,13 @@ function showHiddenAchievementToast(achievement) {
     <div class="achievement-toast__copy">
       <p>成就解鎖</p>
       <strong></strong>
+      <span></span>
     </div>
   `;
   toast.querySelector("strong").textContent = achievement.title;
+  toast.querySelector("span").textContent = achievement.reason || "達成了隱藏條件。";
   region.appendChild(toast);
+  playSound("achievement.wav");
 
   window.setTimeout(() => toast.classList.add("is-leaving"), 4200);
   window.setTimeout(() => toast.remove(), 4600);

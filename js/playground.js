@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const timeCount = document.getElementById('timeCount');
   const endingDialogue = document.getElementById('game');
   const introStorageKey = 'seen_intro_playground';
+  const ambience = new Audio(resolveAppAsset('assets/audio/playground.wav'));
+  const playgroundRescue = document.querySelector('.playground-rescue');
   const sceneIcon = document.getElementById('sceneIcon');
   const sceneLabel = document.getElementById('sceneLabel');
   const sceneHeading = document.getElementById('sceneHeading');
@@ -28,6 +30,21 @@ document.addEventListener('DOMContentLoaded', () => {
   let activeCueElement;
   let beatRing;
   let cueQueue;
+
+  ambience.loop = true;
+
+  function updateAmbienceVolume() {
+    const bgmVolume = SettingsManager.get('bgmVolume', 0.1);
+    ambience.volume = Math.min(bgmVolume * 1, 1);
+  }
+
+  function startAmbience() {
+    updateAmbienceVolume();
+    ambience.play().then(() => {
+      document.removeEventListener('pointerdown', startAmbience);
+      document.removeEventListener('keydown', startAmbience);
+    }).catch(() => {});
+  }
 
   function makeButton({ label, icon, className = '', onClick }) {
     const button = document.createElement('button');
@@ -201,6 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
     gameActive = false;
     clearBeatTimer();
     clearCountdown();
+    playgroundRescue.classList.remove('hidden');
     captureHint.textContent = gameData.instructions;
     setScene({
       icon: 'fa-wave-square',
@@ -288,11 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
         icon: 'fa-map',
         className: 'rescue-button--primary',
         onClick: () => {
-          if (typeof fadeTo === 'function') {
-            fadeTo('map.html');
-          } else {
-            window.location.href = 'map.html';
-          }
+          window.location.href = 'map.html';
         }
       })
     );
@@ -346,9 +360,25 @@ document.addEventListener('DOMContentLoaded', () => {
       leadCount.textContent = `0 / ${gameData.captureHits}`;
       timeCount.textContent = `${gameData.timeLimit}`;
       document.addEventListener('keydown', handleKeyboardCue);
+      document.addEventListener('pointerdown', startAmbience);
+      document.addEventListener('keydown', startAmbience);
+      window.bgm?.setTemporaryVolumeMultiplier(0.5);
+      window.addEventListener('ymsh:settings-changed', (event) => {
+        if (event.detail?.key === 'bgmVolume') updateAmbienceVolume();
+      });
+      window.addEventListener('pagehide', () => {
+        ambience.pause();
+        window.bgm?.setTemporaryVolumeMultiplier(1);
+      });
+      window.addEventListener('pageshow', (event) => {
+        if (!event.persisted) return;
+        window.bgm?.setTemporaryVolumeMultiplier(0.5);
+        startAmbience();
+      });
       startIntroDialogue();
     } catch (error) {
       console.error('Playground game could not be loaded:', error);
+      playgroundRescue.classList.remove('hidden');
       sceneLabel.textContent = '操場現場';
       sceneHeading.textContent = '暫時無法開啟口令練習';
       sceneText.textContent = '請重新整理頁面後再試一次。';

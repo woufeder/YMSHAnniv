@@ -13,6 +13,10 @@ body {
   background-size: cover, 32px 32px, 32px 32px, cover;
 }
 
+#game {
+  background: #173c4d url('../assets/images/lab.png') center / cover no-repeat;
+}
+
 .lab-game {
   width: min(100% - 40px, 940px);
   min-height: 100vh;
@@ -125,7 +129,7 @@ body {
   border-radius: 8px;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  transition: transform 0.5s ease, background 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.22s ease, background 0.2s ease, border-color 0.3s ease;
 }
 
 .card-front {
@@ -307,21 +311,46 @@ body {
   font-size: 16px;
 }
 
-.complete-restart {
+.complete-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.complete-restart,
+.complete-back {
   min-width: 142px;
   padding: 11px 18px;
-  border: 1px solid #ffe49b;
   border-radius: 8px;
-  background: #ffe49b;
-  color: #24404b;
   font: inherit;
   font-weight: 700;
   cursor: pointer;
 }
 
+.complete-restart {
+  border: 1px solid #ffe49b;
+  background: #ffe49b;
+  color: #24404b;
+}
+
+.complete-back {
+  border: 1px solid rgba(159, 236, 238, 0.72);
+  background: transparent;
+  color: #efffff;
+}
+
+.complete-back i {
+  margin-right: 6px;
+}
+
 .complete-restart:hover,
-.complete-restart:focus-visible {
+.complete-restart:focus-visible,
+.complete-back:hover,
+.complete-back:focus-visible {
+  border-color: #fff3c4;
   background: #fff3c4;
+  color: #24404b;
   outline: none;
 }
 

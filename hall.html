@@ -7,7 +7,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>YMSH 周年紀念 - 穿堂留言板</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/hall.css">
@@ -47,7 +48,7 @@
             </div>
             <div class="mb-3">
               <label for="messageInput" class="form-label">祝福訊息</label>
-              <textarea class="form-control" id="messageInput" rows="4" placeholder="寫下您對 YMSH 的想念..."></textarea>
+              <textarea class="form-control" id="messageInput" rows="4" maxlength="500" placeholder="寫下您對 YMSH 的想念..."></textarea>
             </div>
           </div>
           <div class="modal-footer">
@@ -56,6 +57,22 @@
           </div>
         </div>
       </div>
+      </div>
+      <div class="modal fade" id="messageDetailModal" tabindex="-1" aria-labelledby="messageDetailTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div>
+                <h5 class="modal-title" id="messageDetailTitle"></h5>
+                <p id="messageDetailTime" class="message-detail-time"></p>
+              </div>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+            </div>
+            <div class="modal-body">
+              <p id="messageDetailContent" class="message-detail-content"></p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 

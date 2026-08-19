@@ -171,6 +171,10 @@ body {
   animation: event-missed 0.18s ease-out forwards;
 }
 
+.garden-event.is-expiring {
+  animation: event-expiring 2.5s linear forwards;
+}
+
 @keyframes event-arrive {
   from {
     opacity: 0;
@@ -200,6 +204,13 @@ body {
   }
   to {
     opacity: 0;
+  }
+}
+
+@keyframes event-expiring {
+  to {
+    opacity: 0.55;
+    transform: scale(0.55);
   }
 }
 

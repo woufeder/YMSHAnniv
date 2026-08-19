@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const restartButton = document.getElementById('restartGame');
   const backButton = document.getElementById('backToMap');
   const toolButtons = [...document.querySelectorAll('.garden-tool')];
+  const ambience = new Audio(resolveAppAsset('assets/audio/playground.wav'));
 
   // 事件類型定義：在此修改每個隨機事件的圖示(icon)、名稱(label)與所需工具(tool)
   const eventTypes = [
@@ -69,6 +70,13 @@ document.addEventListener('DOMContentLoaded', () => {
       success: "找到一張匿名紙條",
     },
   ];
+
+  const toolSounds = {
+    water: 'waterdrop',
+    sunlight: 'sunshine',
+    fertilize: 'put',
+    tidy: 'grab',
+  };
   const memories = [
     "無論生活把你栽種在哪，優雅地綻放。",
     "種樹的最佳時間是十年前，其次是現在。",
@@ -92,6 +100,20 @@ document.addEventListener('DOMContentLoaded', () => {
   let memoryTimer = null;
   const activeEvents = new Map();
 
+  ambience.loop = true;
+
+  function updateAmbienceVolume() {
+    ambience.volume = SettingsManager.get('bgmVolume', 0.25);
+  }
+
+  function startAmbience() {
+    updateAmbienceVolume();
+    ambience.play().then(() => {
+      document.removeEventListener('pointerdown', startAmbience);
+      document.removeEventListener('keydown', startAmbience);
+    }).catch(() => {});
+  }
+
   function randomItem(items) {
     return items[Math.floor(Math.random() * items.length)];
   }
@@ -109,7 +131,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function startRound() {
     stopTimers();
-    activeEvents.forEach(event => clearTimeout(event.timeoutId));
+    activeEvents.forEach(event => {
+      clearTimeout(event.timeoutId);
+      clearTimeout(event.warningTimeoutId);
+    });
     activeEvents.clear();
     score = 0;
     combo = 0;
@@ -158,10 +183,14 @@ document.addEventListener('DOMContentLoaded', () => {
     button.setAttribute('aria-label', eventType.label);
     button.innerHTML = `<span class="event-icon" aria-hidden="true">${eventType.icon}</span><span>${eventType.label}</span>`;
 
-    const event = { slotIndex, eventType, button, timeoutId: null };
+    const event = { slotIndex, eventType, button, timeoutId: null, warningTimeoutId: null };
     button.addEventListener('click', () => handleEvent(event));
     slot.appendChild(button);
     activeEvents.set(slotIndex, event);
+    event.warningTimeoutId = setTimeout(
+      () => button.classList.add('is-expiring'),
+      Math.max(eventType.lifetime - 2500, 0)
+    );
     event.timeoutId = setTimeout(() => expireEvent(event), eventType.lifetime);
   }
 
@@ -176,10 +205,8 @@ document.addEventListener('DOMContentLoaded', () => {
       event.button.classList.add('is-resolved');
       if (event.eventType.id === 'memory') {
         showMemory();
-        playSound?.('paper');
-      } else {
-        playSound?.('step');
       }
+      playSound?.(toolSounds[event.eventType.tool]);
     } else {
       health -= 1;
       combo = 0;
@@ -209,6 +236,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function resolveEvent(event) {
     clearTimeout(event.timeoutId);
+    clearTimeout(event.warningTimeoutId);
+    event.button.classList.remove('is-expiring');
     activeEvents.delete(event.slotIndex);
     setTimeout(() => event.button.remove(), 180);
   }
@@ -255,6 +284,7 @@ document.addEventListener('DOMContentLoaded', () => {
     stopTimers();
     activeEvents.forEach(event => {
       clearTimeout(event.timeoutId);
+      clearTimeout(event.warningTimeoutId);
       event.button.disabled = true;
     });
     activeEvents.clear();
@@ -299,6 +329,21 @@ document.addEventListener('DOMContentLoaded', () => {
   startButton.addEventListener('click', startRound);
   restartButton.addEventListener('click', startRound);
   backButton.addEventListener('click', () => window.location.href = '../map.html');
+  document.addEventListener('pointerdown', startAmbience);
+  document.addEventListener('keydown', startAmbience);
+  window.bgm?.setTemporaryVolumeMultiplier(0.5);
+  window.addEventListener('ymsh:settings-changed', (event) => {
+    if (event.detail?.key === 'bgmVolume') updateAmbienceVolume();
+  });
+  window.addEventListener('pagehide', () => {
+    ambience.pause();
+    window.bgm?.setTemporaryVolumeMultiplier(1);
+  });
+  window.addEventListener('pageshow', (event) => {
+    if (!event.persisted) return;
+    window.bgm?.setTemporaryVolumeMultiplier(0.5);
+    startAmbience();
+  });
 
   createGrid();
   renderStats();

@@ -242,11 +242,13 @@ document.addEventListener("DOMContentLoaded", async function () {
       buttons[selectedIndex].classList.add("correct");
       showFeedback(`正確！${q.fact}`);
       quizCard.classList.add("bounce");
+      playSound("corerect.wav");
     } else {
       buttons[selectedIndex].classList.add("wrong");
       buttons[correctIndex].classList.add("correct");
       showFeedback("唉呀沒關係，可以偷偷去官網找答案喔！");
       quizCard.classList.add("shake");
+      playSound("wrong.wav");
     }
     currentQuestionIndex++;
     updateUI();

@@ -8,7 +8,7 @@
   },
   "instructions": "使用方向鍵或畫面上的方向按鈕。口令會持續重複，等節拍環最亮時按下相同方向；只有成功命中才會換下一個口令。",
   "timeLimit": 30,
-  "captureHits": 12,
+  "captureHits": 20,
   "tempo": 720,
   "cues": [
     {

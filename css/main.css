@@ -459,7 +459,8 @@ body.fade-in {
 }
 
 .achievement-toast__copy p,
-.achievement-toast__copy strong {
+.achievement-toast__copy strong,
+.achievement-toast__copy span {
   margin: 0;
 }
 
@@ -474,6 +475,14 @@ body.fade-in {
   margin-top: 3px;
   font-size: 17px;
   line-height: 1.35;
+}
+
+.achievement-toast__copy span {
+  display: block;
+  margin-top: 3px;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 13px;
+  line-height: 1.4;
 }
 
 .achievement-toast.is-leaving {

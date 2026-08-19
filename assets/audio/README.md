@@ -2,16 +2,17 @@
 
 此資料夾包含遊戲所需的音效檔案。
 
-## 所需檔案
+## 目前使用的檔案
 
-- `click.mp3` - 按鈕點擊音效
-- `complete.mp3` - 任務完成音效
-- `wind.mp3` - 環境背景音
-- `bgm.mp3` - 背景音樂（可選）
+- `hihamatanoboru.mp3` - 全站 BGM
+- `corerect.wav` - 遊戲答對音效
+- `wrong.wav` - 遊戲答錯音效
+- `achievement.wav` - 隱藏成就解鎖音效
+- `playground.wav` - 操場頁面的循環環境音
 
 ## 音檔規格
 
-- **格式**：MP3 (優先) 或 OGG
+- **格式**：MP3 或 WAV
 - **品質**：128kbps - 192kbps
 - **長度**：音效 1-3 秒，背景音可循環播放
 

@@ -6,7 +6,7 @@
     {
       "char": "student.png",
       "name": "學生",
-      "text": "「哇哇哇要來不及了！怎麼辦怎麼辦！」",
+      "text": "<char:dashAcross><sound=swoosh>「哇哇哇要來不及了！怎麼辦怎麼辦！」",
       "effect": "shake"
     },
     {
@@ -35,7 +35,7 @@
     {
       "char": "student.png",
       "name": "學生",
-      "text": "「哇哇哇要來不及了！怎麼辦怎麼辦！」",
+      "text": "<char:dashAcross><sound=swoosh>「哇哇哇要來不及了！怎麼辦怎麼辦！」",
       "effect": "shake"
     },
     {
@@ -64,7 +64,7 @@
     {
       "char": "student.png",
       "name": "學生",
-      "text": "「哇哇哇要來不及了！怎麼辦怎麼辦！」",
+      "text": "<char:dashAcross><sound=swoosh>「哇哇哇要來不及了！怎麼辦怎麼辦！」",
       "effect": "shake"
     },
     {

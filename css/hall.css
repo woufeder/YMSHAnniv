@@ -457,13 +457,24 @@
 
 /* 便條紙基礎樣式 */
 .sticky-note {
-  cursor: default;
+  border: 0;
+  color: #1f2830;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
   transition: transform 0.2s ease;
   font-family: "LXGW WenKai Mono TC", "Noto Sans TC"; 
 }
 
 .sticky-note:hover {
   transform: scale(1.1) rotate(0deg) !important; /* 滑鼠移上去時放大並正向 */
+  z-index: 1000 !important;
+}
+
+.sticky-note:focus-visible {
+  outline: 3px solid var(--primary700);
+  outline-offset: 3px;
+  transform: scale(1.06) rotate(0deg) !important;
   z-index: 1000 !important;
 }
 
@@ -485,7 +496,26 @@
 }
 
 .note-content {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
   font-size: 1rem;
   line-height: 1.4;
+  white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+.message-detail-time {
+  margin: 3px 0 0;
+  color: #6d747d;
+  font-size: 13px;
+}
+
+.message-detail-content {
+  margin: 0;
+  color: #1f2830;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
 }

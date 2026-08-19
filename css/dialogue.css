@@ -30,14 +30,15 @@
 
 .character-layer {
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: center;
   pointer-events: none;
 }
 
 .character-layer img {
+  margin-top: 20vh;
   max-width: 90vw;
-  height: 80vh;
+  height: 120vh;
   object-fit: contain;
   transition: opacity 0.5s ease;
 }
@@ -53,6 +54,14 @@
 
 .char-jump {
   animation: char-jump 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.char-dash-across {
+  animation: char-dash-across 0.8s linear both;
+}
+
+.char-drop-pause {
+  animation: char-drop-pause 0.85s ease-in-out;
 }
 
 @keyframes char-shake {
@@ -72,6 +81,17 @@
 @keyframes char-jump {
   0% { transform: translateY(0); }
   50% { transform: translateY(-50px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes char-dash-across {
+  0% { transform: translateX(125vw); }
+  100% { transform: translateX(-125vw); }
+}
+
+@keyframes char-drop-pause {
+  0% { transform: translateY(0); }
+  20%, 80% { transform: translateY(28px); }
   100% { transform: translateY(0); }
 }
 /* ------------------ */
@@ -103,8 +123,6 @@
   position: absolute;
   top: -50px;
   left: 25px;
-  min-width: 150px;
-  min-height: 38px;
   padding: 4px 50px;
   border: 1px solid #fff;
   border-left: 0;
