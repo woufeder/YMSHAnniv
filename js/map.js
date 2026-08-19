@@ -12,8 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
         { id: 'lab', name: '實驗室', event:"記憶翻牌", mapX: 2550, mapY: 2600, url: 'games/lab.html' },
         { id: 'principal', name: '校長室', mapX: 3500, mapY: 3200, url: 'principal.html' },
         { id: 'hall', name: '穿堂', mapX: 3600, mapY: 2600, url: 'hall.html' },
-        { id: 'playground', name: '操場', mapX: 4850, mapY: 1600, url: 'playground.html' },
-        // { id: 'extras', name: '彩蛋區', mapX: 5200, mapY: 470, url: 'games/extras.html' }
+        { id: 'playground', name: '操場', mapX: 4850, mapY: 1600, url: 'playground.html' }
     ];
     
     // 初始化進度

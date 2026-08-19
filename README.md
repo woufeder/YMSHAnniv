@@ -15,7 +15,6 @@
 5. **實驗室電路解謎** - 邏輯思維挑戰遊戲
 6. **校長室紀念卡** - 個人化紀念卡片生成
 7. **穿堂留言板** - 社群留言功能（可串接 Google Sheets）
-8. **彩蛋區** - 隱藏成就和特殊獎勵 -->
 
 <!-- ## 專案結構
 
@@ -31,7 +30,6 @@
 │   ├── classroom.html        # 教室：翻牌遊戲
 │   ├── garden.html           # 花園：種樹
 │   ├── lab.html              # 實驗室：電路解謎
-│   └── extras.html           # 彩蛋區
 │
 ├── /js                       # JavaScript 控制
 │   ├── main.js               # 校門口流程
@@ -42,7 +40,6 @@
 │   ├── principal.js          # 紀念卡生成（canvas）
 │   ├── hall.js               # Google Sheet 留言串接
 │   ├── utils.js              # 通用函式
-│   └── config.js             # 遊戲設定常數
 │
 ├── /css                      # 樣式檔案
 │   ├── main.css              # 共用基礎樣式
@@ -52,12 +49,8 @@
 │   ├── lab.css               # 電路關卡樣式
 │   ├── principal.css         # 校長室卡片樣式
 │   ├── hall.css              # 留言板樣式
-│   └── components.css        # 共用元件樣式
 │
 ├── /data                     # 資料設定檔
-│   ├── config.json           # 遊戲設定
-│   ├── messages.json         # 紀念卡文字對照
-│   └── extras.json           # 彩蛋地點設定
 │
 ├── /assets                   # 靜態資源
 │   ├── /images               # 圖片素材
@@ -103,19 +96,6 @@
 3. 建立 Google Apps Script 來處理 API 請求
 4. 將 Web App URL 更新到 `js/hall.js` 中的 `SHEET_URL` 變數
 
-### 自訂設定
-
-編輯 `data/config.json` 來修改：
-- 遊戲難度設定
-- 徽章和成就設定
-- UI 色彩主題
-- 功能開關
-
-編輯 `data/messages.json` 來修改：
-- 遊戲文字內容
-- 成就訊息
-- 系統提示文字
-
 ## 功能特色
 
 ### 響應式設計
@@ -130,11 +110,6 @@
 ### 進度儲存
 - 使用 localStorage 儲存遊戲進度
 - 支援跨頁面的狀態保持
-
-### 彩蛋系統
-- 多種隱藏成就等待發現
-- Konami 密技支援
-- 時間相關的特殊事件 -->
 
 ## 瀏覽器支援
 
@@ -173,10 +148,6 @@
 ### 更換圖片素材
 1. 將圖片放置到對應的 `assets/images/` 子資料夾
 2. 更新 CSS 或 JavaScript 中的檔案路徑引用
-
-### 修改遊戲設定
-1. 編輯 `js/config.js` 中的遊戲常數
-2. 修改 `data/config.json` 中的設定值
 
 ### 新增遊戲區域
 1. 在 `games/` 資料夾中建立新的 HTML 檔案

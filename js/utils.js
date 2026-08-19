@@ -30,7 +30,15 @@ function clearExpiredLocalStorage() {
       Number.isFinite(lastClosedAt) &&
       Date.now() - lastClosedAt >= STORAGE_EXPIRY_MS
     ) {
+      const achievements = [];
+      for (let index = 0; index < localStorage.length; index += 1) {
+        const key = localStorage.key(index);
+        if (key?.startsWith("achievement_")) {
+          achievements.push([key, localStorage.getItem(key)]);
+        }
+      }
       localStorage.clear();
+      achievements.forEach(([key, value]) => localStorage.setItem(key, value));
     }
 
     sessionStorage.setItem(STORAGE_SESSION_MARKER_KEY, "1");
@@ -425,9 +433,39 @@ function hasHiddenAchievement(id) {
 function earnHiddenAchievement(id) {
   const achievement = findHiddenAchievement(id);
   if (!achievement) return false;
+  if (hasHiddenAchievement(id)) return false;
 
   localStorage.setItem(achievement.storageKey, "true");
+  showHiddenAchievementToast(achievement);
   return true;
+}
+
+function showHiddenAchievementToast(achievement) {
+  if (!document.body) return;
+
+  let region = document.getElementById("achievementToastRegion");
+  if (!region) {
+    region = document.createElement("div");
+    region.id = "achievementToastRegion";
+    region.setAttribute("aria-live", "polite");
+    region.setAttribute("aria-label", "成就通知");
+    document.body.appendChild(region);
+  }
+
+  const toast = document.createElement("section");
+  toast.className = "achievement-toast";
+  toast.innerHTML = `
+    <div class="achievement-toast__icon" aria-hidden="true"><i class="fa-solid fa-trophy"></i></div>
+    <div class="achievement-toast__copy">
+      <p>成就解鎖</p>
+      <strong></strong>
+    </div>
+  `;
+  toast.querySelector("strong").textContent = achievement.title;
+  region.appendChild(toast);
+
+  window.setTimeout(() => toast.classList.add("is-leaving"), 4200);
+  window.setTimeout(() => toast.remove(), 4600);
 }
 
 window.YMSHAchievements = Object.freeze({
