@@ -16,7 +16,7 @@
   height: fit-content;
   text-align: center;
   background: rgba(71, 77, 100, 0.85);
-  padding: 14px 18px;
+  padding: 14px 18px 21px;
   border-radius: 0px 0px 8px 8px;
   box-shadow: 0 14px 40px rgba(36, 42, 56, 0.22);
   backdrop-filter: blur(8px);
@@ -34,7 +34,6 @@
 
 .progress-checklist {
   display: grid;
-  gap: 7px;
   min-width: 130px;
 }
 
@@ -55,6 +54,7 @@
 
 .progress-achievement.is-earned {
   color: var(--school-gold, #ffc107);
+  margin-top: 7px;
 }
 
 .progress-achievement.is-earned i {
