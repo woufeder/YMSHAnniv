@@ -100,6 +100,8 @@ class DialogueCore {
             <button id="submitName">確定</button>
           </div>
 
+          <div id="optionsArea" class="options-area hidden"></div>
+
           <div class="control-area">
             <button id="nextBtn" class="next-btn"><i class="fa-solid fa-play"></i></button>
           </div>
@@ -130,6 +132,7 @@ class DialogueCore {
     this.inputArea = this.container.querySelector('#inputArea');
     this.playerInput = this.container.querySelector('#playerName');
     this.submitName = this.container.querySelector('#submitName');
+    this.optionsArea = this.container.querySelector('#optionsArea');
 
     this.nextBtn?.addEventListener('click', () => this.nextLine());
     this.submitName?.addEventListener('click', () => this.handleNameSubmit());
@@ -268,11 +271,9 @@ class DialogueCore {
               playSound(match[1]);
             }
           } else if (command.startsWith('char:')) {
-            // 處理角色專用特效
-            const charEffect = command.slice(5); // 去掉 "char:"
+            const charEffect = command.slice(5);
             this.triggerCharEffect(charEffect);
           } else {
-            // 處理全螢幕視覺效果
             if (typeof triggerEffect === 'function') {
               triggerEffect(command);
             }
@@ -293,8 +294,18 @@ class DialogueCore {
 
       if (index >= parsed.length) {
         clearInterval(this.typingTimer);
+        // 文字播放完畢後，檢查是否有選項需要顯示
+        this.checkAndShowOptions();
       }
     }, this.textSpeed);
+  }
+
+  checkAndShowOptions() {
+    const line = this.dialogue[this.current];
+    if (line && line.options && line.options.length > 0) {
+      this.renderOptions(line.options);
+      if (this.nextBtn) this.nextBtn.classList.add('hidden');
+    }
   }
 
   triggerCharEffect(effect) {
@@ -379,8 +390,43 @@ class DialogueCore {
       this.nextBtn.classList.add('hidden');
     } else {
       this.inputArea.classList.add('hidden');
-      this.nextBtn.classList.remove('hidden');
+      // 這裡不再強制顯示 nextBtn，因為它由 typeText 完畢後的 checkAndShowOptions 決定
+      if (!line.options || line.options.length === 0) {
+        this.nextBtn.classList.remove('hidden');
+      } else {
+        this.nextBtn.classList.add('hidden');
+      }
     }
+  }
+
+  renderOptions(options) {
+    if (!this.optionsArea) return;
+    this.optionsArea.innerHTML = '';
+    this.optionsArea.classList.remove('hidden');
+
+    options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'dialogue-option-btn';
+      btn.textContent = this.replaceVars(opt.text);
+      btn.onclick = async () => {
+        this.optionsArea.classList.add('hidden');
+        if (this.nextBtn) this.nextBtn.classList.remove('hidden');
+
+        if (typeof opt.next === 'number') {
+          const targetLine = this.dialogue.find(l => l.id === opt.next);
+          if (targetLine) {
+            this.current = this.dialogue.indexOf(targetLine);
+          } else {
+            this.current = opt.next;
+          }
+        } else if (typeof opt.next === 'string') {
+          await this.loadDialogue(opt.next);
+          this.current = 0;
+        }
+        this.showLine();
+      };
+      this.optionsArea.appendChild(btn);
+    });
   }
 
   async handleNameSubmit() {
@@ -414,6 +460,11 @@ class DialogueCore {
     const fullText = this.getDisplayText(line?.text || '');
     if (this.textBox.textContent.length < fullText.length) {
       this.textBox.textContent = fullText;
+      return;
+    }
+
+    // 如果目前有選項，不允許透過「下一步」跳過
+    if (line?.options && line.options.length > 0) {
       return;
     }
 
