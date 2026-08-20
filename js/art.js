@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const intro = new DialogueCore({
         container: '#game',
         data: 'data/intro_art.json',
+        role: localStorage.getItem('playerRole') || 'default',
         onFinish: () => {
           localStorage.setItem(introStorageKey, 'true');
           showBuilding();
