@@ -1,32 +1,74 @@
 {
   "default": [
     {
-      "text": "<wait=1000>2樓的實驗室門開著，<wait>大部分的器材和藥劑都鎖在櫃子裡。"
+      "text": "<wait=1000>靠近操場，遠處的球場依然滿位。<wait>不過打球的不再只是學生。"
+    },
+    {
+      "text": "一小群人坐在操場中央的草地上休息聊天。<wait>PU跑道上也有些人悠悠哉哉地在散步。"
     },
     {
       "char": "dog.png",
       "name": "狗狗",
       "text": "<char:jump><sound=bark>「汪！」"
+    },
+    {
+      "char": "dog.png",
+      "name": "狗狗",
+      "text": "不知道哪裡<char:jump>竄出來的小狗狗<char:jump>叼著網球，<wait>一副希望有人和他<char:jump>玩的樣子。"
+    },
+    {
+      "text": "「啊！不好，他要跑去其他地方了。」",
+      "effect": "shake"
     }
   ],
   "student": [
     {
-      "text": "<wait=1000>2樓的實驗室門開著，<wait>大部分的器材和藥劑都鎖在櫃子裡。"
+      "text": "<wait=1000>靠近操場，遠處的球場依然滿位。<wait>不過打球的不再只是學生。"
+    },
+    {
+      "text": "跑道上的白字好像淺了一點，<wait>司令台上也沒有囉縮的師長耳提面命。"
+    },
+    {
+      "text": "一小群人坐在操場中央的草地上休息聊天。<wait>PU跑道上也有些人悠悠哉哉地在散步。"
     },
     {
       "char": "dog.png",
       "name": "狗狗",
       "text": "<char:jump><sound=bark>「汪！」"
+    },
+    {
+      "char": "dog.png",
+      "name": "狗狗",
+      "text": "不知道哪裡<char:jump>竄出來的小狗狗<char:jump>叼著網球，<wait>一副希望有人和他<char:jump>玩的樣子。"
+    },
+    {
+      "text": "「啊！不好，他要跑去其他地方了。」",
+      "effect": "shake"
     }
   ],
   "teacher": [
     {
-      "text": "<wait=1000>2樓的實驗室門開著，<wait>大部分的器材和藥劑都鎖在櫃子裡。"
+      "text": "<wait=1000>靠近操場，遠處的球場依然滿位。<wait>不過打球的不再只是學生。"
+    },
+    {
+      "text": "跑道上的白字好像淺了一點，<wait>你還記得司令台同仁宣導時，<wait>學生的臉一個比一個還臭。"
+    },
+    {
+      "text": "一小群人坐在操場中央的草地上休息聊天。<wait>PU跑道上也有些人悠悠哉哉地在散步。"
     },
     {
       "char": "dog.png",
       "name": "狗狗",
       "text": "<char:jump><sound=bark>「汪！」"
+    },
+    {
+      "char": "dog.png",
+      "name": "狗狗",
+      "text": "不知道哪裡<char:jump>竄出來的小狗狗<char:jump>叼著網球，<wait>一副希望有人和他<char:jump>玩的樣子。"
+    },
+    {
+      "text": "「啊！不好，他要跑去其他地方了。」",
+      "effect": "shake"
     }
   ]
 }
