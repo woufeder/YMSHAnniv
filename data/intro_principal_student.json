@@ -1,0 +1,29 @@
+{
+  "default": [
+    {
+      "char": "principal.png",
+      "name": "桓成康",
+      "text": "<char:dropPause>「啊……不好意思，<wait>當年永明的孩子很多，<wait>一部分人已經有些記不清。」"
+    },
+    {
+      "char": "principal.png",
+      "name": "桓成康",
+      "text": "「今天逛得還愉快嗎？<wait=300>那太好了。<wait>我確認一下。」"
+    },
+    {
+      "char": "principal.png",
+      "name": "桓成康",
+      "text": "<wait=1000>「來，<wait>這是今天的紀念卡。<wait=300>還想去逛逛再回來的話，也可以重新申請卡片。」"
+    },
+    {
+      "char": "principal.png",
+      "name": "桓成康",
+      "text": "「如果有什麼想說的，<wait>也可以在穿堂的佈告欄提交留言。」"
+    },
+    {
+      "char": "principal.png",
+      "name": "桓成康",
+      "text": "「今天真的很高興見到你，{{input}}同學，<wait>謝謝你回來看永明。」"
+    }
+  ]
+}
