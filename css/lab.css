@@ -7,14 +7,18 @@ body {
     linear-gradient(rgba(5, 23, 34, 0.72), rgba(5, 23, 34, 0.72)),
     linear-gradient(rgba(114, 217, 219, 0.08) 1px, transparent 1px),
     linear-gradient(90deg, rgba(114, 217, 219, 0.08) 1px, transparent 1px),
-    url('../assets/images/lab.png');
+    url("../assets/images/lab.png");
   background-position: center, center, center, center;
   background-repeat: no-repeat, repeat, repeat, no-repeat;
-  background-size: cover, 32px 32px, 32px 32px, cover;
+  background-size:
+    cover,
+    32px 32px,
+    32px 32px,
+    cover;
 }
 
 #game {
-  background: #173c4d url('../assets/images/lab.png') center / cover no-repeat;
+  background: #173c4d url("../assets/images/lab.png") center / cover no-repeat;
 }
 
 .lab-game {
@@ -45,13 +49,13 @@ body {
 
 .game-title {
   margin: 0;
-  color: #fff;
-  font-family: "LXGW WenKai Mono TC", "Noto Sans TC", sans-serif;
-  font-size: clamp(28px, 4vw, 42px);
+  color: var(--white);
+  font-size: 2.2rem;
   line-height: 1.2;
+  font-weight: bold;
 }
 
-.lab-objective {
+.objective {
   max-width: 290px;
   margin: 0;
   color: #c7e1e7;
@@ -129,7 +133,10 @@ body {
   border-radius: 8px;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  transition: transform 0.22s ease, background 0.2s ease, border-color 0.3s ease;
+  transition:
+    transform 0.22s ease,
+    background 0.2s ease,
+    border-color 0.3s ease;
 }
 
 .card-front {
@@ -140,7 +147,7 @@ body {
 
 .card-front::before,
 .card-back::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 7px;
   border: 1px solid rgba(204, 255, 253, 0.2);
@@ -212,7 +219,7 @@ body {
 }
 
 .experiment-card.is-matched .card-back::after {
-  content: '\f00c';
+  content: "\f00c";
   position: absolute;
   right: 9px;
   bottom: 7px;
@@ -372,7 +379,7 @@ body {
     gap: 10px;
   }
 
-  .lab-objective {
+  .objective {
     max-width: none;
     text-align: left;
   }

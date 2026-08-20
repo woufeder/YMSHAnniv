@@ -185,7 +185,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const gameContainer = document.getElementById("game");
     const quizContainer = document.getElementById("quizContainer");
     if (gameContainer) gameContainer.style.display = "none";
-    if (quizContainer) quizContainer.style.display = "block";
+    if (quizContainer) quizContainer.style.display = "flex";
 
     initGame();
   }
