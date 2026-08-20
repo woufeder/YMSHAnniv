@@ -1,0 +1,30 @@
+/* --- 選項分歧樣式 --- */
+.options-area {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+  width: 100%;
+}
+
+.options-area.hidden {
+  display: none;
+}
+
+.dialogue-option-btn {
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  color: var(--dialogue-text-color);
+  text-align: left;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.2s ease;
+}
+
+.dialogue-option-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #fff;
+  padding-left: 25px;
+}
