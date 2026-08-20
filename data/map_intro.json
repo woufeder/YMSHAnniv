@@ -1,10 +1,10 @@
 {
 
   "default": [
-    {"char": "guard.png", "name": "警衛", "text": "<wait=1000>唷！<wait>新面孔，<wait>進來之前讓阿伯登記一下名字。"},
-    {"char": "guard.png", "name": "警衛", "text": "我看看，<wait>{{input}}……<wait=800>好！<wait>不用換證，這樣就可以啦。"},
-    {"char": "guard.png", "name": "警衛", "text": "嗯？你說今天辦什麼活動，<wait>是永明的創校一百周年校慶啊！"},
-    {"char": "guard.png", "name": "警衛", "text": "好啦進來吧，<wait>今天人不少，小心身上的東西，別搞丟錢包手機啦。"}
+    {"char": "guard.png", "name": "警衛", "text": "<wait=1000>「唷！<wait>新面孔，<wait>進來之前讓阿伯登記一下名字。」"},
+    {"char": "guard.png", "name": "警衛", "text": "「我看看，<wait>{{input}}……<wait=800>好！<wait>不用換證，這樣就可以啦。」"},
+    {"char": "guard.png", "name": "警衛", "text": "「嗯？你說今天辦什麼活動，<wait>是永明的創校一百周年校慶啊！"},
+    {"char": "guard.png", "name": "警衛", "text": "「好啦進來吧，<wait>今天人不少，小心身上的東西，別搞丟錢包手機啦。」"}
   ],
     "student": [
     { "text": "<wait=1000>不知不覺已經過了這麼久了啊！" },
@@ -12,10 +12,10 @@
     { "text": "不知道大家最近過得怎麼樣？<wait>老師們還在不在？<wait>一切都還好嗎？" },
     { "text": "學校的一切，似乎沒有太多變化，<wait>大樓、操場，看起來都是一樣的。" },
     { "text": "只是，感覺有些不同了。" },
-    {"char": "guard.png", "name": "警衛", "text": "嗯？<wait>你看起來有點眼熟啊，<wait>你是……？"},
-    {"char": "guard.png", "name": "警衛", "text": "啊對對對，{{input}}。我還記得你。<wait>當年還是{{class}}的學生吧？唉呀現在都長這麼大了！", "effect": "shake"},
-    {"char": "guard.png", "name": "警衛", "text": "真好真好，真高興看到你回來。<wait>在外面有照顧好自己嗎？<wait>欲會記得食飯欸(要記得吃飯欸)。"},
-    {"char": "guard.png", "name": "警衛", "text": "好啦好啦快進來吧，<wait>今年也有一些小遊戲，<wait>聽說校長有準備小東西紀念，<wait>回去之前別忘了去校長室看看啊！"}
+    {"char": "guard.png", "name": "警衛", "text": "「嗯？<wait>你看起來有點眼熟啊，<wait>你是……？」"},
+    {"char": "guard.png", "name": "警衛", "text": "「啊對對對，{{input}}。我還記得你。<wait>當年還是{{class}}的學生吧？唉呀現在都長這麼大了！」", "effect": "shake"},
+    {"char": "guard.png", "name": "警衛", "text": "「真好真好，真高興看到你回來。<wait>在外面有照顧好自己嗎？<wait>欲會記得食飯欸(要記得吃飯欸)。」"},
+    {"char": "guard.png", "name": "警衛", "text": "「好啦好啦快進來吧，<wait>今年也有一些小遊戲，<wait>聽說校長有準備小東西紀念，<wait>回去之前別忘了去校長室看看啊！」"}
   ],
   "teacher": [
     { "text": "<wait=1000>在那些孩子們畢業之後，<wait>不知不覺已經過了這麼久了啊！" },
@@ -24,10 +24,10 @@
     { "text": "每年新學生湧進，<wait>舊生畢業，<wait>如此往復，也倒了這個時候。" },
     { "text": "不過……<wait>哈哈，<wait>還是會有點想念那些孩子們呢，<wait>不知道大家最近過得怎麼樣？" },
     { "text": "說不定今天還會見到大家呢。" },
-    {"char": "guard.png", "name": "警衛", "text": "唉唷，{{input}}老師。<wait>今天起這麼早啊，<wait>一定也是來參加校慶的對吧！"},
-     {"char": "guard.png", "name": "警衛", "text": "聽說以前的學生也會回來看看呢，<wait>我剛剛就看到了好幾個，<wait>都長大了啊。"},
-    {"char": "guard.png", "name": "警衛", "text": "哈哈哈，<wait>不耽誤您時間啦，<wait>快進來吧，外頭熱著呢。"},
-    {"char": "guard.png", "name": "警衛", "text": "聽說校長有準備小東西紀念，<wait>回去之前別忘了去校長室看看啊！"}
+    {"char": "guard.png", "name": "警衛", "text": "「唉唷，{{input}}老師。<wait>今天起這麼早啊，<wait>一定也是來參加校慶的對吧！」"},
+     {"char": "guard.png", "name": "警衛", "text": "「聽說以前的學生也會回來看看呢，<wait>我剛剛就看到了好幾個，<wait>都長大了啊。」"},
+    {"char": "guard.png", "name": "警衛", "text": "「哈哈哈，<wait>不耽誤您時間啦，<wait>快進來吧，外頭熱著呢。」"},
+    {"char": "guard.png", "name": "警衛", "text": "「聽說校長有準備小東西紀念，<wait>回去之前別忘了去校長室看看啊！」"}
   ]
 }
 
