@@ -80,10 +80,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const earned = window.YMSHAchievements.has(achievement.id);
             const item = document.createElement('div');
             item.className = `progress-achievement${earned ? ' is-earned' : ''}`;
-            item.innerHTML = `<i class="fa-solid ${earned ? 'fa-star' : 'fa-question'}" aria-hidden="true"></i>`;
+            item.innerHTML = earned ? `<i class="fa-solid fa-star" aria-hidden="true"></i>` : '';
 
             const name = document.createElement('span');
-            name.textContent = earned ? `達成成就：${achievement.title}` : '？？？？？';
+            name.textContent = earned ? `達成成就：${achievement.title}` : '';
             item.append(name);
             return item;
         });
