@@ -49,17 +49,17 @@ class SettingsUI {
 
     const volumeOptions = [
       { value: 0, text: "靜音" },
-      { value: 0.25, text: "低" },
-      { value: 0.5, text: "中" },
-      { value: 0.75, text: "高" },
-      { value: 1, text: "滿" },
+      { value: 0.20, text: "低" },
+      { value: 0.40, text: "中" },
+      { value: 0.60, text: "高" },
+      { value: 0.80, text: "滿" },
     ];
     const speedOptions = [
-      { value: 120, text: "慢" },
-      { value: 90, text: "稍慢" },
-      { value: 60, text: "普通" },
-      { value: 35, text: "稍快" },
-      { value: 15, text: "快" },
+      { value: 100, text: "慢" },
+      { value: 75, text: "稍慢" },
+      { value: 45, text: "普通" },
+      { value: 30, text: "稍快" },
+      { value: 10, text: "快" },
     ];
 
     this.modal = document.createElement("div");
@@ -77,11 +77,11 @@ class SettingsUI {
 
     this.modal.querySelector("#close-settings").onclick = () =>
       this.toggleModal(false);
-    this.bindOptionGroup("vol-bgm", "bgmVolume", 0.25, () =>
+    this.bindOptionGroup("vol-bgm", "bgmVolume", 0.20, () =>
       window.bgm?.updateVolume(),
     );
     this.bindOptionGroup("vol-se", "seVolume", 0.5);
-    this.bindOptionGroup("speed-text", "textSpeed", 60);
+    this.bindOptionGroup("speed-text", "textSpeed", 45);
   }
 
   bindOptionGroup(id, settingKey, defaultValue, onChange) {

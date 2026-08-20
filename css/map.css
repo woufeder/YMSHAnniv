@@ -99,7 +99,9 @@
   color: var(--primary700);
   cursor: pointer;
   transform: translate(-50%, -100%);
-  transition: transform 0.2s ease, color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
   pointer-events: all;
   overflow: visible;
 }
@@ -110,23 +112,17 @@
   height: 48px;
   place-items: center;
   font-size: 42px;
-  filter:drop-shadow(0 0 5px var(--primary100));
+  filter: drop-shadow(0 0 5px var(--primary100));
 }
 
 .location-label {
-  position: absolute;
-  bottom: -36px;
-  left: 50%;
   min-width: max-content;
-  padding: 3px 7px;
-  border: 1px solid rgba(255, 255, 255, 0.85);
-  border-radius: 8px;
-  background: var(--primary300);
-  color: var(--text-color);
+  padding: 5px 10px;
+  border-radius: var(--border-radius);
+  background: var(--primary700);
+  color: var(--white);
   font-size: 20px;
-  font-weight: 700;
   line-height: 1.2;
-  transform: translateX(-50%);
   white-space: nowrap;
   box-shadow: 0 2px 8px rgba(21, 31, 42, 0.2);
 }
@@ -141,13 +137,12 @@
 
 .location-marker.completed {
   color: var(--success-color);
-  animation: marker-pulse 2s infinite;
 }
 
 .location-marker.completed::after {
   content: "\f00c";
   position: absolute;
-  top: 2px;
+  bottom: 2px;
   right: -2px;
   display: grid;
   width: 18px;
@@ -160,6 +155,13 @@
   font-family: "Font Awesome 6 Free";
   font-size: 10px;
   font-weight: bold;
+}
+.location-marker.completed .location-label {
+  background-color: var(--success-color);
+  color: var(--success-text-color);
+  font-weight: 700;
+  animation: marker-pulse 2s ease-in-out infinite;
+  transform-origin: center bottom;
 }
 
 @keyframes marker-pulse {

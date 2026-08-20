@@ -8,6 +8,7 @@
   --primary900: #252834;
   --text-color: #111111;
   --success-color: #8ed14b;
+  --success-text-color: #193200;
   --error-color: #b95351;
   --info-color: #2196f3;
   --warning-color: #ffc107;
@@ -304,7 +305,7 @@ body.fade-in {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
-  gap:30px;
+  gap: 30px;
   font-family: "LXGW WenKai Mono TC", "Noto Sans TC";
 }
 
@@ -347,7 +348,7 @@ body.fade-in {
   border: 1px solid var(--primary700);
   border-radius: var(--border-radius);
   background: transparent;
-  color: var(--primary700);
+  color: var(--primary900);
   font: inherit;
   font-size: 16px;
   line-height: 1.2;
@@ -407,7 +408,9 @@ body.fade-in {
   font-size: 18px;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
 }
 
 .return-button:hover,
@@ -490,13 +493,25 @@ body.fade-in {
 }
 
 @keyframes achievement-toast-in {
-  from { opacity: 0; transform: translateX(28px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 @keyframes achievement-toast-out {
-  from { opacity: 1; transform: translateX(0); }
-  to { opacity: 0; transform: translateX(28px); }
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(28px);
+  }
 }
 
 @media (max-width: 640px) {

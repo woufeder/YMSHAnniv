@@ -276,7 +276,7 @@ body {
 .user-name {
     font-size: 18px;
     font-weight: bold;
-    color: var(--primary700);
+    color: var(--primary100);
     margin-bottom: 5px;
 }
 
@@ -319,7 +319,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     font-weight: bold;
-    color: var(--primary700);
+    color: var(--primary100);
 }
 
 /* 響應式設計 */
