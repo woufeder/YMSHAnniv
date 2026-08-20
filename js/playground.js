@@ -254,6 +254,11 @@ document.addEventListener('DOMContentLoaded', () => {
     clearBeatTimer();
     clearCountdown();
 
+    // 隱藏遊戲畫面
+    document.querySelector('.playground-rescue')?.classList.add('hidden');
+    gameBoard.style.display = 'none';
+    gameActions.style.display = 'none';
+
     if (outcome === 'success') {
       localStorage.setItem('ymsh:playgroundCompleted', 'true');
       window.YMSHAchievements?.earn('playground-dog');
@@ -271,6 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dialogue = new DialogueCore({
       container: '#game',
       data: dataPath,
+      role: localStorage.getItem('playerRole') || 'default',
       onFinish: () => {
         endingDialogue.style.display = 'none';
         renderOutcome(outcome);
@@ -284,6 +290,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderOutcome(outcome) {
+    // 恢復遊戲界面顯示
+    document.querySelector('.playground-rescue')?.classList.remove('hidden');
+    gameBoard.style.display = '';
+    gameActions.style.display = '';
+
     leadCount.textContent = `${successfulHits} / ${gameData.captureHits}`;
     timeCount.textContent = outcome === 'success' ? '完成' : '0';
     const isSuccess = outcome === 'success';
@@ -329,6 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dialogue = new DialogueCore({
       container: '#game',
       data: 'data/intro_playground.json',
+      role: localStorage.getItem('playerRole') || 'default',
       onFinish: () => {
         localStorage.setItem(introStorageKey, 'true');
         endingDialogue.style.display = 'none';
