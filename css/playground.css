@@ -56,7 +56,6 @@
 .rescue-header h1 {
   margin: 0;
   color: #fff;
-  font-family: "LXGW WenKai Mono TC", "Noto Sans TC", sans-serif;
   font-size: 32px;
 }
 
@@ -126,7 +125,6 @@
 .rescue-scene h2 {
   margin: 0;
   color: #fff;
-  font-family: "LXGW WenKai Mono TC", "Noto Sans TC", sans-serif;
   font-size: 23px;
   line-height: 1.4;
 }
@@ -276,7 +274,6 @@
 }
 
 .active-cue strong {
-  font-family: "LXGW WenKai Mono TC", "Noto Sans TC", sans-serif;
   font-size: 34px;
   line-height: 1;
 }
