@@ -101,10 +101,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     {
       question: "學業任務和課外活動分別有幾項？",
       options: [
-        "學業任務5項，課外活動3項",
-        "學業任務8項，課外活動2項",
-        "學業任務4項，課外活動2項",
-        "學業任務10項，課外活動5項",
+        "學業任務5項\n課外活動3項",
+        "學業任務8項\n課外活動2項",
+        "學業任務4項\n課外活動2項",
+        "學業任務10項\n課外活動5項",
       ],
       answer: 2,
       fact: "看來是有認真交作業的好學生！",
@@ -140,10 +140,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     {
       question: "校慶活動中，哪一組選項的年級與活動對應正確？",
       options: [
-        "一年級：串珠；二年級：手拉坏；三年級：金工",
-        "一年級：刺繡；二年級：押花；三年級：手工香皂",
-        "一年級：絹印；二年級：蝶古巴特；三年級：粽子吊飾",
-        "一年級：魁地奇；二年級:三巫鬥法大賽；三年級：普等巫測",
+        "一年級：串珠\n二年級：手拉坏\n三年級：金工",
+        "一年級：刺繡\n二年級：押花\n三年級：手工香皂",
+        "一年級：絹印\n二年級：蝶古巴特\n三年級：粽子吊飾",
+        "一年級：魁地奇\n二年級:三巫鬥法大賽\n三年級：普等巫測",
       ],
       answer: 3,
       fact: "選魁地奇的請左轉霍格華茲。",
@@ -216,8 +216,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     optionsGrid.innerHTML = "";
     q.options.forEach((opt, index) => {
       const btn = document.createElement("button");
-      btn.className = "option-btn";
-      btn.textContent = opt;
+      const label = document.createElement("span");
+      const optionText = document.createElement("span");
+      btn.className = "option-btn btn";
+      label.className = "option-key";
+      label.textContent = String.fromCharCode(65 + index);
+      optionText.className = "option-text";
+      optionText.textContent = opt;
+      btn.append(label, optionText);
       btn.addEventListener("click", () => handleAnswer(index));
       optionsGrid.appendChild(btn);
     });
