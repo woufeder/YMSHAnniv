@@ -10,8 +10,11 @@
   --success-color: #8ed14b;
   --success-text-color: #193200;
   --error-color: #b95351;
+  --error-text-color: #520404;
   --info-color: #2196f3;
   --warning-color: #ffc107;
+  --alert-color: #f8f2eb;
+  --alert-text-color: #7a5b50;
 
   --border-radius: 6px;
   --border-radius-large: 8px;
@@ -28,47 +31,51 @@
   --dialogue-header-bg: #343742;
   --dialogue-text-color: #151925;
   --dialogue-max-width: 1080px;
+
+  font-size: 17px;
 }
 
 h1 {
-  font-size: 72px;
-  font-weight: bold;
+  font-size: 4.5rem;
+  font-weight: 700;
   padding: 0;
   margin: 0;
 }
 
 h2 {
-  font-size: 48px;
+  font-size: 3rem;
+  font-weight: 700;
   padding: 0;
   margin: 0;
 }
 
 h3 {
-  font-size: 36px;
+  font-size: 2.3rem;
+  font-weight: 700;
   padding: 0;
   margin: 0;
 }
 
 h4 {
-  font-size: 30px;
+  font-size: 1.9rem;
   padding: 0;
   margin: 0;
 }
 
 h5 {
-  font-size: 24px;
+  font-size: 1.5rem;
   padding: 0;
   margin: 0;
 }
 
 h6 {
-  font-size: 20px;
+  font-size: 1.3rem;
   padding: 0;
   margin: 0;
 }
 
 p {
-  font-size: 16px;
+  font-size: 1rem;
   padding: 0;
   margin: 0;
 }
@@ -305,8 +312,7 @@ body.fade-in {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
-  gap: 30px;
-  font-family: "LXGW WenKai Mono TC", "Noto Sans TC";
+  gap: 1rem;
 }
 
 .settings-content h3 {
@@ -318,7 +324,6 @@ body.fade-in {
 
 .bgm-credit {
   margin: -6px 0 0;
-  font-size: 17px;
   line-height: 1.5;
 }
 
@@ -389,6 +394,14 @@ body.fade-in {
   color: var(--primary900);
   outline: none;
 }
+
+.settings-info {
+  font-size: 14px;
+  color: var(--primary900);
+  text-decoration: underline;
+  text-align: center;
+}
+
 /* Fixed return control used across the site. */
 .return-button {
   position: fixed;
@@ -476,7 +489,6 @@ body.fade-in {
 .achievement-toast__copy strong {
   display: block;
   margin-top: 3px;
-  font-size: 17px;
   line-height: 1.35;
 }
 
@@ -512,6 +524,103 @@ body.fade-in {
     opacity: 0;
     transform: translateX(28px);
   }
+}
+
+/* --------------bootstrap顏色修改-------------- */
+/* --------------primary-------------- */
+.btn-primary {
+  --bs-btn-color: var(--primary100);
+  --bs-btn-bg: var(--primary700);
+  --bs-btn-border-color: var(--primary700);
+
+  --bs-btn-hover-color: var(--primary100);
+  --bs-btn-hover-bg: var(--primary900);
+  --bs-btn-hover-border-color: var(--primary900);
+
+  --bs-btn-focus-shadow-rgb: 71, 77, 100;
+
+  --bs-btn-active-color: var(--primary100);
+  --bs-btn-active-bg: var(--primary900);
+  --bs-btn-active-border-color: var(--primary900);
+
+  --bs-btn-disabled-color: var(--primary100);
+  --bs-btn-disabled-bg: var(--primary700);
+  --bs-btn-disabled-border-color: var(--primary700);
+}
+.alert-primary {
+  --bs-alert-color: var(--primary900);
+  --bs-alert-bg: var(--primary100);
+  --bs-alert-border-color: var(--primary300);
+}
+.text-bg-primary {
+  color: #fff !important;
+  background-color: var(--primary700) !important;
+}
+.bg-primary {
+  --bs-bg-opacity: 1;
+  background-color: rgba(71, 77, 100, var(--bs-bg-opacity)) !important;
+}
+.border-primary {
+  --bs-border-opacity: 1;
+  border-color: rgba(71, 77, 100, var(--bs-border-opacity)) !important;
+}
+.text-primary {
+  --bs-text-opacity: 1;
+  color: rgba(71, 77, 100, var(--bs-text-opacity)) !important;
+}
+/* --------------light-------------- */
+.btn-light {
+  --bs-btn-color: var(--primary900);
+  --bs-btn-bg: var(--primary100);
+  --bs-btn-border-color: var(--primary100);
+  --bs-btn-hover-color: var(--primary900);
+  --bs-btn-hover-bg: var(--primary300);
+  --bs-btn-hover-border-color: var(--primary300);
+  --bs-btn-focus-shadow-rgb: 189, 196, 238;
+  --bs-btn-active-color: var(--primary900);
+  --bs-btn-active-bg: var(--primary300);
+  --bs-btn-active-border-color: var(--primary500);
+  --bs-btn-active-shadow: inset 0 0.2rem 0.3rem rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: var(--primary500);
+  --bs-btn-disabled-bg: var(--primary100);
+  --bs-btn-disabled-border-color: var(--primary300);
+}
+
+.btn-outline-light {
+  --bs-btn-color: var(--primary100);
+  --bs-btn-border-color: var(--primary100);
+  --bs-btn-hover-color: var(--primary900);
+  --bs-btn-hover-bg: var(--primary100);
+  --bs-btn-hover-border-color: var(--primary100);
+  --bs-btn-focus-shadow-rgb: 189, 196, 238;
+  --bs-btn-active-color: var(--primary900);
+  --bs-btn-active-bg: var(--primary300);
+  --bs-btn-active-border-color: var(--primary300);
+  --bs-btn-disabled-color: var(--primary300);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--primary300);
+}
+.bg-light {
+  --bs-bg-opacity: 1;
+  background-color: rgba(220, 236, 255, var(--bs-bg-opacity)) !important;
+}
+.text-light {
+  --bs-text-opacity: 1;
+  color: rgba(220, 236, 255, var(--bs-text-opacity)) !important;
+}
+.border-light {
+  --bs-border-opacity: 1;
+  border-color: rgba(220, 236, 255, var(--bs-border-opacity)) !important;
+}
+.text-bg-light {
+  color: var(--primary900) !important;
+  background-color: var(--primary100) !important;
+}
+.alert-light {
+  --bs-alert-color: var(--primary900);
+  --bs-alert-bg: var(--primary100);
+  --bs-alert-border-color: var(--primary300);
+  --bs-alert-link-color: var(--primary900);
 }
 
 @media (max-width: 640px) {
