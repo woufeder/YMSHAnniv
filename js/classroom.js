@@ -16,14 +16,14 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   async function handleIntro() {
     if (!localStorage.getItem(introStorageKey)) {
-      console.log("🎬 啟動對話系統...");
+      // console.log("🎬 啟動對話系統...");
       try {
         const intro = new DialogueCore({
           container: "#game",
           data: "../data/intro_classroom.json",
           role,
           onFinish: () => {
-            console.log("✅ 對話完整結束，標記為已閱並進入遊戲");
+            // console.log("✅ 對話完整結束，標記為已閱並進入遊戲");
             // 只有在對話真正結束後才標記為 true
             localStorage.setItem(introStorageKey, "true");
             localStorage.setItem(introCompletedAtKey, Date.now().toString());
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         "永明高級中等學校",
       ],
       answer: 3,
-      fact: "考試的時候就知道名字很重要了，對吧？",
+      fact: "考試時就知道名字很重要了，對吧？",
     },
     {
       question: "健康中心在哪一棟樓？",
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       question: "企劃營運中，學業任務6是哪一科的？",
       options: ["國文", "數學", "社會", "體育"],
       answer: 4,
-      fact: "體育課的任務就是要動起來，才能保持健康！",
+      fact: "體育課就是要動起來，才能保持健康！",
     },
     {
       question: "下列哪一句是永明的校訓？",
@@ -78,25 +78,25 @@ document.addEventListener("DOMContentLoaded", async function () {
         "真理照耀永明",
       ],
       answer: 2,
-      fact: "在你身上點亮一盞小燈泡！",
+      fact: "叮，在你身上點亮一盞小燈泡！",
     },
     {
-      question: "運動會活動中，藍色名牌＋校徽能換得什麼禮物？",
+      question: "運動會活動中，藍色名牌＋校徽能兌換什麼禮物？",
       options: ["兩張冰淇淋兌換券", "永明小書包", "手工音樂盒", "殺人鯨娃娃"],
       answer: 4,
-      fact: "和O家的鯊魚娃娃真的不是兄弟！",
+      fact: "和YEE家的鯊魚娃娃真的不是兄弟！",
     },
     {
       question: "企劃官網的教師NPC中，沒有哪一項人員？",
       options: ["警衛", "自然", "教官", "輔導"],
       answer: 1,
-      fact: "雖然官網沒有但在這個網站裡，沒寫名字就翻牆進來會被警衛伯伯抓到喔！",
+      fact: "但今天沒寫名字就進來會被警衛伯伯抓到喔！",
     },
     {
       question: "距離永明高中最近的捷運站是哪一站？",
       options: ["仁北站", "排排站", "景湖站", "不服來站"],
       answer: 3,
-      fact: "雖然營運中未多有描述，但在校外地理還是可以看得到喔！",
+      fact: "雖然營運中未多有描述，但校外地理有寫喔！",
     },
     {
       question: "學業任務和課外活動分別有幾項？",
@@ -118,24 +118,24 @@ document.addEventListener("DOMContentLoaded", async function () {
         "智誠勤敬，真善謙愛，仁和信義",
       ],
       answer: 1,
-      fact: "居然能答對！這題的答案在官網QA的營運#21中！",
+      fact: "居然能答對！答案在官網QA的營運#21中！",
     },
     {
       question: "福利社阿姨在結業式中拿著的花是？",
       options: ["卡斯比亞", "海芋", "向日葵", "百合"],
       answer: 2,
-      fact: "嘿嘿，那還記得福利社阿姨的名字嗎？",
+      fact: "嘿嘿，還記得秀秀的名字嗎？",
     },
     {
       question: "學業任務4-社會課中提到的期刊文章節錄作者為？",
       options: [
-        "卡爾·薩根",
-        "愛德溫·哈伯",
-        "卡爾·史瓦西",
-        "亨麗埃塔·史旺·勒維特",
+        "卡爾・薩根",
+        "愛德溫・哈伯",
+        "卡爾・史瓦西",
+        "亨麗埃塔・史旺・勒維特",
       ],
       answer: 1,
-      fact: "這四位都是非常重要的天文學家，對於天文學的發展有著不可磨滅的貢獻。",
+      fact: "這四位都是對天文學與人類理解宇宙有重要貢獻的科學家喔！",
     },
     {
       question: "校慶活動中，哪一組選項的年級與活動對應正確？",
@@ -146,25 +146,31 @@ document.addEventListener("DOMContentLoaded", async function () {
         "一年級：魁地奇；二年級:三巫鬥法大賽；三年級：普等巫測",
       ],
       answer: 3,
-      fact: "應該不會有人選魁地奇吧？這是永明不是霍格華茲捏。",
+      fact: "選魁地奇的請左轉霍格華茲。",
     },
     {
       question: "學生心情不好的話，校長會請同學到校長室做什麼？",
-      options: ["唱卡拉ok", "做運動", "寫考卷", "喝茶"],
+      options: ["唱卡拉ok", "做新式健康操", "寫考卷", "喝茶"],
       answer: 4,
-      fact: "「要不要來杯茶？」",
+      fact: "是不是有人想看校長跳Lucy？",
     },
     {
       question: "企劃營運中，結業證書分為幾種？",
       options: ["1種", "2種", "3種", "4種"],
       answer: 4,
-      fact: "結業證書分為四種，分別為智育、德育、五育、全勤。",
+      fact: "結業證書分別為智育、德育、五育、全勤。",
     },
     {
       question: "企劃營運的營運年分為？",
       options: ["2019", "2020", "2021", "2022"],
       answer: 2,
-      fact: "企劃營運時間為2020年8月1日至10月31日喔！",
+      fact: "居然已經這麼久了，真不可思議！",
+    },
+    {
+      question: "學業任務中的籤桶沒有什麼顏色？",
+      options: ["紅色", "藍色", "綠色", "黃色"],
+      answer: 4,
+      fact: "籤筒和噗浪bz同色，沒有黃色喔！",
     },
   ];
 
@@ -206,7 +212,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       return;
     }
     const q = shuffledQuestions[currentQuestionIndex];
-    questionText.textContent = q.question;
+    questionText.textContent = `Q：${q.question}`;
     optionsGrid.innerHTML = "";
     q.options.forEach((opt, index) => {
       const btn = document.createElement("button");
@@ -240,7 +246,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (selectedIndex === correctIndex) {
       score += 10;
       buttons[selectedIndex].classList.add("correct");
-      showFeedback(`正確！${q.fact}`);
+      showFeedback(`${q.fact}`);
       quizCard.classList.add("bounce");
       playSound("corerect.wav");
     } else {
