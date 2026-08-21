@@ -65,12 +65,13 @@ class SettingsUI {
     this.modal = document.createElement("div");
     this.modal.className = "settings-modal hidden";
     this.modal.innerHTML = `
-      <div class="settings-content" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="settings-content " role="dialog" aria-modal="true" aria-labelledby="settings-title">
         <h3 id="settings-title">系統設定</h3>
-        ${this.createOptionGroup("vol-bgm", '音樂：真島こころ-陽はまた昇る', volumeOptions)}
+        ${this.createOptionGroup("vol-bgm", "音樂：真島こころ-陽はまた昇る", volumeOptions)}
         ${this.createOptionGroup("vol-se", "音效", volumeOptions)}
-        ${this.createOptionGroup("speed-text", "文字速度(變更後請重整頁面才會生效)", speedOptions)}
+        ${this.createOptionGroup("speed-text", "文字速度(變更後重整才會生效)", speedOptions)}
         <button id="close-settings" class="settings-confirm" type="button">確定</button>
+        <a class="settings-info mx-auto" href="credits.html">製作資訊・素材來源</a>
       </div>
     `;
     document.body.appendChild(this.modal);
