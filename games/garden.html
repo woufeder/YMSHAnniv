@@ -22,7 +22,6 @@
   <div id="game"></div>
   <main id="gardenContent" class="garden-game location-page-content is-hidden">
     <header class="garden-header">
-      <h1>花圃急救站</h1>
       <div class="garden-stats" aria-live="polite">
         <div class="garden-stat"><span>時間</span><strong id="timeRemaining">60</strong></div>
         <div class="garden-stat"><span>分數</span><strong id="score">0</strong></div>
@@ -45,7 +44,7 @@
           <span>陽光</span><kbd>2</kbd>
         </button>
         <button class="garden-tool" type="button" data-tool="fertilize" aria-label="施肥" title="施肥">
-          <i class="fa-solid fa-seedling" aria-hidden="true"></i>
+          <i class="fa-solid fa-plant-wilt"></i>
           <span>施肥</span><kbd>3</kbd>
         </button>
         <button class="garden-tool" type="button" data-tool="tidy" aria-label="整理花圃" title="整理花圃">
@@ -61,22 +60,22 @@
           <p class="intro-note">可按鍵盤1至4切換工具。<br>事件過期或用錯工具會扣健康；60 秒結束時仍有至少一顆心，即算通關。</p>
           <div class="intro-guide" aria-label="工具對應表">
             <div class="d-flex flex-row align-items-center gap-2 nowrap">
-              <span class="tool"><i class="fa-solid fa-droplet" aria-hidden="true"></i>澆水：</span>
-              <span class="quiz"><i class="fa-solid fa-plant-wilt" aria-hidden="true"></i>土太乾了</span>
+              <span class="tool"><i class="fa-solid fa-droplet me-1" aria-hidden="true"></i>澆水：</span>
+              <span class="quiz"></i>土太乾了</span>
 
             </div>
             <div class="d-flex flex-row align-items-center gap-2 nowrap">
-              <span class="tool"><i class="fa-solid fa-sun" aria-hidden="true"></i>陽光：</span>
-              <span class="quiz"><i class="fa-solid fa-cloud-rain" aria-hidden="true"></i>天氣不好</span>
+              <span class="tool"><i class="fa-solid fa-sun me-1" aria-hidden="true"></i>陽光：</span>
+              <span class="quiz"></i>天氣不好</span>
             </div>
             <div class="d-flex flex-row align-items-center gap-2 nowrap">
-              <span class="tool"><i class="fa-solid fa-seedling" aria-hidden="true"></i>施肥：</span>
-              <span class="quiz"><i class="fa-solid fa-seedling" aria-hidden="true"></i>養分不夠</span>
+              <span class="tool"><i class="fa-solid fa-plant-wilt me-1"></i></i>施肥：</span>
+              <span class="quiz"></i>養分不夠</span>
 
             </div>
             <div>
-              <span class="tool"><i class="fa-solid fa-hand-sparkles" aria-hidden="true"></i>整理：</span>
-              <span class="quiz"><i class="fa-solid fa-seedling" aria-hidden="true"></i>雜草太多、<i class="fa-solid fa-note-sticky"></i>有張紙條</span>
+              <span class="tool"><i class="fa-solid fa-hand-sparkles me-1" aria-hidden="true"></i>整理：</span>
+              <span class="quiz">雜草太多、有張紙條</span>
             </div>
           </div>
 

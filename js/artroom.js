@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let isDrawing = false;
   let drawingPointerId = null;
   let penPointerId = null;
+  let activePressure = 1;
   let lastPoint = null;
   let history = [];
   let redoHistory = [];
@@ -90,13 +91,21 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   }
 
+  function getPressure(event) {
+    if (event.pointerType !== "pen") return 1;
+
+    // Some tablets briefly report 0 pressure at contact, so keep a visible minimum.
+    return Math.min(1, Math.max(0.2, event.pressure || 0.5));
+  }
+
   function drawLine(from, to) {
     context.save();
     const isMarker = activeTool === "brush" && activeBrush === "marker";
+    const pressureSize = 0.45 + activePressure * 0.85;
     context.lineCap = isMarker ? "square" : "round";
     context.lineJoin = "round";
-    context.globalAlpha = isMarker && activeTool !== "eraser" ? 0.35 : 1;
-    context.lineWidth = Number(brushSize.value) * (isMarker ? 1.25 : 1);
+    context.globalAlpha = 1;
+    context.lineWidth = Number(brushSize.value) * pressureSize * (isMarker ? 1.25 : 1);
     context.strokeStyle = activeTool === "eraser" ? "#ffffff" : color;
     context.beginPath();
     context.moveTo(from.x, from.y);
@@ -106,11 +115,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function drawSpray(point) {
-    const radius = Number(brushSize.value) * 1.6;
+    const pressureSize = 0.45 + activePressure * 0.85;
+    const radius = Number(brushSize.value) * 1.6 * pressureSize;
     const dotCount = Math.max(18, Math.round(radius * 2.4));
     context.save();
     context.fillStyle = color;
-    context.globalAlpha = 0.38;
+    context.globalAlpha = 1;
 
     for (let index = 0; index < dotCount; index += 1) {
       const angle = Math.random() * Math.PI * 2;
@@ -205,6 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
     saveHistory();
     isDrawing = true;
     drawingPointerId = event.pointerId;
+    activePressure = getPressure(event);
     lastPoint = point;
     if (activeBrush === "spray" && activeTool === "brush") {
       drawSpray(point);
@@ -215,19 +226,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function continueDrawing(event) {
     if (!isDrawing || event.pointerId !== drawingPointerId) return;
-    const point = getCanvasPoint(event);
-    if (activeBrush === "spray" && activeTool === "brush") {
-      drawSpray(point);
-    } else {
-      drawLine(lastPoint, point);
-    }
-    lastPoint = point;
+    const coalescedSamples = event.getCoalescedEvents?.();
+    const samples = coalescedSamples?.length ? coalescedSamples : [event];
+
+    samples.forEach((sample) => {
+      activePressure = getPressure(sample);
+      const point = getCanvasPoint(sample);
+      if (activeBrush === "spray" && activeTool === "brush") {
+        drawSpray(point);
+      } else {
+        drawLine(lastPoint, point);
+      }
+      lastPoint = point;
+    });
   }
 
   function endDrawing(event) {
     if (!isDrawing || event.pointerId !== drawingPointerId) return;
     isDrawing = false;
     drawingPointerId = null;
+    activePressure = 1;
     lastPoint = null;
   }
 

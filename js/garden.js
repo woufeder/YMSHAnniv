@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: "dry",
       label: "土太乾了",
-      icon: '<i class="fa-solid fa-plant-wilt"></i>',
+      icon: '<i class="fa-solid fa-droplet"></i>',
       tool: "water",
       points: 10,
       lifetime: 9000,
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     {
       id: "shade",
       label: "天氣不好",
-      icon: '<i class="fa-solid fa-cloud-rain"></i>',
+      icon: '<i class="fa-solid fa-sun"></i>',
       tool: "sunlight",
       points: 12,
       lifetime: 8500,
@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resultTitle.textContent = completed ? '巡園完成' : '花圃需要再照顧';
     resultSummary.textContent = completed
       ? `你守住了花圃，獲得 ${score} 分。`
-      : `這次獲得 ${score} 分，換個節奏再試一次。`;
+      : `這次獲得 ${score} 分，再接再厲！`;
     roundResult.classList.remove('hidden');
 
     if (completed) {

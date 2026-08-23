@@ -3,7 +3,8 @@
 body {
   height: 100vh;
   overflow: hidden;
-  background: #dbeeff url('../assets/images/garden.jpg') center / cover no-repeat;
+  background: #dbeeff url("../assets/images/garden.jpg") center / cover
+    no-repeat;
 }
 
 .garden-game {
@@ -20,15 +21,11 @@ body {
 }
 
 .garden-header {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
   gap: 20px;
-}
-
-.garden-header h1 {
-  color: #285844;
-  font-size: 2.1rem;
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
+  color: var(--white);
 }
 
 .garden-stats {
@@ -42,7 +39,7 @@ body {
   padding: 7px 9px;
   border: 1px solid rgba(40, 88, 68, 0.2);
   border-radius: var(--border-radius);
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 254, 244, 0.95);
   text-align: center;
 }
 
@@ -52,14 +49,14 @@ body {
 }
 
 .garden-stat span {
-  color: #547162;
-  font-size: 12px;
+  color: #22362c;
+  font-size: 17px;
 }
 
 .garden-stat strong {
   margin-top: 2px;
   color: #285844;
-  font-size: 17px;
+  font-size: 20px;
 }
 
 #health {
@@ -69,11 +66,16 @@ body {
 
 .garden-area {
   position: relative;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
   min-height: 0;
   overflow: hidden;
   border: 2px solid rgba(40, 88, 68, 0.28);
   border-radius: var(--border-radius-large);
-  background: linear-gradient(rgba(185, 222, 247, 0.3), rgba(61, 121, 66, 0.38)), url('../assets/images/garden.jpg') center / cover no-repeat;
+  background:
+    linear-gradient(rgba(185, 222, 247, 0.3), rgba(61, 121, 66, 0.38)),
+    url("../assets/images/garden.jpg") center / cover no-repeat;
   box-shadow: var(--shadow-heavy);
 }
 
@@ -131,7 +133,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 8px;
   width: calc(100% - 10px);
   height: calc(100% - 10px);
   border: 2px solid #fff;
@@ -139,7 +141,7 @@ body {
   background: rgba(255, 255, 255, 0.93);
   color: #315244;
   font: inherit;
-  font-size: 14px;
+  font-size: 20px;
   font-weight: bold;
   cursor: pointer;
   box-shadow: 0 5px 12px rgba(18, 68, 42, 0.22);
@@ -154,7 +156,7 @@ body {
 }
 
 .event-icon {
-  font-size: 28px;
+  font-size: 34px;
   line-height: 1;
 }
 
@@ -224,7 +226,7 @@ body {
   border-radius: var(--border-radius);
   background: rgba(30, 63, 47, 0.78);
   color: #fff;
-  font-size: 14px;
+  font-size: 17px;
   opacity: 0;
   pointer-events: none;
   transform: translate(-50%, -8px);
@@ -266,7 +268,7 @@ body {
   background: rgba(255, 255, 255, 0.14);
   color: #fff;
   font: inherit;
-  font-size: 14px;
+  font-size: 20px;
   cursor: pointer;
   transition:
     transform 0.15s ease,
@@ -292,12 +294,10 @@ body {
 }
 
 .garden-tool kbd {
-  padding: 1px 3px;
-  border: 1px solid currentColor;
+  padding: 3px 3px;
+
   border-radius: 3px;
-  font: inherit;
-  font-size: 11px;
-  line-height: 1.2;
+  font-size: 17px;
   text-align: center;
 }
 
@@ -384,13 +384,14 @@ body {
   z-index: 2000;
   width: min(420px, calc(100vw - 32px));
   margin: 0;
-  padding: 15px 22px;
+  padding: 7px 22px;
   box-sizing: border-box;
   border: 2px solid #f4d77b;
   border-radius: var(--border-radius);
   background: rgba(255, 252, 235, 0.96);
   box-shadow: var(--shadow-medium);
   color: #5c5032;
+  font-size: 20px;
   line-height: 1.6;
   text-align: center;
   opacity: 0;
