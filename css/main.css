@@ -2,10 +2,15 @@
 :root {
   --white: #fff;
   --primary100: #dcecff;
+  --primary100-op7: #dcecffb3;
   --primary300: #bdd4ee;
+  --primary300-op7: #bdd4eeb3;
   --primary500: #8495b1;
+  --primary500-op7: #8495b1b3;
   --primary700: #474d64;
+  --primary700-op7: #474d64b3;
   --primary900: #252834;
+  --primary900-op7: #252834b3;
   --text-color: #111111;
   --success-color: #8ed14b;
   --success-text-color: #193200;
@@ -415,7 +420,7 @@ body.fade-in {
   place-items: center;
   border: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: 50%;
-  background: rgba(20, 27, 39, 0.72);
+  background: var(--primary700-op7);
   color: #fff;
   font: inherit;
   font-size: 18px;
@@ -622,8 +627,28 @@ body.fade-in {
   --bs-alert-border-color: var(--primary300);
   --bs-alert-link-color: var(--primary900);
 }
+.w-fit{
+  width: fit-content;
+}
+.h-fit{
+  height: fit-content;
+}
+.underline{
+  text-decoration: underline;
+}
 
 @media (max-width: 640px) {
+  :root {
+    font-size: 14px;
+  }
+
+  .return-button {
+    top: 16px;
+    left: 16px;
+    width: 32px;
+    height: 32px;
+  }
+
   #achievementToastRegion {
     right: 16px;
     bottom: 16px;

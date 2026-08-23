@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     },
     {
       question: "企劃官網的教師NPC中，沒有哪一項人員？",
-      options: ["警衛", "自然", "教官", "輔導"],
+      options: ["警衛", "自然", "教官", "福利社阿姨"],
       answer: 1,
       fact: "但今天沒寫名字就進來會被警衛伯伯抓到喔！",
     },
@@ -180,7 +180,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   const questionText = document.getElementById("question-text");
   const optionsGrid = document.getElementById("options-grid");
-  const scoreElement = document.getElementById("score");
+  // const scoreElement = document.getElementById("score");
+  const inputName = document.querySelector("#input-name");
   const progressElement = document.getElementById("progress");
   const feedbackElement = document.getElementById("feedback");
   const quizCard = document.getElementById("quiz-card");
@@ -270,19 +271,43 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   function updateUI() {
-    scoreElement.textContent = `得分: ${score}`;
+    // scoreElement.textContent = `得分: ${score}`;
+    if (inputName) {
+      inputName.innerHTML = `
+       <p id="input-name" class="me-2">姓名：<span class="underline">${localStorage.getItem("playerInput")?.trim()}</span></p>
+      `;
+    }
     progressElement.textContent = `進度: ${currentQuestionIndex} / ${shuffledQuestions.length}`;
   }
 
   function gameComplete() {
-    questionText.textContent = "測驗完成！";
-    optionsGrid.innerHTML = `
-            <div style="grid-column: span 2; font-size: 1.2rem; color: #5d4037; margin-bottom: 20px;">
-                你的最終得分是 ${score} 分！<br>
-                感謝你與我們一起回憶 YMSH 的時光。
+    questionText.textContent = "";
+    if (score == 100) {
+      optionsGrid.innerHTML = `
+            <div class="score-complete" >
+            <div class="d-flex justify-content-end pe-5">
+            <h3 class="w-fit score-mark">${score}</h3>
+            </div>
+            快問快答完成！<br>
+            恭喜你獲得滿分！<br>
+            永明知識王稱號非你莫屬！
+            </div>
+            <img class="hanamaru" src="/assets/images/ui/hanamaru.png" alt="">
+        `;
+    } else {
+      optionsGrid.innerHTML = `
+            <div class="score-complete" >
+            <div class="d-flex justify-content-end pe-5">
+            <h3 class="w-fit score-mark">${score}</h3>
+            </div>
+            快問快答完成！<br>
+            沒有滿分也沒關係～<br>
+            所有答案都在官網上，歡迎重新挑戰！
             </div>
         `;
-    feedbackElement.textContent = "所有的回憶都已收集完畢 ❤️";
+    }
+
+    hideFeedback();
     let completedGames =
       JSON.parse(localStorage.getItem("completedGames")) || [];
     if (!completedGames.includes("classroom")) {

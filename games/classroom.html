@@ -25,13 +25,11 @@
 
   <div class="quiz-container" id="quizContainer" style="display: none;">
     <div class="game-info">
-      <span id="progress">進度: 0 / 0</span>
+      <img class="logo" src="/assets/images/ui/dialogLogo.png" alt="">
       <h4 class="game-title">永明知識快問快答</h4>
-      <span id="score" >得分: 0</span>
+      <p id="input-name" class="ms-auto">姓名<span class="ms-2">你的名字</span></p>
     </div>
-    
     <p class="objective">隨機抽問10題，看看你對永明的了解有多深。</p>
-
 
     <div id="quiz-card" class="quiz-card">
       <div id="question-text" class="question-text">載入中...</div>
@@ -43,8 +41,9 @@
     <div id="feedback" class="feedback-message"></div>
 
     <div class="game-controls">
-      <button id="resetGame" class="control-btn">重新挑戰</button>
-      <button id="backToMap" class="control-btn">返回地圖</button>
+      <button id="resetGame" class="btn control-btn"><i class="fa-solid fa-rotate-left me-2"></i>重新挑戰</button>
+      <button id="backToMap" class="btn control-btn"><i class="fa-solid fa-map me-2"></i>返回地圖</button>
+      <span id="progress" class="ms-auto">進度: 0 / 0</span>
     </div>
   </div>
 
