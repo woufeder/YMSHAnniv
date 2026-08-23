@@ -3,14 +3,19 @@
   --white: #fff;
   --primary100: #dcecff;
   --primary100-op7: #dcecffb3;
+  --primary100-op3: #dbebff4d;
   --primary300: #bdd4ee;
   --primary300-op7: #bdd4eeb3;
+  --primary300-op3: #bdd4ee4d;
   --primary500: #8495b1;
   --primary500-op7: #8495b1b3;
+  --primary500-op3: #8495b14d;
   --primary700: #474d64;
   --primary700-op7: #474d64b3;
+  --primary700-op3: #474d644d;
   --primary900: #252834;
   --primary900-op7: #252834b3;
+  --primary900-op3: #2528344d;
   --text-color: #111111;
   --success-color: #8ed14b;
   --success-text-color: #193200;
@@ -627,13 +632,13 @@ body.fade-in {
   --bs-alert-border-color: var(--primary300);
   --bs-alert-link-color: var(--primary900);
 }
-.w-fit{
+.w-fit {
   width: fit-content;
 }
-.h-fit{
+.h-fit {
   height: fit-content;
 }
-.underline{
+.underline {
   text-decoration: underline;
 }
 
