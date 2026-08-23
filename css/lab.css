@@ -4,7 +4,7 @@ body {
   color: #e7f7fb;
   background-color: #0d1e2c;
   background-image:
-    linear-gradient(rgba(5, 23, 34, 0.72), rgba(5, 23, 34, 0.72)),
+    linear-gradient(rgba(5, 23, 34, 0.72), rgba(27, 44, 54, 0.7)),
     linear-gradient(rgba(114, 217, 219, 0.08) 1px, transparent 1px),
     linear-gradient(90deg, rgba(114, 217, 219, 0.08) 1px, transparent 1px),
     url("../assets/images/lab.png");
@@ -22,8 +22,9 @@ body {
 }
 
 .lab-game {
-  width: min(100% - 40px, 940px);
+  width: min(calc(100% - 48px), 960px);
   min-height: 100vh;
+  max-height: 100vh;
   margin: 0 auto;
   padding: 52px 0 30px;
   box-sizing: border-box;
@@ -55,7 +56,7 @@ body {
   font-weight: bold;
 }
 
-.objective {
+.lab-objective {
   max-width: 290px;
   margin: 0;
   color: #c7e1e7;
@@ -110,7 +111,7 @@ body {
 
 .experiment-card {
   position: relative;
-  aspect-ratio: 1.35 / 1;
+  aspect-ratio: 1.65 / 1;
   padding: 0;
   border: 0;
   border-radius: 8px;
@@ -128,7 +129,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 5px;
-  padding: 9px;
+  padding: 20px;
   box-sizing: border-box;
   border-radius: 8px;
   backface-visibility: hidden;
@@ -379,7 +380,7 @@ body {
     gap: 10px;
   }
 
-  .objective {
+  .lab-objective {
     max-width: none;
     text-align: left;
   }

@@ -68,6 +68,26 @@ function initLab() {
       matchLabel: '測量質量',
       matchType: '用途',
       note: '測量前先歸零，才能讓實驗紀錄更可靠。'
+    },
+    {
+      id: 'graduated-cylinder',
+      icon: 'fa-vial',
+      label: '量筒',
+      type: '儀器',
+      matchIcon: 'fa-ruler-vertical',
+      matchLabel: '量取液體體積',
+      matchType: '用途',
+      note: '讀取量筒刻度時，液面最低處要和視線保持水平。'
+    },
+    {
+      id: 'alcohol-lamp',
+      icon: 'fa-fire',
+      label: '酒精燈',
+      type: '器材',
+      matchIcon: 'fa-cloud',
+      matchLabel: '加熱使水蒸發',
+      matchType: '現象',
+      note: '加熱前確認酒精量與燈芯狀態，才能安全觀察變化。'
     }
   ];
 
@@ -110,7 +130,7 @@ function initLab() {
       card.innerHTML = `
         <span class="card-face card-front" aria-hidden="true">
           <i class="fa-solid fa-flask-vial"></i>
-          <span>YMSH LAB</span>
+          <p>實驗小卡</p>
         </span>
         <span class="card-face card-back">
           <i class="fa-solid ${data.icon}" aria-hidden="true"></i>
@@ -180,8 +200,8 @@ function initLab() {
   }
 
   function updateStatus() {
-    progressElement.textContent = `校對進度 ${matchedPairs} / ${experimentPairs.length}`;
-    movesElement.textContent = `翻閱 ${moves}`;
+    progressElement.textContent = `配對成功 ${matchedPairs} / ${experimentPairs.length}`;
+    movesElement.textContent = `翻牌次數 ${moves}`;
     comboElement.textContent = `連續成功 ${combo}`;
   }
 
@@ -190,7 +210,7 @@ function initLab() {
     timerInterval = window.setInterval(() => {
       const seconds = Math.floor((Date.now() - startTime) / 1000);
       const minutes = Math.floor(seconds / 60);
-      timerElement.textContent = `時間 ${String(minutes).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+      timerElement.textContent = `經過時間 ${String(minutes).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
     }, 1000);
   }
 
