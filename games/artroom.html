@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YMSH 周年紀念 - 美術教室</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/artroom.css">
 </head>
+
 <body>
   <main class="artroom">
     <header class="artroom-header">
-      <div>
-        <p>ART BUILDING / ART ROOM</p>
-        <h1>美術教室</h1>
+      <h3>美術教室</h3>
+      <div class="text-end">
+
+        <p id="saveStatus" class="save-status" aria-live="polite"> </p>
+        <p>在畫布上畫下你的作品吧！</p>
       </div>
-      <p id="saveStatus" class="save-status" aria-live="polite"></p>
     </header>
 
     <section class="drawing-workspace" aria-label="繪圖畫布">
@@ -57,6 +58,13 @@
       </div>
     </section>
 
+    <div class="artroom-actions">
+      <button id="backToArtFooter" class="artroom-back-button" type="button">
+        <i class="fa-solid fa-building"></i> 返回藝術大樓
+      </button>
+      <button id="backToMap" class="artroom-back-button" type="button"><i class="fa-solid fa-map me-2"></i>返回地圖</button>
+    </div>
+
     <button id="backToArt" class="return-button" type="button" aria-label="返回藝術大樓" title="返回藝術大樓">
       <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
     </button>
@@ -66,4 +74,5 @@
   <script src="../js/settings.js"></script>
   <script src="../js/artroom.js"></script>
 </body>
+
 </html>

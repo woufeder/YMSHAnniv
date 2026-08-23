@@ -32,6 +32,7 @@ body {
     box-shadow: var(--shadow-heavy);
     margin: 20px auto;
     display: block;
+    width: min(100%, 400px);
     max-width: 100%;
     height: auto;
     background: white;
@@ -333,8 +334,8 @@ body {
     }
     
     #memoryCard {
-        max-width: 320px;
-        height: 480px;
+        width: min(100%, 400px);
+        height: auto;
     }
     
     .controls {
@@ -369,8 +370,8 @@ body {
 
 @media (max-width: 480px) {
     #memoryCard {
-        max-width: 280px;
-        height: 420px;
+        width: min(100%, 400px);
+        height: auto;
     }
     
     .controls {

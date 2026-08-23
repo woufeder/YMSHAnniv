@@ -8,18 +8,18 @@ window.addEventListener("pagehide", () => window.bgm?.setTemporaryMute(false));
 
 document.addEventListener("DOMContentLoaded", () => {
   const NOTES = [
-    { note: "C4", key: "A", frequency: 261.63 },
-    { note: "D4", key: "S", frequency: 293.66 },
-    { note: "E4", key: "D", frequency: 329.63 },
-    { note: "F4", key: "F", frequency: 349.23 },
-    { note: "G4", key: "G", frequency: 392.0 },
-    { note: "A4", key: "H", frequency: 440.0 },
-    { note: "B4", key: "J", frequency: 493.88 },
-    { note: "C5", key: "Q", frequency: 523.25 },
-    { note: "D5", key: "W", frequency: 587.33 },
-    { note: "E5", key: "E", frequency: 659.25 },
-    { note: "F5", key: "R", frequency: 698.46 },
-    { note: "G5", key: "T", frequency: 783.99 },
+    { note: "C4", key: "Q", frequency: 261.63 },
+    { note: "D4", key: "W", frequency: 293.66 },
+    { note: "E4", key: "E", frequency: 329.63 },
+    { note: "F4", key: "R", frequency: 349.23 },
+    { note: "G4", key: "T", frequency: 392.0 },
+    { note: "A4", key: "Y", frequency: 440.0 },
+    { note: "B4", key: "U", frequency: 493.88 },
+    { note: "C5", key: "I", frequency: 523.25 },
+    { note: "D5", key: "O", frequency: 587.33 },
+    { note: "E5", key: "P", frequency: 659.25 },
+    { note: "F5", key: "[", frequency: 698.46 },
+    { note: "G5", key: "]", frequency: 783.99 },
   ];
 
   // Original score is in B-flat major. This melody has been transposed up a whole step to C major.
@@ -224,13 +224,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (progress === score.length) {
         window.YMSHAchievements?.earn("school-song");
-        musicMessage.textContent = "校歌演奏完成。";
+        musicMessage.textContent = "太棒啦！你演奏完整首校歌了！";
       } else {
-        musicMessage.textContent = "正確，繼續下一個音。";
+        musicMessage.textContent = "真棒！繼續下一個音吧。";
       }
     } else {
       flashKey(note, "wrong");
-      musicMessage.textContent = "這個音不對，再試一次目前的音。";
+      musicMessage.textContent = "這個音不太對唷！再試一次吧。";
     }
 
     renderSheetMusic();
@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function restartScore() {
     progress = 0;
-    musicMessage.textContent = "從「智」開始，節奏不限，依序彈對每個音即可。";
+    musicMessage.textContent = "跟著樂譜指示彈奏校歌吧！節奏不限，依序彈對每個音即可。";
     renderSheetMusic();
   }
 

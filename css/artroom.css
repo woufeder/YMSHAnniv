@@ -1,44 +1,42 @@
 body {
-  min-height: 100vh;
+  min-height: 100dvh;
   overflow: hidden;
-  background: #f2ece2 url('../assets/images/classroom-art.jpg') center / cover no-repeat;
+  background: #f2ece2 url("../assets/images/classroom-art.jpg") center / cover
+    no-repeat;
 }
 
 .artroom {
-  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100dvh;
   padding: 28px;
   box-sizing: border-box;
-  background: rgba(248, 239, 226, 0.62);
+  background: rgba(255, 251, 247, 0.6);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 16px;
 }
 
 .artroom-header {
   display: flex;
+  flex-direction: row;
   align-items: start;
   justify-content: space-between;
   gap: 20px;
-  max-width: 1200px;
-  margin: 0 auto 18px;
-}
-
-.artroom-header p {
-  color: #634f4a;
-  font-size: 13px;
-}
-
-.artroom-header h1 {
-  margin-top: 8px;
-  color: #452f3d;
-  font-size: 42px;
+  width: min(100%, 1200px);
+  margin: 0 auto;
+  color: #240801;
+  min-height: 50px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 12px 16px;
+  border-radius: var(--border-radius-large);
 }
 
 .save-status {
-  max-width: 260px;
   margin: 0;
   color: #513d35;
-  font-size: 14px;
-  line-height: 1.45;
   opacity: 0;
   transition: opacity 0.2s ease;
+  min-height: 25.5px;
 }
 
 .save-status.is-visible {
@@ -46,13 +44,17 @@ body {
 }
 
 .drawing-workspace {
-  max-width: 1200px;
+  width: min(100%, 1200px);
+  height: 100%;
+  min-height: 0;
   margin: 0 auto;
   border: 1px solid rgba(69, 47, 61, 0.22);
   border-radius: var(--border-radius-large);
   background: rgba(255, 255, 255, 0.58);
   box-shadow: var(--shadow-heavy);
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .drawing-toolbar {
@@ -63,6 +65,11 @@ body {
   padding: 12px 16px;
   border-bottom: 1px solid rgba(69, 47, 61, 0.16);
   background: rgba(255, 255, 255, 0.72);
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 1;
+  user-select: none;
+  touch-action: manipulation;
 }
 
 .color-swatches,
@@ -107,6 +114,7 @@ body {
 #brushSize {
   width: 110px;
   accent-color: #a3586c;
+  cursor: ew-resize;
 }
 
 .tool-action,
@@ -151,16 +159,26 @@ body {
 }
 
 .canvas-frame {
-  padding: 20px;
-  background-image: linear-gradient(rgba(91, 62, 72, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(91, 62, 72, 0.05) 1px, transparent 1px);
+  min-height: 0;
+  background-image:
+    linear-gradient(rgba(91, 62, 72, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(91, 62, 72, 0.05) 1px, transparent 1px);
   background-size: 24px 24px;
+  flex: 1 1 auto;
+  display: grid;
+  place-items: center;
+  position: relative;
+  z-index: 0;
 }
 
 #drawingCanvas {
   display: block;
-  width: 100%;
-  max-height: calc(100vh - 205px);
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
   aspect-ratio: 3 / 2;
+  box-sizing: border-box;
   touch-action: none;
   border: 1px solid #d4c3b5;
   background: #fff;
@@ -171,10 +189,71 @@ body {
   cursor: cell;
 }
 
+.pen-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #593e48;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.38);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.82);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  z-index: 100;
+  transition: opacity 0.08s linear;
+}
+
+.pen-cursor::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #593e48;
+  transform: translate(-50%, -50%);
+}
+
+.pen-cursor.is-visible {
+  opacity: 1;
+}
+
+.artroom-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.artroom-back-button {
+  min-height: 40px;
+  padding: 9px 14px;
+  border: 1px solid #b98c87;
+  border-radius: var(--border-radius);
+  background: rgba(255, 255, 255, 0.84);
+  color: #593e48;
+  font: inherit;
+  cursor: pointer;
+}
+
+.artroom-back-button:hover,
+.artroom-back-button:focus-visible {
+  background: #f4dca6;
+  outline: none;
+}
+
+.artroom-back-button i {
+  margin-right: 6px;
+}
 
 @media (max-width: 760px) {
   .artroom {
-    padding: 18px 10px;
+    padding: 18px 10px 12px;
+    gap: 12px;
   }
 
   .artroom-header {
@@ -201,9 +280,5 @@ body {
 
   .canvas-frame {
     padding: 10px;
-  }
-
-  #drawingCanvas {
-    max-height: calc(100vh - 275px);
   }
 }

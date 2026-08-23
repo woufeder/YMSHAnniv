@@ -1,37 +1,35 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YMSH 周年紀念 - 音樂教室</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/music.css">
 </head>
+
 <body>
   <main class="music-classroom">
     <header class="music-header">
-      <div>
-        <p>ART BUILDING / MUSIC ROOM</p>
-        <h1>音樂教室</h1>
-      </div>
+      <h2>音樂教室</h2>
     </header>
 
     <section class="music-stage" aria-label="琴譜演奏">
-      <p class="score-label">永明高中校歌・C 大調簡化版・節奏不限</p>
+      <h6 class="score-label">永明高中校歌・C大調簡化版</h6>
       <p id="measureProgress" class="measure-progress" aria-live="polite"></p>
       <div id="sheetMusic" class="sheet-music" aria-label="琴譜"></div>
       <p id="musicMessage" class="music-message" aria-live="polite"></p>
       <div id="piano" class="piano" aria-label="鋼琴鍵盤"></div>
       <div class="music-stage-actions">
         <button id="restartScore" class="new-melody" type="button"><i class="fa-solid fa-rotate-left me-2"></i>重新開始</button>
-        <button id="backToMap" class="new-melody" type="button"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i><i class="fa-solid fa-map me-2"></i>返回地圖</button>
+        <button id="backToArt" class="new-melody" type="button"><i class="fa-solid fa-building"></i>返回藝術大樓</button>
+        <button id="backToMap" class="new-melody" type="button"><i class="fa-solid fa-map me-2"></i>返回地圖</button>
       </div>
     </section>
 
@@ -44,4 +42,5 @@
   <script src="../js/settings.js"></script>
   <script src="../js/music.js"></script>
 </body>
+
 </html>

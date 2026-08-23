@@ -1,38 +1,33 @@
 body {
   min-height: 100vh;
   overflow: hidden;
-  background: #252b3b url('../assets/images/classroom-music.jpg') center / cover no-repeat;
+  background: #252b3b url("../assets/images/classroom-music.jpg") center / cover
+    no-repeat;
 }
 
 .music-classroom {
   min-height: 100vh;
   padding: 42px;
   box-sizing: border-box;
-  background: linear-gradient(150deg, rgba(25, 36, 61, 0.7), rgba(61, 83, 125, 0.6));
+  background: linear-gradient(
+    150deg,
+    rgba(25, 36, 61, 0.7),
+    rgba(61, 83, 125, 0.6)
+  );
   color: #fff;
 }
 
 .music-header {
   display: flex;
-  align-items: start;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 16px;
 }
 
-.music-header p {
-  color: #dbe8ff;
-  font-size: 13px;
-}
-
-.music-header h1 {
-  margin-top: 8px;
-  color: #fff;
-  font-size: 42px;
-}
-
 .music-stage {
-  width: min(900px, 100%);
-  margin: 9vh auto 0;
+  width: min(1000px, 100%);
+  margin: 2vh auto 0;
   padding: 30px;
   border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: var(--border-radius-large);
@@ -48,8 +43,8 @@ body {
 .measure-progress {
   min-height: 24px;
   margin: 8px 0 0;
-  color: #ffe083;
-  font-size: 14px;
+  color: var(--warning-color);
+  font-size: 15px;
   text-align: center;
 }
 
@@ -86,14 +81,14 @@ body {
   top: 4px;
   left: 7px;
   color: #dbe8ff;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .measure-notes {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 10px;
   min-height: 66px;
 }
 
@@ -102,26 +97,26 @@ body {
   place-items: center;
   min-width: 22px;
   color: #e7eefc;
-  font-size: 15px;
+  font-size: 17px;
   line-height: 1;
 }
 
 .score-note strong {
   display: grid;
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   place-items: center;
   border-radius: 50%;
   background: #e7eefc;
   color: #2c3854;
-  font-size: 14px;
+  font-size: 17px;
 }
 
 .score-note small {
   min-height: 18px;
   margin-top: 7px;
   color: #fff;
-  font-size: 14px;
+  font-size: 17px;
 }
 
 .score-note.is-played {
@@ -134,11 +129,11 @@ body {
 }
 
 .score-note.is-current {
-  color: #ffe083;
+  color: var(--warning-color);
 }
 
 .score-note.is-current strong {
-  background: #ffe083;
+  background: var(--warning-color);
   color: #59471d;
   box-shadow: 0 0 0 5px rgba(255, 224, 131, 0.25);
 }
@@ -171,7 +166,9 @@ body {
   color: #222b3c;
   font: inherit;
   cursor: pointer;
-  transition: background 0.12s ease, transform 0.12s ease;
+  transition:
+    background 0.12s ease,
+    transform 0.12s ease;
 }
 
 .piano-key.is-high-octave {
@@ -181,7 +178,7 @@ body {
 .piano-key:hover,
 .piano-key:focus-visible {
   background: #eff5ff;
-  outline: 2px solid #ffe083;
+  outline: 2px solid var(--warning-color);
   outline-offset: -3px;
 }
 
@@ -196,12 +193,12 @@ body {
 .piano-key kbd {
   align-self: center;
   min-width: 22px;
-  padding: 3px 6px;
+  padding: 3px 12px;
   border: 1px solid #aeb9cb;
   border-radius: 4px;
-  color: #59667d;
+  color: var(--primary100);
   font: inherit;
-  font-size: 12px;
+  font-size: 17px;
   text-align: center;
 }
 
@@ -214,12 +211,21 @@ body {
 }
 
 @keyframes right-key {
-  50% { background: #9bd7bc; transform: translateY(6px); }
+  50% {
+    background: #9bd7bc;
+    transform: translateY(6px);
+  }
 }
 
 @keyframes wrong-key {
-  25%, 75% { background: #f3a7a0; transform: translateX(-4px); }
-  50% { transform: translateX(4px); }
+  25%,
+  75% {
+    background: #f3a7a0;
+    transform: translateX(-4px);
+  }
+  50% {
+    transform: translateX(4px);
+  }
 }
 
 .music-stage-actions {
@@ -250,7 +256,6 @@ body {
   background: rgba(255, 255, 255, 0.16);
   outline: none;
 }
-
 
 @media (max-width: 680px) {
   .music-classroom {

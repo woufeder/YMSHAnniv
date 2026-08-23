@@ -1,28 +1,37 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const STORAGE_KEY = 'ymsh:artwork';
-  const canvas = document.getElementById('drawingCanvas');
-  const context = canvas.getContext('2d', { willReadFrequently: true });
-  const customColor = document.getElementById('customColor');
-  const brushSize = document.getElementById('brushSize');
-  const swatches = [...document.querySelectorAll('.color-swatch')];
-  const toolButtons = [...document.querySelectorAll('[data-tool]')];
-  const undoButton = document.getElementById('undo');
-  const redoButton = document.getElementById('redo');
-  const clearButton = document.getElementById('clearCanvas');
-  const saveButton = document.getElementById('saveArtwork');
-  const saveStatus = document.getElementById('saveStatus');
-  const backButton = document.getElementById('backToArt');
-  let color = '#252834';
-  let activeTool = 'brush';
-  let activeBrush = 'round';
+document.addEventListener("DOMContentLoaded", () => {
+  const STORAGE_KEY = "ymsh:artwork";
+  const canvas = document.getElementById("drawingCanvas");
+  const context = canvas.getContext("2d", { willReadFrequently: true });
+  const customColor = document.getElementById("customColor");
+  const brushSize = document.getElementById("brushSize");
+  const swatches = [...document.querySelectorAll(".color-swatch")];
+  const toolButtons = [...document.querySelectorAll("[data-tool]")];
+  const undoButton = document.getElementById("undo");
+  const redoButton = document.getElementById("redo");
+  const clearButton = document.getElementById("clearCanvas");
+  const saveButton = document.getElementById("saveArtwork");
+  const saveStatus = document.getElementById("saveStatus");
+  const backButton = document.getElementById("backToArt");
+  const footerBackButton = document.getElementById("backToArtFooter");
+  const mapButton = document.getElementById("backToMap");
+  const toolbar = document.querySelector(".drawing-toolbar");
+  const penCursor = document.createElement("div");
+  penCursor.className = "pen-cursor";
+  penCursor.setAttribute("aria-hidden", "true");
+  document.body.append(penCursor);
+  let color = "#252834";
+  let activeTool = "brush";
+  let activeBrush = "round";
   let isDrawing = false;
+  let drawingPointerId = null;
+  let penPointerId = null;
   let lastPoint = null;
   let history = [];
   let redoHistory = [];
 
   function fillBackground() {
     context.save();
-    context.fillStyle = '#ffffff';
+    context.fillStyle = "#ffffff";
     context.fillRect(0, 0, canvas.width, canvas.height);
     context.restore();
   }
@@ -41,43 +50,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateStatus(message) {
     saveStatus.textContent = message;
-    saveStatus.classList.add('is-visible');
+    saveStatus.classList.add("is-visible");
     clearTimeout(updateStatus.timer);
-    updateStatus.timer = setTimeout(() => saveStatus.classList.remove('is-visible'), 2200);
+    updateStatus.timer = setTimeout(
+      () => saveStatus.classList.remove("is-visible"),
+      2200,
+    );
   }
 
   function setColor(nextColor) {
     color = nextColor;
     customColor.value = nextColor;
-    swatches.forEach(swatch => swatch.classList.toggle('is-selected', swatch.dataset.color === nextColor));
+    swatches.forEach((swatch) =>
+      swatch.classList.toggle(
+        "is-selected",
+        swatch.dataset.color === nextColor,
+      ),
+    );
   }
 
   function setTool(tool, brush = activeBrush) {
     activeTool = tool;
     activeBrush = brush;
     toolButtons.forEach((button) => {
-      const isBrushMatch = tool === 'brush' && button.dataset.brush === brush;
-      button.classList.toggle('is-active', button.dataset.tool === tool && (tool !== 'brush' || isBrushMatch));
+      const isBrushMatch = tool === "brush" && button.dataset.brush === brush;
+      button.classList.toggle(
+        "is-active",
+        button.dataset.tool === tool && (tool !== "brush" || isBrushMatch),
+      );
     });
-    canvas.classList.toggle('is-bucket', tool === 'bucket');
+    canvas.classList.toggle("is-bucket", tool === "bucket");
   }
 
   function getCanvasPoint(event) {
     const rect = canvas.getBoundingClientRect();
     return {
       x: (event.clientX - rect.left) * (canvas.width / rect.width),
-      y: (event.clientY - rect.top) * (canvas.height / rect.height)
+      y: (event.clientY - rect.top) * (canvas.height / rect.height),
     };
   }
 
   function drawLine(from, to) {
     context.save();
-    const isMarker = activeTool === 'brush' && activeBrush === 'marker';
-    context.lineCap = isMarker ? 'square' : 'round';
-    context.lineJoin = 'round';
-    context.globalAlpha = isMarker && activeTool !== 'eraser' ? 0.35 : 1;
+    const isMarker = activeTool === "brush" && activeBrush === "marker";
+    context.lineCap = isMarker ? "square" : "round";
+    context.lineJoin = "round";
+    context.globalAlpha = isMarker && activeTool !== "eraser" ? 0.35 : 1;
     context.lineWidth = Number(brushSize.value) * (isMarker ? 1.25 : 1);
-    context.strokeStyle = activeTool === 'eraser' ? '#ffffff' : color;
+    context.strokeStyle = activeTool === "eraser" ? "#ffffff" : color;
     context.beginPath();
     context.moveTo(from.x, from.y);
     context.lineTo(to.x, to.y);
@@ -96,7 +116,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const angle = Math.random() * Math.PI * 2;
       const distance = Math.sqrt(Math.random()) * radius;
       const size = Math.random() * 1.8 + 0.6;
-      context.fillRect(point.x + Math.cos(angle) * distance, point.y + Math.sin(angle) * distance, size, size);
+      context.fillRect(
+        point.x + Math.cos(angle) * distance,
+        point.y + Math.sin(angle) * distance,
+        size,
+        size,
+      );
     }
 
     context.restore();
@@ -105,16 +130,35 @@ document.addEventListener('DOMContentLoaded', () => {
   function fillArea(point) {
     const startX = Math.floor(point.x);
     const startY = Math.floor(point.y);
-    if (startX < 0 || startY < 0 || startX >= canvas.width || startY >= canvas.height) return;
+    if (
+      startX < 0 ||
+      startY < 0 ||
+      startX >= canvas.width ||
+      startY >= canvas.height
+    )
+      return;
 
     const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     const { data, width, height } = imageData;
     const startOffset = (startY * width + startX) * 4;
-    const target = [data[startOffset], data[startOffset + 1], data[startOffset + 2], data[startOffset + 3]];
-    const replacement = color.match(/[a-f\d]{2}/gi).map(value => Number.parseInt(value, 16));
+    const target = [
+      data[startOffset],
+      data[startOffset + 1],
+      data[startOffset + 2],
+      data[startOffset + 3],
+    ];
+    const replacement = color
+      .match(/[a-f\d]{2}/gi)
+      .map((value) => Number.parseInt(value, 16));
     const tolerance = 18;
 
-    if (target[0] === replacement[0] && target[1] === replacement[1] && target[2] === replacement[2] && target[3] === 255) return;
+    if (
+      target[0] === replacement[0] &&
+      target[1] === replacement[1] &&
+      target[2] === replacement[2] &&
+      target[3] === 255
+    )
+      return;
 
     const visited = new Uint8Array(width * height);
     const pending = [startY * width + startX];
@@ -126,10 +170,11 @@ document.addEventListener('DOMContentLoaded', () => {
       visited[pixel] = 1;
 
       const offset = pixel * 4;
-      const matchesTarget = Math.abs(data[offset] - target[0]) <= tolerance
-        && Math.abs(data[offset + 1] - target[1]) <= tolerance
-        && Math.abs(data[offset + 2] - target[2]) <= tolerance
-        && Math.abs(data[offset + 3] - target[3]) <= tolerance;
+      const matchesTarget =
+        Math.abs(data[offset] - target[0]) <= tolerance &&
+        Math.abs(data[offset + 1] - target[1]) <= tolerance &&
+        Math.abs(data[offset + 2] - target[2]) <= tolerance &&
+        Math.abs(data[offset + 3] - target[3]) <= tolerance;
       if (!matchesTarget) continue;
 
       data[offset] = replacement[0];
@@ -148,19 +193,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function beginDrawing(event) {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
     event.preventDefault();
     const point = getCanvasPoint(event);
-    if (activeTool === 'bucket') {
+    if (activeTool === "bucket") {
       saveHistory();
       fillArea(point);
       return;
     }
 
-    canvas.setPointerCapture(event.pointerId);
     saveHistory();
     isDrawing = true;
+    drawingPointerId = event.pointerId;
     lastPoint = point;
-    if (activeBrush === 'spray' && activeTool === 'brush') {
+    if (activeBrush === "spray" && activeTool === "brush") {
       drawSpray(point);
     } else {
       drawLine(lastPoint, { x: lastPoint.x + 0.01, y: lastPoint.y + 0.01 });
@@ -168,9 +214,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function continueDrawing(event) {
-    if (!isDrawing) return;
+    if (!isDrawing || event.pointerId !== drawingPointerId) return;
     const point = getCanvasPoint(event);
-    if (activeBrush === 'spray' && activeTool === 'brush') {
+    if (activeBrush === "spray" && activeTool === "brush") {
       drawSpray(point);
     } else {
       drawLine(lastPoint, point);
@@ -179,10 +225,30 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function endDrawing(event) {
-    if (!isDrawing) return;
+    if (!isDrawing || event.pointerId !== drawingPointerId) return;
     isDrawing = false;
+    drawingPointerId = null;
     lastPoint = null;
-    canvas.releasePointerCapture?.(event.pointerId);
+  }
+
+  function showPenCursor(event) {
+    if (event.pointerType !== "pen") return;
+
+    if (event.type === "pointerdown") {
+      penPointerId = event.pointerId;
+    }
+    if (event.pointerId !== penPointerId) return;
+
+    penCursor.style.left = `${event.clientX}px`;
+    penCursor.style.top = `${event.clientY}px`;
+    penCursor.classList.add("is-visible");
+  }
+
+  function hidePenCursor(event) {
+    if (event.pointerType !== "pen" || event.pointerId !== penPointerId) return;
+
+    penPointerId = null;
+    penCursor.classList.remove("is-visible");
   }
 
   function restoreArtwork() {
@@ -193,59 +259,75 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const image = new Image();
-    image.onload = () => context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    image.onload = () =>
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
     image.onerror = fillBackground;
     image.src = savedArtwork;
   }
 
   function saveArtwork() {
     try {
-      localStorage.setItem(STORAGE_KEY, canvas.toDataURL('image/jpeg', 0.86));
-      updateStatus('作品已儲存，會顯示在校長室紀念卡。');
+      localStorage.setItem(STORAGE_KEY, canvas.toDataURL("image/jpeg", 0.86));
+      updateStatus("作品已儲存，屆時請去校長室領取紀念卡！");
     } catch (error) {
-      console.error('Artwork save failed:', error);
-      updateStatus('作品儲存失敗，請清空部分舊資料後再試。');
+      console.error("Artwork save failed:", error);
+      updateStatus("作品儲存失敗，請嘗試重新儲存。");
     }
   }
 
-  swatches.forEach(swatch => {
-    swatch.addEventListener('click', () => setColor(swatch.dataset.color));
+  swatches.forEach((swatch) => {
+    swatch.addEventListener("click", () => setColor(swatch.dataset.color));
   });
-  customColor.addEventListener('input', () => setColor(customColor.value));
+  customColor.addEventListener("input", () => setColor(customColor.value));
   toolButtons.forEach((button) => {
-    button.addEventListener('click', () => {
+    button.addEventListener("click", () => {
       setTool(button.dataset.tool, button.dataset.brush || activeBrush);
     });
   });
-  undoButton.addEventListener('click', () => {
+  undoButton.addEventListener("click", () => {
     const previous = history.pop();
     if (!previous) return;
     redoHistory.push(context.getImageData(0, 0, canvas.width, canvas.height));
     context.putImageData(previous, 0, 0);
     updateHistoryControls();
   });
-  redoButton.addEventListener('click', () => {
+  redoButton.addEventListener("click", () => {
     const next = redoHistory.pop();
     if (!next) return;
     history.push(context.getImageData(0, 0, canvas.width, canvas.height));
     context.putImageData(next, 0, 0);
     updateHistoryControls();
   });
-  clearButton.addEventListener('click', () => {
+  clearButton.addEventListener("click", () => {
     saveHistory();
     fillBackground();
   });
-  saveButton.addEventListener('click', saveArtwork);
-  backButton.addEventListener('click', () => {
-    window.location.href = '../art.html';
+  saveButton.addEventListener("click", saveArtwork);
+  const returnToArt = () => {
+    saveArtwork()
+    window.location.href = "../art.html";
+  };
+  backButton.addEventListener("click", returnToArt);
+  mapButton.addEventListener("click", () => {
+    saveArtwork()
+    window.location.href = "../map.html";
   });
-  canvas.addEventListener('pointerdown', beginDrawing);
-  canvas.addEventListener('pointermove', continueDrawing);
-  canvas.addEventListener('pointerup', endDrawing);
-  canvas.addEventListener('pointercancel', endDrawing);
-  canvas.addEventListener('pointerleave', endDrawing);
+  footerBackButton.addEventListener("click", returnToArt);
+  canvas.addEventListener("pointerdown", beginDrawing);
+  canvas.addEventListener("pointermove", continueDrawing);
+  canvas.addEventListener("pointerup", endDrawing);
+  canvas.addEventListener("pointercancel", endDrawing);
+  canvas.addEventListener("pointerleave", endDrawing);
+  toolbar.addEventListener("pointerdown", endDrawing);
+  window.addEventListener("pointerup", endDrawing);
+  window.addEventListener("pointercancel", endDrawing);
+  document.addEventListener("pointerdown", showPenCursor, true);
+  document.addEventListener("pointermove", showPenCursor, true);
+  document.addEventListener("pointerup", hidePenCursor, true);
+  document.addEventListener("pointercancel", hidePenCursor, true);
+  window.addEventListener("blur", () => penCursor.classList.remove("is-visible"));
 
-  setTool('brush', 'round');
+  setTool("brush", "round");
   updateHistoryControls();
   restoreArtwork();
 });
