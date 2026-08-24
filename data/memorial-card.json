@@ -1,7 +1,8 @@
 {
   "kicker": "YMSH ANNIVERSARY LETTER",
-  "title": " {name} 的校園紀念卡",
-  "meta": "於 {date} 整理，已走過 {gameCount} 個遊戲與 {achievementCount} 個隱藏成就。",
+  "title": " Dear：{name}",
+  "meta": "小遊戲：{gameCount}/4　隱藏成就：{achievementCount}/5",
+  "time-mark":"{date}．永明高中校長室",
   "artwork": {
     "caption": "美術教室留下的作品",
     "emptyCaption": "美術教室尚未留下作品。"

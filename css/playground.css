@@ -502,6 +502,64 @@
   display: none;
 }
 
+#game.playground-ending-dialogue .options-area {
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+#game.playground-ending-dialogue .dialogue-option-btn {
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border: 1px solid var(--primary300);
+  border-radius: var(--border-radius-large);
+  background: #ffffff;
+  color: var(--primary900);
+  font: inherit;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+}
+
+#game.playground-ending-dialogue .dialogue-option-btn:hover,
+#game.playground-ending-dialogue .dialogue-option-btn:focus-visible {
+  border-color: var(--primary700);
+  background: var(--primary100);
+  padding-left: 14px;
+}
+
+#game.playground-ending-dialogue .dialogue-option-btn[data-action="playground:retry"] {
+  border-color: var(--primary700);
+  background: var(--primary700);
+  color: var(--primary100);
+}
+
+#game.playground-ending-dialogue .dialogue-option-btn[data-action="playground:retry"]:hover,
+#game.playground-ending-dialogue .dialogue-option-btn[data-action="playground:retry"]:focus-visible {
+  border-color: var(--primary900);
+  background: var(--primary900);
+  color: #ffffff;
+}
+
+#game.playground-ending-dialogue .dialogue-option-btn[data-action="playground:retry"]::before,
+#game.playground-ending-dialogue .dialogue-option-btn[data-action="navigate:map"]::before {
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+}
+
+#game.playground-ending-dialogue .dialogue-option-btn[data-action="playground:retry"]::before {
+  content: "\f2f1";
+}
+
+#game.playground-ending-dialogue .dialogue-option-btn[data-action="navigate:map"]::before {
+  content: "\f060";
+}
+
 .game-kicker i {
   color: #ffd85d;
 }

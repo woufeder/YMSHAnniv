@@ -5,7 +5,7 @@ body {
 }
 
 .principal-room {
-  width: min(100% - 32px, 820px);
+  width: min(100% - 32px, 1180px);
   min-height: 100vh;
   margin: 0 auto;
   padding: 72px 0 32px;
@@ -35,17 +35,30 @@ body {
 }
 
 .memorial-letter {
-  max-height: 70vh;
+  max-height: 80vh;
   overflow: auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: var(--border-radius-large);
   background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 20px 48px rgba(20, 34, 39, 0.28);
 }
 
+.memorial-page {
+  min-width: 0;
+}
+
+.memorial-page--left {
+  border-right: 1px solid rgba(71, 77, 100, 0.18);
+}
+
+.memorial-page--right {
+  background: rgba(231, 237, 247, 0.36);
+}
+
 .memorial-letter__header {
-  padding: 30px 34px 22px;
-  border-bottom: 1px solid rgba(71, 77, 100, 0.18);
+  padding: 30px 34px 0px;
 }
 
 .memorial-letter__kicker,
@@ -61,38 +74,31 @@ body {
 }
 
 .memorial-letter__header h2 {
-  margin-top: 7px;
+  margin-top: 20px;
   color: var(--primary900);
   font-size: 1.8rem;
   font-weight: 700;
 }
 
-.memorial-letter__meta {
-  margin-top: 10px;
-  color: #727783;
-  line-height: 1.55;
-}
-
 .memorial-letter__body {
   display: grid;
-  padding: 30px 34px 10px;
+  gap: 0.5rem;
+  padding: 20px 34px;
+}
+
+.memorial-letter__body:empty {
+  display: none;
 }
 
 .memorial-letter__body p {
   margin: 0;
   color: #343742;
-  font-size: 1.06rem;
-  line-height: 1.9;
+  line-height: 1.5;
   text-align: left;
 }
 
 .memorial-artwork {
   display: none;
-  margin: 16px 34px 28px;
-  padding: 14px;
-  border: 1px solid var(--primary300);
-  border-radius: var(--border-radius-large);
-  background: rgba(220, 236, 255, 0.34);
 }
 
 .memorial-artwork:not(.is-empty) {
@@ -102,7 +108,7 @@ body {
 .memorial-artwork img {
   display: block;
   width: min(100%, 520px);
-  max-height: 360px;
+  height: 280px;
   margin: 0 auto;
   border: 1px solid rgba(71, 77, 100, 0.24);
   object-fit: contain;
@@ -177,6 +183,19 @@ body {
 }
 
 @media (max-width: 640px) {
+  .memorial-letter {
+    display: block;
+  }
+
+  .memorial-page--left {
+    border-right: 0;
+    border-bottom: 1px solid rgba(71, 77, 100, 0.18);
+  }
+
+  .memorial-page--right {
+    background: transparent;
+  }
+
   .principal-room {
     width: min(100% - 24px, 820px);
     padding-top: 68px;

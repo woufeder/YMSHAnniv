@@ -25,19 +25,30 @@
       <h1>校長室</h1>
     </header>
     <section class="memorial-letter" aria-labelledby="memorialTitle">
-      <header class="memorial-letter__header">
-        <p id="memorialKicker" class="memorial-letter__kicker"></p>
-        <h2 id="memorialTitle">正在整理紀念卡</h2>
-        <p id="memorialMeta" class="memorial-letter__meta"></p>
-      </header>
-      <article id="memorialParagraphs" class="memorial-letter__body" aria-live="polite"></article>
-      <figure id="artworkSection" class="memorial-artwork">
-        <img id="artworkImage" alt="美術教室留下的作品">
-        <figcaption id="artworkCaption"></figcaption>
-      </figure>
+      <div class="memorial-page memorial-page--left">
+        <header class="memorial-letter__header">
+          <div class="d-flex justify-content-between">
+            <p id="memorialKicker" class="memorial-letter__kicker"></p>
+            <p id="memorialMeta" class="memorial-letter__kicker"></p>
+          </div>
+
+          <h2 id="memorialTitle">正在整理紀念卡</h2>
+        </header>
+        <article id="memorialParagraphsLeft" class="memorial-letter__body" aria-live="polite"></article>
+      </div>
+      <div class="memorial-page memorial-page--right">
+        <article id="memorialParagraphsRight" class="memorial-letter__body" aria-live="polite"></article>
+        <figure id="artworkSection" class="memorial-artwork">
+          <img id="artworkImage" alt="美術教室留下的作品">
+          <figcaption id="artworkCaption"></figcaption>
+        </figure>
+
+        <p id="dateMark" class="ms-auto memorial-letter__kicker w-fit pe-4"></p>
+      </div>
 
     </section>
     <canvas id="memoryCard" class="download-canvas" width="1080" height="1350" aria-hidden="true"></canvas>
+
     <footer class="memorial-letter__footer">
       <button id="generateCard" class="principal-button" type="button"><i class="fa-solid fa-rotate" aria-hidden="true"></i><span>更新紀念卡</span></button>
       <button id="downloadCard" class="principal-button principal-button--primary" type="button"><i class="fa-solid fa-download" aria-hidden="true"></i><span>下載紀念卡</span></button>

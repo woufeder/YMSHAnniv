@@ -412,6 +412,7 @@ class DialogueCore {
     options.forEach(opt => {
       const btn = document.createElement('button');
       btn.className = 'dialogue-option-btn';
+      if (opt.action) btn.dataset.action = opt.action;
       btn.textContent = this.replaceVars(opt.text);
       btn.onclick = async () => {
         this.optionsArea.classList.add('hidden');

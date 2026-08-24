@@ -10,7 +10,12 @@ function initPrincipal() {
   const kicker = document.getElementById("memorialKicker");
   const title = document.getElementById("memorialTitle");
   const meta = document.getElementById("memorialMeta");
-  const paragraphs = document.getElementById("memorialParagraphs");
+  const dateMark = document.getElementById("dateMark");
+
+  const leftPage = document.querySelector(".memorial-page--left");
+  const rightPage = document.querySelector(".memorial-page--right");
+  const leftParagraphs = document.getElementById("memorialParagraphsLeft");
+  const rightParagraphs = document.getElementById("memorialParagraphsRight");
   const artworkSection = document.getElementById("artworkSection");
   const artworkImage = document.getElementById("artworkImage");
   const artworkCaption = document.getElementById("artworkCaption");
@@ -18,6 +23,10 @@ function initPrincipal() {
   let config;
   let state;
   let selectedSections = [];
+  let leftSections = [];
+  let rightSections = [];
+  let cardLeftSections = [];
+  let cardRightSections = [];
 
   function readCompletedGames() {
     try {
@@ -70,12 +79,16 @@ function initPrincipal() {
     const hasEvery = (values, available) =>
       !values || values.every((value) => available.has(value));
     const hasSome = (values, available) =>
-      !values || values.length === 0 || values.some((value) => available.has(value));
+      !values ||
+      values.length === 0 ||
+      values.some((value) => available.has(value));
 
     if (!hasSome(condition.games, state.completedGames)) return false;
     if (!hasEvery(condition.allGames, state.completedGames)) return false;
-    if (!hasSome(condition.achievements, state.earnedAchievements)) return false;
-    if (!hasEvery(condition.allAchievements, state.earnedAchievements)) return false;
+    if (!hasSome(condition.achievements, state.earnedAchievements))
+      return false;
+    if (!hasEvery(condition.allAchievements, state.earnedAchievements))
+      return false;
     if (
       Number.isFinite(condition.minimumGames) &&
       state.completedGames.size < condition.minimumGames
@@ -88,32 +101,136 @@ function initPrincipal() {
     ) {
       return false;
     }
-    if (typeof condition.artwork === "boolean" && condition.artwork !== Boolean(state.artwork)) {
+    if (
+      typeof condition.artwork === "boolean" &&
+      condition.artwork !== Boolean(state.artwork)
+    ) {
       return false;
     }
-    if (condition.noProgress && (state.completedGames.size > 0 || state.earnedAchievements.size > 0)) {
+    if (
+      condition.noProgress &&
+      (state.completedGames.size > 0 || state.earnedAchievements.size > 0)
+    ) {
       return false;
     }
 
     return Object.keys(condition).length > 0;
   }
 
-  function renderArticle() {
-    kicker.textContent = replaceVariables(config.kicker);
-    title.textContent = replaceVariables(config.title);
-    meta.textContent = replaceVariables(config.meta);
+  function splitSectionsForCard(sections) {
+    if (sections.length < 2) {
+      return { left: sections, right: [] };
+    }
 
-    selectedSections = (config.sections || []).filter((section) =>
-      matchesCondition(section.when),
-    );
+    const textWidth = 792;
+    const lineHeight = 43;
+    const paragraphGap = 20;
+    const getTextHeight = (items) => {
+      context.font = "27px 'LXGW WenKai Mono TC', serif";
+      return items.reduce((height, section) => {
+        const lines = getWrappedLines(replaceVariables(section.text), textWidth);
+        return height + lines.length * lineHeight + paragraphGap;
+      }, 0);
+    };
 
-    paragraphs.replaceChildren(
-      ...selectedSections.map((section) => {
+    context.font = "700 48px 'LXGW WenKai Mono TC', serif";
+    const titleHeight = getWrappedLines(replaceVariables(config.title), textWidth).length * 60;
+    context.font = "700 23px 'LXGW WenKai Mono TC', serif";
+    const artworkCaptionHeight = state.artwork
+      ? getWrappedLines(replaceVariables(config.artwork?.caption), textWidth).length * 34 + 24
+      : 0;
+    const leftFixedHeight = 104 + titleHeight + 98;
+    const rightFixedHeight = state.artwork ? 94 + artworkCaptionHeight + 308 : 94;
+    let bestSplit = 1;
+    let smallestDifference = Number.POSITIVE_INFINITY;
+
+    for (let splitIndex = 1; splitIndex < sections.length; splitIndex += 1) {
+      const leftHeight = leftFixedHeight + getTextHeight(sections.slice(0, splitIndex));
+      const rightHeight = rightFixedHeight + getTextHeight(sections.slice(splitIndex));
+      const difference = Math.abs(leftHeight - rightHeight);
+
+      if (difference < smallestDifference) {
+        bestSplit = splitIndex;
+        smallestDifference = difference;
+      }
+    }
+
+    return {
+      left: sections.slice(0, bestSplit),
+      right: sections.slice(bestSplit),
+    };
+  }
+
+  function renderParagraphs(container, sections) {
+    container.replaceChildren(
+      ...sections.map((section) => {
         const paragraph = document.createElement("p");
         paragraph.dataset.section = section.id || "";
         paragraph.textContent = replaceVariables(section.text);
         return paragraph;
       }),
+    );
+  }
+
+  function getOuterHeight(element) {
+    const styles = window.getComputedStyle(element);
+    return (
+      element.offsetHeight +
+      (Number.parseFloat(styles.marginTop) || 0) +
+      (Number.parseFloat(styles.marginBottom) || 0)
+    );
+  }
+
+  function getFixedContentHeight(page, paragraphContainer) {
+    return [...page.children]
+      .filter((element) => element !== paragraphContainer)
+      .reduce((height, element) => height + getOuterHeight(element), 0);
+  }
+
+  function splitSectionsAcrossPages(sections) {
+    if (sections.length < 2) {
+      return { left: sections, right: [] };
+    }
+
+    let bestSplit = 1;
+    let smallestDifference = Number.POSITIVE_INFINITY;
+
+    for (let splitIndex = 1; splitIndex < sections.length; splitIndex += 1) {
+      const left = sections.slice(0, splitIndex);
+      const right = sections.slice(splitIndex);
+      renderParagraphs(leftParagraphs, left);
+      renderParagraphs(rightParagraphs, right);
+
+      const leftHeight =
+        leftParagraphs.offsetHeight +
+        getFixedContentHeight(leftPage, leftParagraphs);
+      const rightHeight =
+        rightParagraphs.offsetHeight +
+        getFixedContentHeight(rightPage, rightParagraphs);
+        // 有改要記得這裡得高度要記得加
+        getOuterHeight(dateMark);
+      const difference = Math.abs(leftHeight - rightHeight);
+
+      if (difference < smallestDifference) {
+        bestSplit = splitIndex;
+        smallestDifference = difference;
+      }
+    }
+
+    return {
+      left: sections.slice(0, bestSplit),
+      right: sections.slice(bestSplit),
+    };
+  }
+
+  function renderArticle() {
+    kicker.textContent = replaceVariables(config.kicker);
+    title.textContent = replaceVariables(config.title);
+    meta.textContent = replaceVariables(config.meta);
+    dateMark.textContent = replaceVariables(config["time-mark"]);
+
+    selectedSections = (config.sections || []).filter((section) =>
+      matchesCondition(section.when),
     );
 
     artworkImage.removeAttribute("src");
@@ -123,8 +240,17 @@ function initPrincipal() {
       artworkCaption.textContent = replaceVariables(config.artwork?.caption);
     } else {
       artworkSection.classList.add("is-empty");
-      artworkCaption.textContent = replaceVariables(config.artwork?.emptyCaption);
+      artworkCaption.textContent = replaceVariables(
+        config.artwork?.emptyCaption,
+      );
     }
+
+    ({ left: cardLeftSections, right: cardRightSections } =
+      splitSectionsForCard(selectedSections));
+    ({ left: leftSections, right: rightSections } =
+      splitSectionsAcrossPages(selectedSections));
+    renderParagraphs(leftParagraphs, leftSections);
+    renderParagraphs(rightParagraphs, rightSections);
   }
 
   function getWrappedLines(text, maxWidth) {
@@ -159,6 +285,16 @@ function initPrincipal() {
     return y;
   }
 
+  function drawRightAlignedTextLines(lines, x, y, lineHeight) {
+    context.textAlign = "right";
+    lines.forEach((line) => {
+      context.fillText(line, x, y);
+      y += lineHeight;
+    });
+    context.textAlign = "left";
+    return y;
+  }
+
   function loadImage(source) {
     return new Promise((resolve, reject) => {
       const image = new Image();
@@ -181,69 +317,147 @@ function initPrincipal() {
   }
 
   async function drawDownloadCard() {
-    const width = 1080;
-    const textX = 76;
-    const textWidth = width - textX * 2;
-    const lineHeight = 52;
-    const paragraphGap = 22;
+    const outerMargin = 64;
+    const pageWidth = 900;
+    const pageGap = 24;
+    const pagePadding = 54;
+    const width = outerMargin * 2 + pageWidth * 2 + pageGap;
+    const textWidth = pageWidth - pagePadding * 2;
+    const lineHeight = 43;
+    const paragraphGap = 20;
 
     canvas.width = width;
-    context.font = "31px 'LXGW WenKai Mono TC', serif";
-    const paragraphLines = selectedSections.map((section) =>
-      getWrappedLines(replaceVariables(section.text), textWidth),
+    context.font = "27px 'LXGW WenKai Mono TC', serif";
+    const makeLines = (sections) =>
+      sections.map((section) =>
+        getWrappedLines(replaceVariables(section.text), textWidth),
+      );
+    const leftLines = makeLines(cardLeftSections);
+    const rightLines = makeLines(cardRightSections);
+    const getTextHeight = (groups) =>
+      groups.reduce(
+        (total, lines) => total + lines.length * lineHeight + paragraphGap,
+        0,
+      );
+    context.font = "700 48px 'LXGW WenKai Mono TC', serif";
+    const titleLines = getWrappedLines(
+      replaceVariables(config.title),
+      textWidth,
     );
-    const textHeight = paragraphLines.reduce(
-      (total, lines) => total + lines.length * lineHeight + paragraphGap,
-      0,
+    context.font = "25px 'LXGW WenKai Mono TC', serif";
+    const metaLines = getWrappedLines(replaceVariables(config.meta), textWidth);
+    const headerHeight = 104 + titleLines.length * 60 + 98;
+    const artworkHeight = state.artwork ? 300 : 0;
+    context.font = "700 23px 'LXGW WenKai Mono TC', serif";
+    const artworkLabelHeight = state.artwork
+      ? getWrappedLines(replaceVariables(config.artwork?.caption), textWidth).length * 34 + 24
+      : 0;
+    const pageHeight = Math.max(
+      1040,
+      headerHeight + getTextHeight(leftLines) + 80,
+      100 +
+        getTextHeight(rightLines) +
+        artworkLabelHeight +
+        artworkHeight +
+        100,
     );
-    const artworkHeight = state.artwork ? 370 : 0;
-    canvas.height = Math.max(1350, Math.ceil(300 + textHeight + artworkHeight + 110));
+    const height = outerMargin * 2 + pageHeight;
+    const leftX = outerMargin;
+    const rightX = leftX + pageWidth + pageGap;
+    const contentLeftX = leftX + pagePadding;
+    const contentRightX = rightX + pagePadding;
 
-    const height = canvas.height;
+    canvas.height = height;
     context.clearRect(0, 0, width, height);
-    context.fillStyle = "#f7f8f3";
+    context.fillStyle = "#e7ebf2";
     context.fillRect(0, 0, width, height);
+
+    [leftX, rightX].forEach((pageX) => {
+      context.fillStyle = "#f9faf6";
+      context.fillRect(pageX, outerMargin, pageWidth, pageHeight);
+      context.strokeStyle = "#a7b0c1";
+      context.lineWidth = 2;
+      context.strokeRect(pageX, outerMargin, pageWidth, pageHeight);
+    });
     context.fillStyle = "#474d64";
-    context.fillRect(54, 54, width - 108, 8);
+    context.fillRect(
+      leftX + pageWidth,
+      outerMargin + 12,
+      pageGap,
+      pageHeight - 24,
+    );
 
-    context.fillStyle = "#6c7390";
-    context.font = "700 28px 'LXGW WenKai Mono TC', serif";
     context.textAlign = "left";
-    context.fillText(replaceVariables(config.kicker), textX, 118);
-    context.fillStyle = "#252834";
-    context.font = "700 54px 'LXGW WenKai Mono TC', serif";
-    context.fillText(replaceVariables(config.title), textX, 185);
+    context.fillStyle = "#6c7390";
+    context.font = "700 26px 'LXGW WenKai Mono TC', serif";
+    context.fillText(
+      replaceVariables(config.kicker),
+      contentLeftX,
+      outerMargin + 76,
+    );
     context.fillStyle = "#6b7080";
-    context.font = "28px 'LXGW WenKai Mono TC', serif";
-    context.fillText(replaceVariables(config.meta), textX, 230);
+    context.font = "25px 'LXGW WenKai Mono TC', serif";
+    drawRightAlignedTextLines(
+      metaLines,
+      leftX + pageWidth - pagePadding,
+      outerMargin + 76,
+      38,
+    );
 
-    let y = 300;
+    context.fillStyle = "#252834";
+    context.font = "700 48px 'LXGW WenKai Mono TC', serif";
+    let leftY = drawTextLines(titleLines, contentLeftX, outerMargin + 162, 60);
+    leftY += 14;
+
     context.fillStyle = "#303442";
-    context.font = "31px 'LXGW WenKai Mono TC', serif";
-    paragraphLines.forEach((lines) => {
-      y = drawTextLines(lines, textX, y, lineHeight) + paragraphGap;
+    context.font = "27px 'LXGW WenKai Mono TC', serif";
+    leftLines.forEach((lines) => {
+      leftY =
+        drawTextLines(lines, contentLeftX, leftY, lineHeight) + paragraphGap;
+    });
+
+    let rightY = outerMargin + 94;
+    rightLines.forEach((lines) => {
+      rightY =
+        drawTextLines(lines, contentRightX, rightY, lineHeight) + paragraphGap;
     });
 
     if (state.artwork) {
       try {
         const image = await loadImage(state.artwork);
-        const imageHeight = 280;
         context.fillStyle = "#6c7390";
-        context.font = "700 25px 'LXGW WenKai Mono TC', serif";
-        context.fillText(replaceVariables(config.artwork?.caption), textX, y + 4);
-        drawContainImage(image, textX, y + 30, textWidth, imageHeight);
+        context.font = "700 23px 'LXGW WenKai Mono TC', serif";
+        rightY = drawTextLines(
+          getWrappedLines(replaceVariables(config.artwork?.caption), textWidth),
+          contentRightX,
+          rightY + 16,
+          34,
+        );
+        const imageY = rightY + 8;
+        drawContainImage(
+          image,
+          contentRightX,
+          imageY,
+          textWidth,
+          artworkHeight,
+        );
         context.strokeStyle = "#9ba6c0";
         context.lineWidth = 3;
-        context.strokeRect(textX, y + 30, textWidth, imageHeight);
-        y += imageHeight + 70;
+        context.strokeRect(contentRightX, imageY, textWidth, artworkHeight);
       } catch (error) {
         console.warn("Artwork could not be added to memorial card:", error);
       }
     }
 
     context.fillStyle = "#74798a";
-    context.font = "25px 'LXGW WenKai Mono TC', serif";
-    context.fillText(formatDate(), textX, height - 62);
+    context.font = "23px 'LXGW WenKai Mono TC', serif";
+    context.textAlign = "right";
+    context.fillText(
+      replaceVariables(config["time-mark"]),
+      rightX + pageWidth - pagePadding,
+      outerMargin + pageHeight - 48,
+    );
+    context.textAlign = "left";
   }
 
   async function refreshCard() {
