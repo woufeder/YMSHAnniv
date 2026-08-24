@@ -1,12 +1,11 @@
 {
-  "title": "操場口令練習",
-  "kicker": "PLAYGROUND RHYTHM",
+  "title": "圍捕小狗大作戰",
   "intro": {
-    "title": "小狗一溜進跑道，大家立刻開始喊口令",
-    "text": "牠抱著網球左閃右躲，操場旁的人自然而然排成一列。跟上大家的節拍，在口令最亮的時候回應方向，幫忙把牠引到側門附近。",
-    "action": "開始接口令"
+    "title": "小狗一溜進跑道，大家立刻開始圍著他",
+    "text": "牠抱著網球左閃右躲，操場旁的人自然而然圍成一圈。跟上大家的動作，在最亮的時候回應方向，幫忙擋住小狗。",
+    "action": "加入圍捕"
   },
-  "instructions": "使用方向鍵或畫面上的方向按鈕。口令會持續重複，等節拍環最亮時按下相同方向；只有成功命中才會換下一個口令。",
+  "instructions": "使用方向鍵或畫面上的方向按鈕。動作指令會持續重複，等節拍環最亮時按下相同方向；只有成功命中才會換下一個動作。",
   "timeLimit": 30,
   "captureHits": 20,
   "tempo": 720,
@@ -15,40 +14,40 @@
       "id": "left",
       "key": "ArrowLeft",
       "label": "左",
-      "hint": "左側守住",
+      "hint": "往左邊跑",
       "icon": "fa-arrow-left"
     },
     {
       "id": "right",
       "key": "ArrowRight",
       "label": "右",
-      "hint": "右側守住",
+      "hint": "往右邊跑",
       "icon": "fa-arrow-right"
     },
     {
       "id": "forward",
       "key": "ArrowUp",
       "label": "前",
-      "hint": "往前靠近",
+      "hint": "慢慢靠近",
       "icon": "fa-arrow-up"
     },
     {
       "id": "wait",
       "key": "ArrowDown",
       "label": "停",
-      "hint": "先別追牠",
+      "hint": "原地觀察",
       "icon": "fa-arrow-down"
     }
   ],
   "feedback": {
-    "perfect": "漂亮，節拍剛好接上。",
-    "good": "接到了，繼續跟上下一個口令。",
-    "wrong": "方向不對，先聽清楚下一個拍點。",
+    "perfect": "漂亮，動作剛好跟上。",
+    "good": "接到了，繼續跟上下一個指令。",
+    "wrong": "方向不對，先看清楚方向。",
     "timing": "再等節拍環靠近中央一點。",
-    "miss": "這拍慢了一點，口令會再重複一次。"
+    "miss": "動作慢了一點，再重複一次。"
   },
   "success": {
-    "title": "一串口令接起來，小狗真的往側門跑去了",
+    "title": "大家的默契很好，成功圍住小狗了！",
     "text": "牠叼著網球鑽出門口，操場邊立刻笑成一團。原來大家剛剛不只是在追牠，還臨時組成了一段很亂但很有默契的節奏。",
     "replayAction": "再玩一次",
     "mapAction": "回到校園地圖"

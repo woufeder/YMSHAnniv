@@ -11,16 +11,17 @@
   min-height: 100vh;
   display: grid;
   place-items: center;
-  padding: 72px 24px 32px;
+  padding: 72px 24px 72px;
   box-sizing: border-box;
 }
 
 .rescue-panel {
-  width: min(100%, 800px);
+  width: min(100%, 1200px);
+  height: 100%;
   padding: 26px 30px;
   border: 1px solid rgba(228, 243, 225, 0.74);
   border-radius: 8px;
-  background: rgba(23, 57, 48, 0.88);
+  background: rgba(61, 64, 63, 0.88);
   box-shadow: 0 20px 56px rgba(6, 28, 21, 0.5);
   backdrop-filter: blur(5px);
 }
@@ -38,7 +39,6 @@
 .scene-label {
   margin: 0 0 6px;
   color: #c7edc7;
-  font-size: 13px;
   font-weight: 700;
 }
 
@@ -56,7 +56,6 @@
 .rescue-header h1 {
   margin: 0;
   color: #fff;
-  font-size: 32px;
 }
 
 .game-stats {
@@ -72,14 +71,12 @@
   gap: 3px;
   margin-top: 3px;
   color: #ffd85d;
-  font-size: 13px;
   font-weight: 700;
 }
 
 .lead-meter strong,
 .time-meter strong {
   color: #fff5c9;
-  font-size: 21px;
   line-height: 1;
 }
 
@@ -99,8 +96,8 @@
 }
 
 .rescue-scene {
-  display: grid;
-  grid-template-columns: 58px minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
   column-gap: 16px;
   padding: 22px 0 18px;
 }
@@ -115,7 +112,6 @@
   border-radius: 8px;
   background: rgba(111, 192, 133, 0.15);
   color: #edffee;
-  font-size: 24px;
 }
 
 .scene-label {
@@ -125,7 +121,6 @@
 .rescue-scene h2 {
   margin: 0;
   color: #fff;
-  font-size: 23px;
   line-height: 1.4;
 }
 
@@ -133,7 +128,6 @@
   grid-column: 2;
   margin: 8px 0 0;
   color: #f4faf3;
-  font-size: 16px;
   line-height: 1.7;
 }
 
@@ -151,7 +145,6 @@
   min-height: 25px;
   margin: 10px 0 0;
   color: #e2f3df;
-  font-size: 15px;
   line-height: 1.7;
   text-align: center;
 }
@@ -183,7 +176,6 @@
   background: rgba(255, 255, 255, 0.1);
   color: #f7fbfb;
   font: inherit;
-  font-size: 15px;
   font-weight: 700;
   cursor: pointer;
   transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
@@ -270,17 +262,14 @@
 
 .active-cue i {
   color: #ffe99a;
-  font-size: 28px;
 }
 
 .active-cue strong {
-  font-size: 34px;
   line-height: 1;
 }
 
 .active-cue span {
   color: #d6ece0;
-  font-size: 12px;
   font-weight: 700;
 }
 
@@ -327,13 +316,9 @@
   border-radius: 8px;
   background: rgba(6, 34, 25, 0.25);
   color: #bad2c6;
-  font-size: 12px;
   font-weight: 700;
 }
 
-.cue-chip i {
-  font-size: 15px;
-}
 
 .cue-chip.is-current {
   border-color: #ffe99a;
@@ -355,13 +340,11 @@
 
 .rhythm-control i {
   color: #ffe99a;
-  font-size: 20px;
 }
 
 .rhythm-control kbd {
   color: #bcd6c7;
   font: inherit;
-  font-size: 11px;
 }
 
 .capture-note {
@@ -372,7 +355,6 @@
 .capture-note h2 {
   margin: 0;
   color: #c7edc7;
-  font-size: 14px;
   font-weight: 700;
 }
 
@@ -383,7 +365,6 @@
 .capture-note p {
   margin: 8px 0 0;
   color: #e4f1e2;
-  font-size: 14px;
   line-height: 1.65;
 }
 
@@ -418,9 +399,6 @@
     gap: 6px;
   }
 
-  .rescue-header h1 {
-    font-size: 27px;
-  }
 
   .game-stats {
     gap: 18px;
@@ -439,16 +417,9 @@
   .scene-icon {
     width: 46px;
     height: 46px;
-    font-size: 20px;
   }
 
-  .rescue-scene h2 {
-    font-size: 20px;
-  }
 
-  .scene-text {
-    font-size: 15px;
-  }
 
   .beat-area {
     min-height: 230px;

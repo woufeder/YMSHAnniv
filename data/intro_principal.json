@@ -31,14 +31,19 @@
       "text": "「已經逛過校園了嗎？<wait>那太好了。<wait>我確認一下。」"
     },
     {
-      "char": "principal.png",
+      "char": "principal-2.png",
       "name": "桓成康",
-      "text": "<wait=1000>「來，<wait>請收下，<wait>這是今天的紀念卡。<wait=300>還想去逛逛再回來的話，也可以重新申請卡片。」"
+      "text": "<char:jump><wait=1000>「來，<wait>這是今天的紀念卡。<wait=300>還想去逛逛再回來的話，也可以重新申請卡片。」"
     },
     {
       "char": "principal.png",
       "name": "桓成康",
       "text": "「如果有什麼想說的，也可以在穿堂的佈告欄提交留言。」"
+    },
+    {
+      "char": "principal.png",
+      "name": "桓成康",
+      "text": "「非常感謝您今日蒞臨永明高中。」"
     }
   ],
   "student": [
@@ -66,7 +71,7 @@
     {
       "char": "principal.png",
       "name": "桓成康",
-      "text": "「但有些部分始終一致，<wait>比如記憶，<wait>比如愛，<wait>比如我們曾經存在這件事。」"
+      "text": "<wait>「但有些<char:dropPause>部分始終一致，<wait>比如記憶，<wait>比如愛，<wait>比如我們曾經存在這件事。」"
     },
     {
       "text": "這番話讓人想起黑色的大理石碑，<wait>前任校長的提問。<wait=300>那間至今依舊神秘的校史室。"
@@ -82,12 +87,12 @@
     {
       "char": "principal.png",
       "name": "桓成康",
-      "text": "「這麼多年過去，<wait>同學的答案有改變嗎？<wait=500>不過現在已經沒有新的課了，<wait>也不需要交作業了。」"
+      "text": "「這麼多年過去，<wait>同學的答案有改變嗎？<char:jump><wait=500>不過現在已經沒有新的課了，<wait>也不需要交作業了。」"
     },
     {
-      "char": "principal.png",
+      "char": "principal-2.png",
       "name": "桓成康",
-      "text": "<wait=1000>「來，<wait>這是今天的紀念卡。<wait=300>還想去逛逛再回來的話，也可以重新申請卡片。」"
+      "text": "<char:jump><wait=1000>「來，<wait>這是今天的紀念卡。<wait=300>還想去逛逛再回來的話，也可以重新申請卡片。」"
     },
     {
       "char": "principal.png",
@@ -97,7 +102,7 @@
     {
       "char": "principal.png",
       "name": "桓成康",
-      "text": "「今天真的很高興見到你，<wait>{{input}}同學。<wait=300>我現在依然覺得，<wait>你能來這裡就讀，<wait>真的太好了。」"
+      "text": "「今天真的很高興見到你，<wait>{{input}}同學。<wait=300>我現在依然覺得你能來這裡就讀，<wait>真的太好了。」"
     },
     {
       "char": "principal.png",
@@ -130,7 +135,7 @@
     {
       "char": "principal.png",
       "name": "桓成康",
-      "text": "「但有些部分始終一致，<wait>比如記憶，<wait>比如愛，<wait>比如我們曾經存在這件事。」"
+      "text": "<wait>「但有些<char:dropPause>部分始終一致，<wait>比如記憶，<wait>比如愛，<wait>比如我們曾經存在這件事。」"
     },
     {
       "text": "這番話讓人想起黑色的大理石碑，<wait>前任校長的提問。<wait=300>那間至今依舊神秘的校史室。"
@@ -141,12 +146,12 @@
     {
       "char": "principal.png",
       "name": "桓成康",
-      "text": "「那也已經是好多年前的事了，<wait>不知道孩子們的答案有改變嗎？<wait=500>不過現在大家都是大人了，<wait>也不需要交作業了。」"
+      "text": "「那也已經是好多年前的事了，<wait>不知道孩子們的答案有改變嗎？<char:jump><wait=500>不過現在大家都是大人了，<wait>也不需要交作業了。」"
     },
     {
-      "char": "principal.png",
+      "char": "principal-2.png",
       "name": "桓成康",
-      "text": "<wait=1000>「來，<wait>這是今天的紀念卡。<wait=300>還想去逛逛再回來的話，也可以重新申請卡片。」"
+      "text": "<char:jump><wait=1000>「來，<wait>這是今天的紀念卡。<wait=300>還想去逛逛再回來的話，也可以重新申請卡片。」"
     },
     {
       "char": "principal.png",
@@ -156,7 +161,7 @@
     {
       "char": "principal.png",
       "name": "桓成康",
-      "text": "「今天真的很高興見到你，<wait>{{input}}老師。<wait=300>我現在依然覺得，<wait>你能來這裡就職，<wait>真的太好了。」"
+      "text": "「今天真的很高興見到你，<wait>{{input}}老師。<wait=300>我現在依然覺得你能來這裡就職，<wait>真的太好了。」"
     },
     {
       "char": "principal.png",

@@ -93,14 +93,10 @@ class DialogueCore {
       <div class="dialogue-layer">
         <div class="dialogue-box">
           <div class="dialogue-header"><span id="name"></span></div>
-          <div id="text" class="dialogue-text"></div>
-
-          <div id="inputArea" class="input-area hidden">
-            <input id="playerName" type="text" placeholder="請輸入你的名字" />
-            <button id="submitName">確定</button>
+          <div id="text" class="dialogue-text">
+            <div class="dialogue-content"></div>
+            <div id="optionsArea" class="options-area hidden"></div>
           </div>
-
-          <div id="optionsArea" class="options-area hidden"></div>
 
           <div class="control-area">
             <button id="nextBtn" class="next-btn"><i class="fa-solid fa-play"></i></button>
@@ -128,14 +124,24 @@ class DialogueCore {
     this.nameBox = this.container.querySelector('#name');
     this.dialogueHeader = this.container.querySelector('.dialogue-header');
     this.textBox = this.container.querySelector('#text');
+    this.dialogueContent = this.textBox?.querySelector('.dialogue-content');
+    if (this.textBox && !this.dialogueContent) {
+      this.dialogueContent = document.createElement('div');
+      this.dialogueContent.className = 'dialogue-content';
+      this.textBox.prepend(this.dialogueContent);
+    }
     this.nextBtn = this.container.querySelector('#nextBtn');
-    this.inputArea = this.container.querySelector('#inputArea');
-    this.playerInput = this.container.querySelector('#playerName');
-    this.submitName = this.container.querySelector('#submitName');
     this.optionsArea = this.container.querySelector('#optionsArea');
+    if (this.textBox && !this.optionsArea) {
+      this.optionsArea = document.createElement('div');
+      this.optionsArea.id = 'optionsArea';
+      this.optionsArea.className = 'options-area hidden';
+      this.textBox.append(this.optionsArea);
+    } else if (this.textBox && this.optionsArea.parentElement !== this.textBox) {
+      this.textBox.append(this.optionsArea);
+    }
 
     this.nextBtn?.addEventListener('click', () => this.nextLine());
-    this.submitName?.addEventListener('click', () => this.handleNameSubmit());
   }
 
   setupBackgroundLayers() {
@@ -241,7 +247,7 @@ class DialogueCore {
    *    (格式為 <char:特效名稱>)
    */
   typeText(text) {
-    this.textBox.textContent = '';
+    this.dialogueContent.textContent = '';
     const parsed = this.replaceVars(text || '');
     let index = 0;
     let pauseUntil = 0;
@@ -289,7 +295,7 @@ class DialogueCore {
         return;
       }
 
-      this.textBox.textContent += parsed[index] || '';
+      this.dialogueContent.textContent += parsed[index] || '';
       index++;
 
       if (index >= parsed.length) {
@@ -380,22 +386,20 @@ class DialogueCore {
 
     this.typeText(line.text || '');
 
-    // 是否顯示輸入框
-    if (!this.inputArea || !this.nextBtn) {
+    // 重設當前選項與下一句按鈕狀態。
+    if (!this.nextBtn) {
       return;
     }
 
-    if (line.action === 'askName') {
-      this.inputArea.classList.remove('hidden');
-      this.nextBtn.classList.add('hidden');
+    if (this.optionsArea) {
+      this.optionsArea.innerHTML = '';
+      this.optionsArea.classList.add('hidden');
+    }
+
+    if (!line.options || line.options.length === 0) {
+      this.nextBtn.classList.remove('hidden');
     } else {
-      this.inputArea.classList.add('hidden');
-      // 這裡不再強制顯示 nextBtn，因為它由 typeText 完畢後的 checkAndShowOptions 決定
-      if (!line.options || line.options.length === 0) {
-        this.nextBtn.classList.remove('hidden');
-      } else {
-        this.nextBtn.classList.add('hidden');
-      }
+      this.nextBtn.classList.add('hidden');
     }
   }
 
@@ -429,37 +433,13 @@ class DialogueCore {
     });
   }
 
-  async handleNameSubmit() {
-    const input = this.playerInput.value.trim();
-    if (!input) return;
-
-    this.inputArea.style.transition = 'opacity 0.5s';
-    this.inputArea.style.opacity = 0;
-
-    setTimeout(() => {
-      this.inputArea.classList.add('hidden');
-      this.nextBtn.classList.remove('hidden');
-    }, 500);
-
-    this.studentInfo = this.studentList.find(
-      s => s.name.trim().normalize() === input.normalize()
-    );
-
-    if (this.studentInfo && this.studentInfo.dialogue) {
-      // 如果學生資料包含對應劇情
-      await this.loadDialogue(this.studentInfo.dialogue);
-    }
-    this.current = 0;
-    this.showLine();
-  }
-
   nextLine() {
     clearInterval(this.typingTimer);
     const line = this.dialogue[this.current];
     // 如果正在逐字播放，快速跳完
     const fullText = this.getDisplayText(line?.text || '');
-    if (this.textBox.textContent.length < fullText.length) {
-      this.textBox.textContent = fullText;
+    if (this.dialogueContent.textContent.length < fullText.length) {
+      this.dialogueContent.textContent = fullText;
       return;
     }
 

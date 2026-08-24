@@ -1,40 +1,49 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&display=swap" rel="stylesheet">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YMSH 周年紀念 - 校長室</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/principal.css">
-    <link rel="stylesheet" href="css/dialogue.css">
-    <link rel="stylesheet" href="css/dialogue-options.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YMSH 周年紀念 - 校長室</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dialogue.css">
+  <link rel="stylesheet" href="css/dialogue-options.css">
+  <link rel="stylesheet" href="css/principal.css">
+
 </head>
+
 <body>
-    <a class="return-button" href="map.html" aria-label="返回校園地圖" title="返回校園地圖"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></a>
-    <div id="game"></div>
-    <div id="principalContent" class="principal-room location-page-content is-hidden">
-        <h1>校長室 - 紀念卡生成</h1>
-        <div class="card-generator">
-            <canvas id="memoryCard" width="400" height="600"></canvas>
-            <div class="controls">
-                <button id="generateCard">生成紀念卡</button>
-                <button id="downloadCard">下載紀念卡</button>
-                <button id="backToMap">返回地圖</button>
-            </div>
-        </div>
+  <a class="return-button" href="map.html" aria-label="返回校園地圖" title="返回校園地圖"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></a>
+  <div id="game"></div>
+  <div id="principalContent" class="principal-room location-page-content is-hidden">
+    <h1>校長室 - 紀念卡生成</h1>
+    <div class="card-generator">
+      <canvas id="memoryCard" width="400" height="600"></canvas>
+      <div class="controls">
+        <button id="generateCard">生成紀念卡</button>
+        <button id="downloadCard">下載紀念卡</button>
+        <button id="backToMap">返回地圖</button>
+      </div>
     </div>
-    <script src="js/utils.js"></script>
-    <script src="js/settings.js"></script>
-    <script src="js/dialogue.js"></script>
-    <script src="js/principal.js"></script>
-    <script src="js/location-intro.js"></script>
-    <script>startLocationIntro({ data: 'data/intro_principal.json', storageKey: 'seen_intro_principal', contentSelector: '#principalContent', onReady: initPrincipal });</script>
+  </div>
+  <script src="js/utils.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/dialogue.js"></script>
+  <script src="js/principal.js"></script>
+  <script src="js/location-intro.js"></script>
+  <script>
+    startLocationIntro({
+      data: 'data/intro_principal.json',
+      storageKey: 'seen_intro_principal',
+      contentSelector: '#principalContent',
+      onReady: initPrincipal
+    });
+  </script>
 </body>
+
 </html>

@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const gameKicker = document.getElementById('gameKicker');
   const gameTitle = document.getElementById('gameTitle');
   const leadCount = document.getElementById('leadCount');
   const timeCount = document.getElementById('timeCount');
@@ -7,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const introStorageKey = 'seen_intro_playground';
   const ambience = new Audio(resolveAppAsset('assets/audio/playground.wav'));
   const playgroundRescue = document.querySelector('.playground-rescue');
-  const sceneIcon = document.getElementById('sceneIcon');
   const sceneLabel = document.getElementById('sceneLabel');
   const sceneHeading = document.getElementById('sceneHeading');
   const sceneText = document.getElementById('sceneText');
@@ -59,7 +57,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function setScene({ icon, label, title, text }) {
-    sceneIcon.innerHTML = `<i class="fa-solid ${icon}" aria-hidden="true"></i>`;
     sceneLabel.textContent = label;
     sceneHeading.textContent = title;
     sceneText.textContent = text;
@@ -222,7 +219,6 @@ document.addEventListener('DOMContentLoaded', () => {
     captureHint.textContent = gameData.instructions;
     setScene({
       icon: 'fa-wave-square',
-      label: '操場中央',
       title: gameData.intro.title,
       text: gameData.intro.text
     });
@@ -239,8 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
     captureHint.textContent = gameData.instructions;
     setScene({
       icon: 'fa-drum',
-      label: '操場現場',
-      title: '跟著大家的口令，不要搶拍',
+      label: '操場跑道',
+      title: '跟著大家的指令，不要搶拍',
       text: '口令會在拍點中央亮起；同一個方向會一直重複，直到你在正確拍點接住它。'
     });
     renderGameBoard();
@@ -300,11 +296,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const isSuccess = outcome === 'success';
     setScene({
       icon: isSuccess ? 'fa-paw' : 'fa-door-open',
-      label: isSuccess ? '操場側門' : '跑道旁邊',
-      title: isSuccess ? gameData.success.title : '小狗從側門鑽出去了',
+      title: isSuccess ? gameData.success.title : '小狗跑掉了',
       text: isSuccess
         ? gameData.success.text
-        : '這次的口令還沒接起來，但牠跑出去前仍回頭望了一眼。再試一次，把大家的節拍接得更長吧。'
+        : '大家的默契不夠好，但牠跑出去前仍回頭望了一眼。再試一次，把大家的節拍接得更長吧。'
     });
     gameActions.append(
       makeButton({
@@ -367,7 +362,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await fetch('data/playground.json');
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       gameData = await response.json();
-      gameKicker.textContent = gameData.kicker;
       gameTitle.textContent = gameData.title;
       leadCount.textContent = `0 / ${gameData.captureHits}`;
       timeCount.textContent = `${gameData.timeLimit}`;

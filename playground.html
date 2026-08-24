@@ -23,34 +23,31 @@
     <section class="rescue-panel">
       <header class="rescue-header">
         <div>
-          <p id="gameKicker" class="game-kicker"></p>
-          <h1 id="gameTitle"></h1>
+          <h3 id="gameTitle"></h3>
         </div>
         <div class="game-stats">
           <div class="lead-meter" aria-label="成功口令">
-            <span>成功口令</span>
+            <p>成功口令</p>
             <strong id="leadCount" aria-live="polite">0 / 12</strong>
           </div>
           <div class="time-meter" aria-label="剩餘時間">
-            <span>剩餘時間</span>
+            <p>剩餘時間</p>
             <strong id="timeCount" aria-live="polite">30</strong>
           </div>
         </div>
       </header>
 
       <section class="rescue-scene" aria-live="polite">
-        <div id="sceneIcon" class="scene-icon" aria-hidden="true"></div>
         <p id="sceneLabel" class="scene-label"></p>
-        <h2 id="sceneHeading"></h2>
-        <p id="sceneText" class="scene-text"></p>
+        <h5 id="sceneHeading"></h5>
+        <h6 id="sceneText" class="scene-text"></h6>
         <div id="gameBoard" class="game-board"></div>
         <p id="gameFeedback" class="game-feedback" aria-live="assertive"></p>
         <div id="gameActions" class="game-actions"></div>
       </section>
 
       <section class="capture-note" aria-labelledby="captureNoteTitle">
-        <h2 id="captureNoteTitle"><i class="fa-solid fa-wave-square" aria-hidden="true"></i> 節拍口令</h2>
-        <p id="captureHint"></p>
+        <h6 id="captureHint"></h6>
       </section>
     </section>
   </main>

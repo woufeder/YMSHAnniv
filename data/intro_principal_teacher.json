@@ -11,9 +11,9 @@
       "text": "「今天逛得還愉快嗎？<wait=300>那太好了。<wait>我確認一下。」"
     },
     {
-      "char": "principal.png",
+      "char": "principal-2.png",
       "name": "桓成康",
-      "text": "<wait=1000>「來，<wait>這是今天的紀念卡。<wait=300>還想去逛逛再回來的話，也可以重新申請卡片。」"
+      "text": "<char:jump><wait=1000>「來，<wait>這是今天的紀念卡。<wait=300>還想去逛逛再回來的話，也可以重新申請卡片。」"
     },
     {
       "char": "principal.png",
