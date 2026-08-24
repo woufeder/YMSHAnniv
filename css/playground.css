@@ -2,7 +2,8 @@
   min-height: 100vh;
   overflow-x: hidden;
   color: #f7fbfb;
-  background: #315b54 url('../assets/images/playground.jpg') center / cover no-repeat;
+  background: #315b54 url("../assets/images/playground.jpg") center / cover
+    no-repeat;
 }
 
 .playground-rescue {
@@ -17,7 +18,6 @@
 
 .rescue-panel {
   width: min(100%, 1200px);
-  height: 100%;
   padding: 26px 30px;
   border: 1px solid rgba(228, 243, 225, 0.74);
   border-radius: 8px;
@@ -93,6 +93,40 @@
   inset: 0;
   z-index: 19;
   display: none;
+}
+
+.playground-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 18;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  box-sizing: border-box;
+  background: rgba(16, 39, 31, 0.58);
+}
+
+.playground-modal__content {
+  width: min(430px, 100%);
+  padding: 26px;
+  border: 1px solid rgba(228, 243, 225, 0.74);
+  border-radius: 8px;
+  box-sizing: border-box;
+  background: rgba(80, 81, 81, 0.96);
+  box-shadow: 0 20px 56px rgba(6, 28, 21, 0.5);
+  color: #f7fbfb;
+  text-align: center;
+}
+
+.playground-modal__content h2 {
+  margin: 0;
+  color: #fff5c9;
+  font-size: 26px;
+}
+
+.playground-modal__content p {
+  margin: 14px 0 20px;
+  line-height: 1.7;
 }
 
 .rescue-scene {
@@ -178,7 +212,11 @@
   font: inherit;
   font-weight: 700;
   cursor: pointer;
-  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
 }
 
 .rescue-button:hover,
@@ -257,15 +295,21 @@
   border-radius: 8px;
   background: rgba(37, 92, 68, 0.9);
   color: #f7fff1;
-  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease, transform 0.12s ease;
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease,
+    color 0.12s ease,
+    transform 0.12s ease;
 }
 
 .active-cue i {
   color: #ffe99a;
+  font-size: 50px;
 }
 
 .active-cue strong {
   line-height: 1;
+  font-size: 24px;
 }
 
 .active-cue span {
@@ -275,8 +319,8 @@
 
 .active-cue.is-perfect {
   border-color: #c8f5ce;
-  background: #c8f5ce;
-  color: #1d513a;
+  background: rgba(62, 112, 90, 0.9);
+  /* color: #1d513a; */
   transform: scale(1.06);
 }
 
@@ -318,7 +362,6 @@
   color: #bad2c6;
   font-weight: 700;
 }
-
 
 .cue-chip.is-current {
   border-color: #ffe99a;
@@ -399,7 +442,6 @@
     gap: 6px;
   }
 
-
   .game-stats {
     gap: 18px;
   }
@@ -418,8 +460,6 @@
     width: 46px;
     height: 46px;
   }
-
-
 
   .beat-area {
     min-height: 230px;
@@ -445,5 +485,179 @@
 
   .game-actions .rescue-button {
     width: 100%;
+  }
+}
+
+/* 圍捕介面 */
+.game-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 7px;
+  font-size: 0.84rem;
+  letter-spacing: 0;
+}
+
+.game-kicker::before {
+  display: none;
+}
+
+.game-kicker i {
+  color: #ffd85d;
+}
+
+.game-stats {
+  gap: 10px;
+}
+
+.lead-meter,
+.time-meter {
+  min-width: 112px;
+  padding: 9px 11px;
+  border: 1px solid rgba(228, 243, 225, 0.28);
+  border-radius: 8px;
+  background: rgba(7, 38, 29, 0.3);
+}
+
+.lead-meter p,
+.time-meter p {
+  margin: 0;
+  font-size: 0.82rem;
+}
+
+.lead-progress {
+  width: 100%;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(228, 243, 225, 0.2);
+}
+
+.lead-progress span {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: #ffd85d;
+  transition: width 160ms ease;
+}
+
+.rhythm-stage {
+  gap: 14px;
+}
+
+.beat-area {
+  min-height: 250px;
+  background:
+    linear-gradient(90deg, transparent 0 49.5%, rgba(255, 216, 93, 0.22) 49.5% 50.5%, transparent 50.5%),
+    repeating-linear-gradient(0deg, rgba(199, 237, 199, 0.06) 0 1px, transparent 1px 42px),
+    rgba(6, 34, 25, 0.56);
+}
+
+.beat-area::before,
+.beat-area::after {
+  width: 34%;
+  background: linear-gradient(90deg, transparent, rgba(199, 237, 199, 0.65));
+}
+
+.beat-area::after {
+  transform: scaleX(-1);
+}
+
+.beat-area::after,
+.beat-area::before {
+  box-shadow: 0 0 12px rgba(199, 237, 199, 0.16);
+}
+
+.active-cue {
+  width: 128px;
+  box-shadow: 0 10px 22px rgba(2, 20, 14, 0.28);
+}
+
+.active-cue::before {
+  content: "現在口令";
+  color: #c7edc7;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.active-cue p {
+  margin: 0;
+  color: #f7fff1;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.cue-queue {
+  min-height: 42px;
+  gap: 6px;
+}
+
+.cue-chip {
+  min-width: 46px;
+  min-height: 40px;
+  padding: 5px;
+}
+
+.cue-chip span {
+  display: none;
+}
+
+.cue-chip:nth-child(n + 4) {
+  display: none;
+}
+
+.cue-chip.is-current {
+  background: rgba(255, 216, 93, 0.14);
+  box-shadow: 0 0 14px rgba(255, 216, 93, 0.16);
+}
+
+.rhythm-controls {
+  gap: 10px;
+}
+
+.rhythm-control {
+  min-height: 84px;
+  background: rgba(4, 38, 27, 0.48);
+}
+
+.rhythm-control i {
+  font-size: 1.25rem;
+}
+
+.rhythm-control kbd {
+  min-width: 24px;
+  padding: 2px 5px;
+  border: 1px solid rgba(188, 214, 199, 0.34);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.18);
+  color: #e5ffe5;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.game-feedback {
+  min-height: 28px;
+  margin-top: 2px;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .game-stats {
+    width: 100%;
+  }
+
+  .lead-meter,
+  .time-meter {
+    flex: 1;
+  }
+
+  .beat-area {
+    min-height: 218px;
+  }
+
+  .rhythm-control {
+    min-height: 72px;
+    font-size: 0.9rem;
   }
 }

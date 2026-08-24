@@ -21,15 +21,28 @@
   <a class="return-button" href="map.html" aria-label="返回校園地圖" title="返回校園地圖"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></a>
   <div id="game"></div>
   <div id="principalContent" class="principal-room location-page-content is-hidden">
-    <h1>校長室 - 紀念卡生成</h1>
-    <div class="card-generator">
-      <canvas id="memoryCard" width="400" height="600"></canvas>
-      <div class="controls">
-        <button id="generateCard">生成紀念卡</button>
-        <button id="downloadCard">下載紀念卡</button>
-        <button id="backToMap">返回地圖</button>
-      </div>
-    </div>
+    <header class="principal-heading">
+      <h1>校長室</h1>
+    </header>
+    <section class="memorial-letter" aria-labelledby="memorialTitle">
+      <header class="memorial-letter__header">
+        <p id="memorialKicker" class="memorial-letter__kicker"></p>
+        <h2 id="memorialTitle">正在整理紀念卡</h2>
+        <p id="memorialMeta" class="memorial-letter__meta"></p>
+      </header>
+      <article id="memorialParagraphs" class="memorial-letter__body" aria-live="polite"></article>
+      <figure id="artworkSection" class="memorial-artwork">
+        <img id="artworkImage" alt="美術教室留下的作品">
+        <figcaption id="artworkCaption"></figcaption>
+      </figure>
+
+    </section>
+    <canvas id="memoryCard" class="download-canvas" width="1080" height="1350" aria-hidden="true"></canvas>
+    <footer class="memorial-letter__footer">
+      <button id="generateCard" class="principal-button" type="button"><i class="fa-solid fa-rotate" aria-hidden="true"></i><span>更新紀念卡</span></button>
+      <button id="downloadCard" class="principal-button principal-button--primary" type="button"><i class="fa-solid fa-download" aria-hidden="true"></i><span>下載紀念卡</span></button>
+      <button id="backToMap" class="principal-button" type="button"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i><span>返回地圖</span></button>
+    </footer>
   </div>
   <script src="js/utils.js"></script>
   <script src="js/settings.js"></script>

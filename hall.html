@@ -18,7 +18,8 @@
     <div id="game"></div>
     <div id="hallContent" class="location-page-content is-hidden">
       <div class="hall-container">
-        <h6 class="hall-title">穿堂留言板</h6>
+        <h4 class="hall-title">穿堂留言板</h4>
+        <p class="hall-title">留言載入需要較長時間，請耐心等候</p>
 
         <!-- Canvas 移到上方，撐滿螢幕 -->
         <div class="messages-canvas" id="messagesList">
@@ -27,8 +28,8 @@
 
         <!-- 操作區域放在下方 -->
         <div class="hall-controls">
-            <button id="openModalBtn" class="btn-write">✍️ 寫下祝福</button>
-            <button id="backToMap" class="back-btn">返回地圖</button>
+            <button id="openModalBtn" class="btn-write" type="button"><i class="fa-solid fa-pen-nib" aria-hidden="true"></i><span>寫下祝福</span></button>
+            <button id="backToMap" class="back-btn" type="button"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i><span>返回地圖</span></button>
         </div>
       </div>
 
@@ -37,17 +38,18 @@
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="messageModalLabel">留下您的祝福</h5>
+            <h5 class="modal-title" id="messageModalLabel">留下您的留言</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="mb-3">
               <label for="userNameInput" class="form-label">姓名</label>
-              <input type="text" class="form-control" id="userNameInput" placeholder="請輸入您的姓名">
+              <input type="text" class="form-control" id="userNameInput" placeholder="請輸入留言者姓名">
             </div>
-            <div class="mb-3">
-              <label for="messageInput" class="form-label">祝福訊息</label>
-              <textarea class="form-control" id="messageInput" rows="4" maxlength="500" placeholder="寫下您對 YMSH 的想念..."></textarea>
+            <div class="">
+              <label for="messageInput" class="form-label">留言內容</label>
+              <textarea class="form-control" id="messageInput" rows="5" maxlength="500" aria-describedby="messageCharacterCount" placeholder=""></textarea>
+              <div id="messageCharacterCount" class="message-character-count" aria-live="polite">0 / 500</div>
             </div>
           </div>
           <div class="modal-footer">

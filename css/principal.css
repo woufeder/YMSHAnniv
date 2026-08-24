@@ -1,472 +1,225 @@
-/* principal.css - 校長室卡片樣式 */
-
+/* principal.css - 校長室紀念文章 */
 body {
   min-height: 100vh;
-  background: #26313a url("../assets/images/principal.jpg") center / cover fixed
-    no-repeat;
+  background: #26313a url("../assets/images/principal.jpg") center / cover fixed no-repeat;
 }
 
 .principal-room {
-  max-width: 900px;
+  width: min(100% - 32px, 820px);
   min-height: 100vh;
   margin: 0 auto;
-  padding: 20px;
-  text-align: center;
+  padding: 72px 0 32px;
+  box-sizing: border-box;
 }
 
-.principal-room > h1 {
+.principal-heading {
+  margin-bottom: 18px;
   color: #ffffff;
   text-shadow: 0 2px 12px rgba(17, 29, 37, 0.72);
 }
 
-.card-generator {
-  background: rgba(255, 255, 255, 0.95);
+.principal-heading p,
+.principal-heading h1 {
+  margin: 0;
+}
+
+.principal-heading p {
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.principal-heading h1 {
+  margin-top: 4px;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+.memorial-letter {
+  max-height: 70vh;
+  overflow: auto;
+  border: 1px solid rgba(255, 255, 255, 0.7);
   border-radius: var(--border-radius-large);
-  padding: 30px;
-  box-shadow: var(--shadow-heavy);
-  margin: 30px auto;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 20px 48px rgba(20, 34, 39, 0.28);
 }
 
-#memoryCard {
-  border: 3px solid var(--primary300);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-heavy);
-  margin: 20px auto;
+.memorial-letter__header {
+  padding: 30px 34px 22px;
+  border-bottom: 1px solid rgba(71, 77, 100, 0.18);
+}
+
+.memorial-letter__kicker,
+.memorial-letter__meta,
+.memorial-letter__header h2 {
+  margin: 0;
+}
+
+.memorial-letter__kicker {
+  color: var(--primary500);
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.memorial-letter__header h2 {
+  margin-top: 7px;
+  color: var(--primary900);
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.memorial-letter__meta {
+  margin-top: 10px;
+  color: #727783;
+  line-height: 1.55;
+}
+
+.memorial-letter__body {
+  display: grid;
+  padding: 30px 34px 10px;
+}
+
+.memorial-letter__body p {
+  margin: 0;
+  color: #343742;
+  font-size: 1.06rem;
+  line-height: 1.9;
+  text-align: left;
+}
+
+.memorial-artwork {
+  display: none;
+  margin: 16px 34px 28px;
+  padding: 14px;
+  border: 1px solid var(--primary300);
+  border-radius: var(--border-radius-large);
+  background: rgba(220, 236, 255, 0.34);
+}
+
+.memorial-artwork:not(.is-empty) {
   display: block;
-  width: min(100%, 400px);
-  max-width: 100%;
-  height: auto;
-  background: white;
 }
 
-.controls {
+.memorial-artwork img {
+  display: block;
+  width: min(100%, 520px);
+  max-height: 360px;
+  margin: 0 auto;
+  border: 1px solid rgba(71, 77, 100, 0.24);
+  object-fit: contain;
+  background: #ffffff;
+}
+
+.memorial-artwork figcaption {
+  margin-top: 11px;
+  color: var(--primary700);
+  font-size: 0.92rem;
+  text-align: center;
+}
+
+.memorial-letter__footer {
   display: flex;
-  gap: 20px;
-  justify-content: center;
-  margin-top: 30px;
-  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 18px 34px 26px;
+  border-top: 1px solid rgba(71, 77, 100, 0.16);
 }
 
-.controls button {
-  padding: 15px 30px;
-  font-size: 16px;
-  border-radius: 25px;
-  transition: var(--transition);
-  position: relative;
-  overflow: hidden;
-  min-width: 160px;
-}
-
-#generateCard {
-  background: linear-gradient(45deg, var(--primary300), var(--primary500));
-  border: none;
-  color: white;
-}
-
-#generateCard:hover {
-  background: linear-gradient(45deg, var(--primary700), var(--primary300));
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(21, 101, 192, 0.3);
-}
-
-#downloadCard {
-  background: linear-gradient(45deg, var(--success-color), #66bb6a);
-  border: none;
-  color: white;
-}
-
-#downloadCard:hover {
-  background: linear-gradient(
-    45deg,
-    var(--success-color),
-    var(--success-color)
-  );
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
-}
-
-#backToMap {
-  background: linear-gradient(45deg, var(--primary500), #90caf9);
-  border: none;
-  color: white;
-}
-
-#backToMap:hover {
-  background: linear-gradient(45deg, var(--primary300), var(--primary500));
-  transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(66, 165, 245, 0.3);
-}
-
-/* 按鈕水波效果 */
-.controls button::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition:
-    width 0.6s,
-    height 0.6s;
-  z-index: 0;
-}
-
-.controls button:active::before {
-  width: 300px;
-  height: 300px;
-}
-
-.controls button span {
-  position: relative;
-  z-index: 1;
-}
-
-/* 卡片預覽樣式 */
-.card-preview {
-  background: white;
-  border-radius: var(--border-radius);
-  padding: 20px;
-  margin: 20px 0;
-  box-shadow: var(--shadow-light);
-  position: relative;
-  overflow: hidden;
-}
-
-.card-preview::before {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.1) 50%,
-    transparent 70%
-  );
-  transform: rotate(45deg);
-  animation: shine 3s ease-in-out infinite;
-}
-
-@keyframes shine {
-  0% {
-    transform: translateX(-100%) translateY(-100%) rotate(45deg);
-  }
-  50% {
-    transform: translateX(100%) translateY(100%) rotate(45deg);
-  }
-  100% {
-    transform: translateX(-100%) translateY(-100%) rotate(45deg);
-  }
-}
-
-/* 成就徽章樣式 */
-.achievement-badge {
-  position: relative;
-  display: inline-block;
-  margin: 5px;
-}
-
-.badge-circle {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: linear-gradient(45deg, var(--warning-color), #ffca28);
-  display: flex;
+.principal-button {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
-  box-shadow: var(--shadow-medium);
-  position: relative;
-  overflow: hidden;
-}
-
-.badge-circle.completed {
-  animation: badgeGlow 2s ease-in-out infinite;
-}
-
-.badge-circle.incomplete {
-  background: #e0e0e0;
-  color: #9e9e9e;
-}
-
-@keyframes badgeGlow {
-  0%,
-  100% {
-    box-shadow:
-      var(--shadow-medium),
-      0 0 0 0 rgba(255, 193, 7, 0.7);
-  }
-  50% {
-    box-shadow:
-      var(--shadow-medium),
-      0 0 0 10px rgba(255, 193, 7, 0);
-  }
-}
-
-.badge-circle::after {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent 40%,
-    rgba(255, 255, 255, 0.3) 50%,
-    transparent 60%
-  );
-  animation: badgeShine 4s linear infinite;
-}
-
-@keyframes badgeShine {
-  0% {
-    transform: translateX(-100%) rotate(45deg);
-  }
-  100% {
-    transform: translateX(200%) rotate(45deg);
-  }
-}
-
-/* 卡片生成動畫 */
-.generating {
-  position: relative;
-}
-
-.generating::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(21, 101, 192, 0.1);
-  animation: generatePulse 1.5s ease-in-out infinite;
-  border-radius: var(--border-radius);
-}
-
-@keyframes generatePulse {
-  0%,
-  100% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-/* 下載提示 */
-.download-tip {
-  background: var(--info-color);
-  color: white;
-  padding: 10px 20px;
-  border-radius: var(--border-radius);
-  margin: 15px 0;
-  font-size: 14px;
-  animation: slideDown 0.3s ease;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* 使用者資訊顯示 */
-.user-info {
-  background: var(--primary100);
-  padding: 15px;
-  border-radius: var(--border-radius);
-  margin: 20px 0;
-  border-left: 4px solid var(--primary300);
-}
-
-.user-name {
-  font-size: 18px;
-  font-weight: bold;
-  color: var(--primary100);
-  margin-bottom: 5px;
-}
-
-.user-progress {
+  gap: 8px;
+  min-height: 42px;
+  padding: 9px 14px;
+  border: 1px solid var(--primary300);
+  border-radius: var(--border-radius-large);
+  background: #ffffff;
   color: var(--primary900);
-  font-size: 14px;
+  font: inherit;
+  font-weight: 700;
+  line-height: 1;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
 }
 
-/* 進度圓環 */
-.progress-circle {
-  position: relative;
-  width: 80px;
-  height: 80px;
-  margin: 10px auto;
+.principal-button:hover,
+.principal-button:focus-visible {
+  border-color: var(--primary700);
+  background: var(--primary100);
 }
 
-.progress-circle svg {
-  width: 100%;
-  height: 100%;
-  transform: rotate(-90deg);
+.principal-button:active {
+  transform: translateY(1px);
 }
 
-.progress-circle-bg {
-  fill: none;
-  stroke: #e0e0e0;
-  stroke-width: 8;
-}
-
-.progress-circle-fill {
-  fill: none;
-  stroke: var(--success-color);
-  stroke-width: 8;
-  stroke-linecap: round;
-  transition: stroke-dasharray 0.5s ease;
-}
-
-.progress-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-weight: bold;
+.principal-button--primary {
+  border-color: var(--primary700);
+  background: var(--primary700);
   color: var(--primary100);
+}
+
+.principal-button--primary:hover,
+.principal-button--primary:focus-visible {
+  border-color: var(--primary900);
+  background: var(--primary900);
+  color: #ffffff;
+}
+
+.download-canvas {
+  display: none;
 }
 
 .character-layer img {
-  margin-top: 0vh;
   max-width: 90vw;
   height: 120vh;
+  margin-top: 0;
   object-fit: contain;
   transition: opacity 0.5s ease;
 }
 
-/* 響應式設計 */
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .principal-room {
-    padding: 15px;
+    width: min(100% - 24px, 820px);
+    padding-top: 68px;
   }
 
-  .card-generator {
-    padding: 20px;
+  .principal-heading h1 {
+    font-size: 1.85rem;
   }
 
-  #memoryCard {
-    width: min(100%, 400px);
-    height: auto;
+  .memorial-letter__header,
+  .memorial-letter__body {
+    padding-inline: 20px;
   }
 
-  .controls {
-    gap: 15px;
+  .memorial-letter__header {
+    padding-top: 24px;
+    padding-bottom: 19px;
   }
 
-  .controls button {
-    padding: 12px 24px;
-    font-size: 14px;
-    min-width: 140px;
+  .memorial-letter__body {
+    padding-top: 24px;
   }
 
-  .badge-circle {
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
+  .memorial-letter__header h2 {
+    font-size: 1.45rem;
   }
 
-  .user-info {
-    padding: 12px;
+  .memorial-letter__body p {
+    font-size: 1rem;
+    line-height: 1.8;
   }
 
-  .user-name {
-    font-size: 16px;
+  .memorial-artwork {
+    margin-inline: 20px;
   }
 
-  .progress-circle {
-    width: 60px;
-    height: 60px;
-  }
-}
-
-@media (max-width: 480px) {
-  #memoryCard {
-    width: min(100%, 400px);
-    height: auto;
+  .memorial-letter__footer {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 16px 20px 20px;
   }
 
-  .controls {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .controls button {
-    width: 200px;
-    padding: 10px 20px;
-    font-size: 13px;
-  }
-
-  .card-generator {
-    padding: 15px;
-  }
-}
-
-/* 打印樣式 */
-@media print {
-  .controls,
-  .user-info,
-  .principal-room h1 {
-    display: none;
-  }
-
-  .card-generator {
-    background: white;
-    box-shadow: none;
-    padding: 0;
-  }
-
-  #memoryCard {
-    border: 2px solid #000;
-    max-width: none;
-    width: 400px;
-    height: 600px;
-  }
-}
-
-/* 無障礙改善 */
-.controls button:focus {
-  outline: 3px solid var(--warning-color);
-  outline-offset: 2px;
-}
-
-.badge-circle:focus {
-  outline: 2px solid var(--primary300);
-  outline-offset: 2px;
-}
-
-/* 高對比模式 */
-@media (prefers-contrast: high) {
-  .card-generator {
-    background: #ffffff;
-    border: 2px solid #000000;
-  }
-
-  #memoryCard {
-    border-color: #000000;
-  }
-
-  .badge-circle.incomplete {
-    background: #666666;
-    color: #ffffff;
-  }
-
-  .user-info {
-    background: #f0f0f0;
-    border-left-color: #000000;
+  .principal-button {
+    width: 100%;
   }
 }

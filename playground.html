@@ -23,12 +23,14 @@
     <section class="rescue-panel">
       <header class="rescue-header">
         <div>
+          <p class="game-kicker"><i class="fa-solid fa-paw" aria-hidden="true"></i> 追蹤進行中</p>
           <h3 id="gameTitle"></h3>
         </div>
         <div class="game-stats">
           <div class="lead-meter" aria-label="成功口令">
             <p>成功口令</p>
             <strong id="leadCount" aria-live="polite">0 / 12</strong>
+            <span class="lead-progress" aria-hidden="true"><span id="leadProgress"></span></span>
           </div>
           <div class="time-meter" aria-label="剩餘時間">
             <p>剩餘時間</p>
@@ -38,19 +40,21 @@
       </header>
 
       <section class="rescue-scene" aria-live="polite">
-        <p id="sceneLabel" class="scene-label"></p>
-        <h5 id="sceneHeading"></h5>
-        <h6 id="sceneText" class="scene-text"></h6>
         <div id="gameBoard" class="game-board"></div>
         <p id="gameFeedback" class="game-feedback" aria-live="assertive"></p>
-        <div id="gameActions" class="game-actions"></div>
-      </section>
-
-      <section class="capture-note" aria-labelledby="captureNoteTitle">
-        <h6 id="captureHint"></h6>
       </section>
     </section>
   </main>
+
+  <section id="gameIntroModal" class="playground-modal hidden" role="dialog" aria-modal="true" aria-labelledby="gameIntroTitle">
+    <div class="playground-modal__content">
+      <h2 id="gameIntroTitle">圍捕小狗大作戰</h2>
+      <p id="gameIntroText"></p>
+      <button id="startGame" class="rescue-button rescue-button--primary" type="button">
+        <i class="fa-solid fa-play" aria-hidden="true"></i> 開始遊戲
+      </button>
+    </div>
+  </section>
 
   <script src="js/utils.js"></script>
   <script src="js/settings.js"></script>

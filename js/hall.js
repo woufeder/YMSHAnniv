@@ -6,6 +6,7 @@ function initHall() {
     const messagesList = document.getElementById('messagesList');
     const backBtn = document.getElementById('backToMap');
     const openModalBtn = document.getElementById('openModalBtn');
+    const messageCharacterCount = document.getElementById('messageCharacterCount');
 
     // 初始化 Bootstrap Modal
     const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
@@ -16,10 +17,6 @@ function initHall() {
 
     // Google Apps Script Web App URL
     const SHEET_URL = "https://script.google.com/macros/s/AKfycbyt1y70Lve-DHZ8dpXGPOl3u02ZnCXpNnsxnEztrDWHgsbL-uTRbKJdunXykinjHNw62Q/exec";
-
-    if (localStorage.getItem('userName')) {
-        userNameInput.value = localStorage.getItem('userName');
-    }
 
     let messages = [];
 
@@ -44,18 +41,91 @@ function initHall() {
         const rotation = -8 + pseudoRandom(16);
 
         return {
-            position: 'absolute',
-            top: `${top}%`,
-            left: `${left}%`,
-            backgroundColor: color,
-            transform: `rotate(${rotation}deg)`,
-            width: '160px',
-            minHeight: '160px',
-            padding: '15px',
-            boxShadow: '2px 4px 10px rgba(0,0,0,0.2)',
-            borderRadius: '2px',
-            zIndex: Math.floor(pseudoRandom(100))
+            '--note-top': `${top}%`,
+            '--note-left': `${left}%`,
+            '--note-color': color,
+            '--note-rotation': `${rotation}deg`
         };
+    }
+
+    function createRandomStickyNoteLayouts(items) {
+        const isCompact = window.matchMedia('(max-width: 576px)').matches;
+        const noteWidth = isCompact ? 142 : 150;
+        const noteHeight = isCompact ? 160 : 168;
+        const padding = 22;
+        const gap = 16;
+        const canvasWidth = Math.max(messagesList.clientWidth, noteWidth + padding * 2);
+        const columns = Math.max(1, Math.floor((canvasWidth - padding * 2 + gap) / (noteWidth + gap)));
+        const requiredRows = Math.ceil(items.length / columns);
+        const minimumHeight = padding * 2 + requiredRows * noteHeight + Math.max(0, requiredRows - 1) * gap;
+        const canvasHeight = Math.max(messagesList.clientHeight, minimumHeight);
+        const maxLeft = Math.max(padding, canvasWidth - noteWidth - padding);
+        const maxTop = Math.max(padding, canvasHeight - noteHeight - padding);
+        const placed = [];
+
+        messagesList.style.setProperty('--notes-content-height', `${minimumHeight}px`);
+
+        return items.map((message, index) => {
+            const id = String(message.id || message.timestamp || index);
+            let seed = index * 97;
+            for (let characterIndex = 0; characterIndex < id.length; characterIndex++) {
+                seed += id.charCodeAt(characterIndex);
+            }
+
+            let selected;
+            let lowestPenalty = Number.POSITIVE_INFINITY;
+
+            for (let attempt = 0; attempt < 80; attempt++) {
+                const randomLeft = Math.sin(seed + attempt * 11 + 1) * 10000;
+                const randomTop = Math.sin(seed + attempt * 11 + 2) * 10000;
+                const left = padding + (randomLeft - Math.floor(randomLeft)) * (maxLeft - padding);
+                const top = padding + (randomTop - Math.floor(randomTop)) * (maxTop - padding);
+                const candidate = { left, top };
+                let penalty = 0;
+
+                placed.forEach((existing) => {
+                    const overlapWidth = Math.max(0, Math.min(left + noteWidth + gap, existing.left + noteWidth + gap) - Math.max(left - gap, existing.left - gap));
+                    const overlapHeight = Math.max(0, Math.min(top + noteHeight + gap, existing.top + noteHeight + gap) - Math.max(top - gap, existing.top - gap));
+                    penalty += overlapWidth * overlapHeight;
+                });
+
+                if (penalty === 0) {
+                    selected = candidate;
+                    break;
+                }
+
+                if (penalty < lowestPenalty) {
+                    lowestPenalty = penalty;
+                    selected = candidate;
+                }
+            }
+
+            placed.push(selected);
+            return {
+                top: `${selected.top.toFixed(1)}px`,
+                left: `${selected.left.toFixed(1)}px`,
+                rotation: `${(Math.sin(seed + 3) * 2.5).toFixed(2)}deg`
+            };
+        });
+    }
+
+    function updateCharacterCount() {
+        messageCharacterCount.textContent = `${messageInput.value.length} / 500`;
+    }
+
+    function formatTimestamp(timestamp) {
+        const date = new Date(timestamp);
+
+        if (Number.isNaN(date.getTime())) return '';
+
+        return new Intl.DateTimeFormat('zh-TW', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        }).format(date);
     }
 
     async function loadMessages() {
@@ -84,25 +154,29 @@ function initHall() {
 
     function displayMessages() {
         messagesList.innerHTML = '';
+        const layouts = createRandomStickyNoteLayouts(messages);
 
-        messages.forEach(msg => {
+        messages.forEach((msg, index) => {
             const note = document.createElement('button');
             note.type = 'button';
             note.className = 'sticky-note';
             const style = generateStickyNoteStyle(msg.id || msg.timestamp);
-            Object.assign(note.style, style);
+            const layout = layouts[index];
+            style['--note-top'] = layout.top;
+            style['--note-left'] = layout.left;
+            style['--note-rotation'] = layout.rotation;
+            Object.entries(style).forEach(([property, value]) => {
+                note.style.setProperty(property, value);
+            });
 
-            const header = document.createElement('div');
-            header.className = 'note-header';
-            const author = document.createElement('span');
-            author.className = 'note-author';
+            const author = document.createElement('strong');
+            author.className = 'sticky-note__author';
             author.textContent = msg.name || '匿名';
             const content = document.createElement('div');
-            content.className = 'note-content';
+            content.className = 'sticky-note__content';
             content.textContent = msg.message || '';
             note.setAttribute('aria-label', `閱讀 ${author.textContent} 的完整留言`);
-            note.append(header, content);
-            header.append(author);
+            note.append(author, content);
             note.addEventListener('click', () => showMessageDetail(msg));
             messagesList.appendChild(note);
         });
@@ -110,7 +184,7 @@ function initHall() {
 
     function showMessageDetail(msg) {
         messageDetailTitle.textContent = msg.name || '匿名';
-        messageDetailTime.textContent = msg.timestamp || '';
+        messageDetailTime.textContent = formatTimestamp(msg.timestamp);
         messageDetailContent.textContent = msg.message || '';
         messageDetailModal.show();
     }
@@ -132,8 +206,6 @@ function initHall() {
             return;
         }
 
-        localStorage.setItem('userName', name);
-
         const messageData = {
             name: name,
             message: messageText
@@ -147,8 +219,9 @@ function initHall() {
                 body: JSON.stringify(messageData)
             });
 
-            alert('留言成功！感謝您的祝福 ❤️');
+            alert('留言成功！請重整網頁後稍待');
             messageInput.value = '';
+            updateCharacterCount();
             messageModal.hide();
             setTimeout(loadMessages, 1500);
 
@@ -158,11 +231,22 @@ function initHall() {
         }
     }
 
-    openModalBtn.addEventListener('click', () => messageModal.show());
+    openModalBtn.addEventListener('click', () => {
+        updateCharacterCount();
+        messageModal.show();
+    });
+    messageInput.addEventListener('input', updateCharacterCount);
     submitBtn.addEventListener('click', submitMessage);
 
     backBtn.addEventListener('click', () => window.location.href = 'map.html');
 
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(displayMessages, 120);
+    });
+
+    updateCharacterCount();
     loadMessages();
     setInterval(loadMessages, 60000);
 }

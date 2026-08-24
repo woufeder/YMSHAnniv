@@ -1,18 +1,17 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const gameTitle = document.getElementById('gameTitle');
-  const leadCount = document.getElementById('leadCount');
-  const timeCount = document.getElementById('timeCount');
-  const endingDialogue = document.getElementById('game');
-  const introStorageKey = 'seen_intro_playground';
-  const ambience = new Audio(resolveAppAsset('assets/audio/playground.wav'));
-  const playgroundRescue = document.querySelector('.playground-rescue');
-  const sceneLabel = document.getElementById('sceneLabel');
-  const sceneHeading = document.getElementById('sceneHeading');
-  const sceneText = document.getElementById('sceneText');
-  const gameBoard = document.getElementById('gameBoard');
-  const gameFeedback = document.getElementById('gameFeedback');
-  const gameActions = document.getElementById('gameActions');
-  const captureHint = document.getElementById('captureHint');
+document.addEventListener("DOMContentLoaded", () => {
+  const gameTitle = document.getElementById("gameTitle");
+  const leadCount = document.getElementById("leadCount");
+  const leadProgress = document.getElementById("leadProgress");
+  const timeCount = document.getElementById("timeCount");
+  const endingDialogue = document.getElementById("game");
+  const introStorageKey = "seen_intro_playground";
+  const ambience = new Audio(resolveAppAsset("assets/audio/playground.wav"));
+  const playgroundRescue = document.querySelector(".playground-rescue");
+  const gameBoard = document.getElementById("gameBoard");
+  const gameFeedback = document.getElementById("gameFeedback");
+  const gameIntroModal = document.getElementById("gameIntroModal");
+  const gameIntroText = document.getElementById("gameIntroText");
+  const startGameButton = document.getElementById("startGame");
 
   let gameData;
   let sequence = [];
@@ -32,42 +31,50 @@ document.addEventListener('DOMContentLoaded', () => {
   ambience.loop = true;
 
   function updateAmbienceVolume() {
-    const bgmVolume = SettingsManager.get('bgmVolume', 0.1);
+    const bgmVolume = SettingsManager.get("bgmVolume", 0.1);
     ambience.volume = Math.min(bgmVolume * 1, 1);
   }
 
   function startAmbience() {
     updateAmbienceVolume();
-    ambience.play().then(() => {
-      document.removeEventListener('pointerdown', startAmbience);
-      document.removeEventListener('keydown', startAmbience);
-    }).catch(() => {});
+    ambience
+      .play()
+      .then(() => {
+        document.removeEventListener("pointerdown", startAmbience);
+        document.removeEventListener("keydown", startAmbience);
+      })
+      .catch(() => {});
   }
 
-  function makeButton({ label, icon, className = '', onClick }) {
-    const button = document.createElement('button');
-    const labelElement = document.createElement('span');
-    button.type = 'button';
+  function makeButton({ label, icon, className = "", onClick }) {
+    const button = document.createElement("button");
+    const labelElement = document.createElement("span");
+    button.type = "button";
     button.className = `rescue-button ${className}`.trim();
     button.innerHTML = `<i class="fa-solid ${icon}" aria-hidden="true"></i>`;
     labelElement.textContent = label;
     button.append(labelElement);
-    button.addEventListener('click', onClick);
+    button.addEventListener("click", onClick);
     return button;
   }
 
-  function setScene({ icon, label, title, text }) {
-    sceneLabel.textContent = label;
-    sceneHeading.textContent = title;
-    sceneText.textContent = text;
-    gameBoard.replaceChildren();
-    gameActions.replaceChildren();
-    setFeedback();
+  function setFeedback(message = "", type = "") {
+    gameFeedback.textContent = message;
+    gameFeedback.className = `game-feedback ${type ? `is-${type}` : ""}`.trim();
   }
 
-  function setFeedback(message = '', type = '') {
-    gameFeedback.textContent = message;
-    gameFeedback.className = `game-feedback ${type ? `is-${type}` : ''}`.trim();
+  function updateLeadCount() {
+    leadCount.textContent = `${successfulHits} / ${gameData.captureHits}`;
+    leadProgress.style.width = `${(successfulHits / gameData.captureHits) * 100}%`;
+  }
+
+  function markPlaygroundCompleted() {
+    const completedGames = JSON.parse(localStorage.getItem("completedGames")) || [];
+
+    if (!completedGames.includes("playground")) {
+      completedGames.push("playground");
+      localStorage.setItem("completedGames", JSON.stringify(completedGames));
+    }
   }
 
   function clearBeatTimer() {
@@ -84,48 +91,57 @@ document.addEventListener('DOMContentLoaded', () => {
     const result = [];
     while (result.length < length) {
       const previousCue = result[result.length - 1];
-      const candidates = gameData.cues.filter(cue => cue.id !== previousCue?.id);
+      const candidates = gameData.cues.filter(
+        (cue) => cue.id !== previousCue?.id,
+      );
       result.push(candidates[Math.floor(Math.random() * candidates.length)]);
     }
     return result;
   }
 
   function renderCueQueue() {
-    cueQueue.replaceChildren(...sequence.slice(cueIndex, cueIndex + 5).map((cue, index) => {
-      const item = document.createElement('span');
-      item.className = index === 0 ? 'cue-chip is-current' : 'cue-chip';
-      item.innerHTML = `<i class="fa-solid ${cue.icon}" aria-hidden="true"></i>`;
-      const label = document.createElement('span');
-      label.textContent = cue.label;
-      item.append(label);
-      return item;
-    }));
+    cueQueue.replaceChildren(
+      ...sequence.slice(cueIndex, cueIndex + 5).map((cue, index) => {
+        const item = document.createElement("span");
+        item.className = index === 0 ? "cue-chip is-current" : "cue-chip";
+        item.innerHTML = `<i class="fa-solid ${cue.icon}" aria-hidden="true"></i>`;
+        const label = document.createElement("span");
+        label.textContent = cue.label;
+        item.append(label);
+        return item;
+      }),
+    );
   }
 
   function renderGameBoard() {
-    const stage = document.createElement('section');
-    stage.className = 'rhythm-stage';
-    const beatArea = document.createElement('div');
-    beatArea.className = 'beat-area';
-    beatRing = document.createElement('div');
-    beatRing.className = 'beat-ring';
-    activeCueElement = document.createElement('div');
-    activeCueElement.className = 'active-cue';
+    const stage = document.createElement("section");
+    stage.className = "rhythm-stage";
+    const beatArea = document.createElement("div");
+    beatArea.className = "beat-area";
+    beatRing = document.createElement("div");
+    beatRing.className = "beat-ring";
+    activeCueElement = document.createElement("div");
+    activeCueElement.className = "active-cue";
     beatArea.append(beatRing, activeCueElement);
 
-    cueQueue = document.createElement('div');
-    cueQueue.className = 'cue-queue';
-    const controls = document.createElement('div');
-    controls.className = 'rhythm-controls';
-    gameData.cues.forEach(cue => {
+    cueQueue = document.createElement("div");
+    cueQueue.className = "cue-queue";
+    const controls = document.createElement("div");
+    controls.className = "rhythm-controls";
+    gameData.cues.forEach((cue) => {
       const button = makeButton({
         label: cue.label,
         icon: cue.icon,
-        className: 'rhythm-control',
-        onClick: () => handleCue(cue)
+        className: "rhythm-control",
+        onClick: () => handleCue(cue),
       });
-      const key = document.createElement('kbd');
-      key.textContent = cue.label;
+      const key = document.createElement("kbd");
+      key.textContent = {
+        ArrowLeft: "←",
+        ArrowRight: "→",
+        ArrowUp: "↑",
+        ArrowDown: "↓",
+      }[cue.key];
       button.append(key);
       controls.append(button);
     });
@@ -134,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function restartBeatRing() {
-    beatRing.style.animation = 'none';
+    beatRing.style.animation = "none";
     void beatRing.offsetWidth;
     beatRing.style.animation = `beat-window ${gameData.tempo}ms linear forwards`;
   }
@@ -145,16 +161,16 @@ document.addEventListener('DOMContentLoaded', () => {
     activeCue = sequence[cueIndex];
     inputAcceptedThisBeat = false;
     roundStart = performance.now();
-    leadCount.textContent = `${successfulHits} / ${gameData.captureHits}`;
-    activeCueElement.className = 'active-cue';
-    activeCueElement.innerHTML = `<i class="fa-solid ${activeCue.icon}" aria-hidden="true"></i><strong>${activeCue.label}</strong><span>${activeCue.hint}</span>`;
+    updateLeadCount();
+    activeCueElement.className = "active-cue";
+    activeCueElement.innerHTML = `<i class="fa-solid ${activeCue.icon}" aria-hidden="true"></i><p>${activeCue.hint}</p>`;
     renderCueQueue();
     restartBeatRing();
     clearBeatTimer();
     beatTimer = window.setTimeout(() => {
       if (!inputAcceptedThisBeat) {
-        activeCueElement.classList.add('is-missed');
-        setFeedback(gameData.feedback.miss, 'error');
+        activeCueElement.classList.add("is-missed");
+        setFeedback(gameData.feedback.miss, "error");
       }
       startRound();
     }, gameData.tempo);
@@ -168,27 +184,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const isOnBeat = beatProgress >= 0.3 && beatProgress <= 0.9;
 
     if (!isCorrect) {
-      activeCueElement.classList.add('is-wrong');
-      setFeedback(gameData.feedback.wrong, 'error');
+      activeCueElement.classList.add("is-wrong");
+      setFeedback(gameData.feedback.wrong, "error");
       return;
     }
 
     if (!isOnBeat) {
-      activeCueElement.classList.add('is-good');
-      setFeedback(gameData.feedback.timing, 'error');
+      activeCueElement.classList.add("is-good");
+      setFeedback(gameData.feedback.timing, "error");
       return;
     }
 
     inputAcceptedThisBeat = true;
     clearBeatTimer();
-    activeCueElement.classList.add('is-perfect');
-    setFeedback(gameData.feedback.perfect, 'success');
+    activeCueElement.classList.add("is-perfect");
+    setFeedback(gameData.feedback.perfect, "success");
     successfulHits += 1;
     cueIndex += 1;
-    leadCount.textContent = `${successfulHits} / ${gameData.captureHits}`;
+    updateLeadCount();
 
     if (successfulHits >= gameData.captureHits) {
-      showEndingDialogue('success');
+      showEndingDialogue("success");
       return;
     }
 
@@ -200,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
     timeCount.textContent = `${Math.ceil(remaining / 1000)}`;
 
     if (remaining === 0) {
-      showEndingDialogue('escape');
+      showEndingDialogue("escape");
     }
   }
 
@@ -211,34 +227,21 @@ document.addEventListener('DOMContentLoaded', () => {
     countdownTimer = window.setInterval(updateCountdown, 100);
   }
 
-  function renderIntro() {
+  function showStartModal() {
     gameActive = false;
     clearBeatTimer();
     clearCountdown();
-    playgroundRescue.classList.remove('hidden');
-    captureHint.textContent = gameData.instructions;
-    setScene({
-      icon: 'fa-wave-square',
-      title: gameData.intro.title,
-      text: gameData.intro.text
-    });
-    gameActions.append(makeButton({
-      label: gameData.intro.action,
-      icon: 'fa-play',
-      className: 'rescue-button--primary',
-      onClick: startGame
-    }));
+    playgroundRescue.classList.add("hidden");
+    gameIntroText.textContent = `在 ${gameData.timeLimit} 秒內，依照畫面提示按下正確方向鍵；成功 ${gameData.captureHits} 次就能抓到小狗。`;
+    gameIntroModal.classList.remove("hidden");
   }
 
   function renderGame() {
     gameActive = true;
-    captureHint.textContent = gameData.instructions;
-    setScene({
-      icon: 'fa-drum',
-      label: '操場跑道',
-      title: '跟著大家的指令，不要搶拍',
-      text: '口令會在拍點中央亮起；同一個方向會一直重複，直到你在正確拍點接住它。'
-    });
+    gameIntroModal.classList.add("hidden");
+    playgroundRescue.classList.remove("hidden");
+    gameBoard.replaceChildren();
+    setFeedback();
     renderGameBoard();
     startCountdown();
     startRound();
@@ -246,76 +249,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function showEndingDialogue(outcome) {
     if (!gameActive) return;
+
     gameActive = false;
     clearBeatTimer();
     clearCountdown();
+    playgroundRescue.classList.add("hidden");
+    gameIntroModal.classList.add("hidden");
 
-    // 隱藏遊戲畫面
-    document.querySelector('.playground-rescue')?.classList.add('hidden');
-    gameBoard.style.display = 'none';
-    gameActions.style.display = 'none';
-
-    if (outcome === 'success') {
-      localStorage.setItem('ymsh:playgroundCompleted', 'true');
-      window.YMSHAchievements?.earn('playground-dog');
+    if (outcome === "success") {
+      localStorage.setItem("ymsh:playgroundCompleted", "true");
+      markPlaygroundCompleted();
+      window.YMSHAchievements?.earn("playground-dog");
     }
 
-    if (typeof DialogueCore !== 'function') {
-      renderOutcome(outcome);
+    if (typeof DialogueCore !== "function") {
+      if (outcome === "success") window.location.href = "map.html";
+      else showStartModal();
       return;
     }
 
-    endingDialogue.style.display = 'block';
-    const dataPath = outcome === 'success'
-      ? 'data/playground-capture.json'
-      : 'data/playground-escape.json';
+    endingDialogue.style.display = "block";
+    const dataPath =
+      outcome === "success"
+        ? "data/playground-capture.json"
+        : "data/playground-escape.json";
     const dialogue = new DialogueCore({
-      container: '#game',
+      container: "#game",
       data: dataPath,
-      role: localStorage.getItem('playerRole') || 'default',
+      role: localStorage.getItem("playerRole") || "default",
       onFinish: () => {
-        endingDialogue.style.display = 'none';
-        renderOutcome(outcome);
-      }
+        if (outcome === "success") window.location.href = "map.html";
+      },
+      onAction: (action) => {
+        if (action === "playground:retry") {
+          endingDialogue.style.display = "none";
+          startGame();
+        }
+
+        if (action === "navigate:map") {
+          window.location.href = "map.html";
+        }
+      },
     });
     dialogue.init().catch((error) => {
-      console.error('Playground ending dialogue failed:', error);
-      endingDialogue.style.display = 'none';
-      renderOutcome(outcome);
+      console.error("Playground ending dialogue failed:", error);
+      if (outcome === "success") window.location.href = "map.html";
+      else showStartModal();
     });
-  }
-
-  function renderOutcome(outcome) {
-    // 恢復遊戲界面顯示
-    document.querySelector('.playground-rescue')?.classList.remove('hidden');
-    gameBoard.style.display = '';
-    gameActions.style.display = '';
-
-    leadCount.textContent = `${successfulHits} / ${gameData.captureHits}`;
-    timeCount.textContent = outcome === 'success' ? '完成' : '0';
-    const isSuccess = outcome === 'success';
-    setScene({
-      icon: isSuccess ? 'fa-paw' : 'fa-door-open',
-      title: isSuccess ? gameData.success.title : '小狗跑掉了',
-      text: isSuccess
-        ? gameData.success.text
-        : '大家的默契不夠好，但牠跑出去前仍回頭望了一眼。再試一次，把大家的節拍接得更長吧。'
-    });
-    gameActions.append(
-      makeButton({
-        label: gameData.success.replayAction,
-        icon: 'fa-rotate-right',
-        onClick: startGame
-      }),
-      makeButton({
-        label: gameData.success.mapAction,
-        icon: 'fa-map',
-        className: 'rescue-button--primary',
-        onClick: () => {
-          window.location.href = 'map.html';
-        }
-      })
-    );
   }
 
   function startGame() {
@@ -326,69 +306,71 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function startIntroDialogue() {
-    if (localStorage.getItem(introStorageKey) === 'true' || typeof DialogueCore !== 'function') {
-      renderIntro();
+    if (
+      localStorage.getItem(introStorageKey) === "true" ||
+      typeof DialogueCore !== "function"
+    ) {
+      showStartModal();
       return;
     }
 
-    endingDialogue.style.display = 'block';
+    endingDialogue.style.display = "block";
     const dialogue = new DialogueCore({
-      container: '#game',
-      data: 'data/intro_playground.json',
-      role: localStorage.getItem('playerRole') || 'default',
+      container: "#game",
+      data: "data/intro_playground.json",
+      role: localStorage.getItem("playerRole") || "default",
       onFinish: () => {
-        localStorage.setItem(introStorageKey, 'true');
-        endingDialogue.style.display = 'none';
-        renderIntro();
-      }
+        localStorage.setItem(introStorageKey, "true");
+        endingDialogue.style.display = "none";
+        showStartModal();
+      },
     });
     dialogue.init().catch((error) => {
-      console.error('Playground intro dialogue failed:', error);
-      endingDialogue.style.display = 'none';
-      renderIntro();
+      console.error("Playground intro dialogue failed:", error);
+      endingDialogue.style.display = "none";
+      showStartModal();
     });
   }
 
   function handleKeyboardCue(event) {
     if (!gameActive || event.repeat) return;
-    const cue = gameData.cues.find(candidate => candidate.key === event.key);
+    const cue = gameData.cues.find((candidate) => candidate.key === event.key);
     if (!cue) return;
     event.preventDefault();
     handleCue(cue);
   }
 
+  startGameButton.addEventListener("click", startGame);
+
   async function loadGame() {
     try {
-      const response = await fetch('data/playground.json');
+      const response = await fetch("data/playground.json");
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       gameData = await response.json();
       gameTitle.textContent = gameData.title;
-      leadCount.textContent = `0 / ${gameData.captureHits}`;
+      updateLeadCount();
       timeCount.textContent = `${gameData.timeLimit}`;
-      document.addEventListener('keydown', handleKeyboardCue);
-      document.addEventListener('pointerdown', startAmbience);
-      document.addEventListener('keydown', startAmbience);
+      document.addEventListener("keydown", handleKeyboardCue);
+      document.addEventListener("pointerdown", startAmbience);
+      document.addEventListener("keydown", startAmbience);
       window.bgm?.setTemporaryVolumeMultiplier(0.5);
-      window.addEventListener('ymsh:settings-changed', (event) => {
-        if (event.detail?.key === 'bgmVolume') updateAmbienceVolume();
+      window.addEventListener("ymsh:settings-changed", (event) => {
+        if (event.detail?.key === "bgmVolume") updateAmbienceVolume();
       });
-      window.addEventListener('pagehide', () => {
+      window.addEventListener("pagehide", () => {
         ambience.pause();
         window.bgm?.setTemporaryVolumeMultiplier(1);
       });
-      window.addEventListener('pageshow', (event) => {
+      window.addEventListener("pageshow", (event) => {
         if (!event.persisted) return;
         window.bgm?.setTemporaryVolumeMultiplier(0.5);
         startAmbience();
       });
       startIntroDialogue();
     } catch (error) {
-      console.error('Playground game could not be loaded:', error);
-      playgroundRescue.classList.remove('hidden');
-      sceneLabel.textContent = '操場現場';
-      sceneHeading.textContent = '暫時無法開啟口令練習';
-      sceneText.textContent = '請重新整理頁面後再試一次。';
-      setFeedback('遊戲文字檔沒有成功讀取。', 'error');
+      console.error("Playground game could not be loaded:", error);
+      gameIntroText.textContent = "遊戲資料無法載入，請重新整理後再試。";
+      gameIntroModal.classList.remove("hidden");
     }
   }
 

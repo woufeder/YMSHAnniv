@@ -1,0 +1,89 @@
+{
+  "kicker": "YMSH ANNIVERSARY LETTER",
+  "title": " {name} 的校園紀念卡",
+  "meta": "於 {date} 整理，已走過 {gameCount} 個遊戲與 {achievementCount} 個隱藏成就。",
+  "artwork": {
+    "caption": "美術教室留下的作品",
+    "emptyCaption": "美術教室尚未留下作品。"
+  },
+  "sections": [
+    {
+      "id": "opening",
+      "when": { "always": true },
+      "text": "這張紀念卡記下的不是一份成績單，而是你在校園裡停留、回頭與再次出發的痕跡。"
+    },
+    {
+      "id": "first-visit",
+      "when": { "noProgress": true },
+      "text": "今天的路才剛開始。校園裡還有許多聲音、問題與風景，等著你用自己的步調遇見。"
+    },
+    {
+      "id": "classroom",
+      "when": { "games": ["classroom"] },
+      "text": "你在教室翻過題目，也把那些曾經一起準備、一起記住的片段重新念了一遍。"
+    },
+    {
+      "id": "garden",
+      "when": { "games": ["garden"] },
+      "text": "花圃裡的枝葉被重新照料；耐心並不總是安靜，它也可以是一連串認真做出的選擇。"
+    },
+    {
+      "id": "lab",
+      "when": { "games": ["lab"] },
+      "text": "實驗室的資料終於各自回到正確的位置，像一些零散記憶在此刻彼此對照後，有了新的意義。"
+    },
+    {
+      "id": "playground",
+      "when": { "games": ["playground"] },
+      "text": "你曾在操場追著小狗跑過一段路。無論結果如何，那陣匆忙和笑聲都已經成為今天的一部分。"
+    },
+    {
+      "id": "school-song",
+      "when": { "achievements": ["school-song"] },
+      "text": "音樂教室裡，校歌被一個音一個音地接起來；旋律不必完美，仍然足以把人帶回熟悉的地方。"
+    },
+    {
+      "id": "dog",
+      "when": { "achievements": ["playground-dog"] },
+      "text": "最後，小狗沒有再從眼前溜走。你替操場留下了一個熱鬧、剛剛好的小插曲。"
+    },
+    {
+      "id": "garden-perfect",
+      "when": { "achievements": ["garden-perfect"] },
+      "text": "你照顧的花圃仍保有五顆心，這份細緻也被好好記在這張卡上。"
+    },
+    {
+      "id": "classroom-perfect",
+      "when": { "achievements": ["classroom-perfect"] },
+      "text": "教室裡的快問快答全數答對；那些熟悉的名字與事情，原來一直都沒有離得太遠。"
+    },
+    {
+      "id": "lab-grade-a",
+      "when": { "achievements": ["lab-grade-a"] },
+      "text": "你完成了一次俐落的實驗校對。看起來凌亂的線索，也能在專心之後逐漸清楚。"
+    },
+    {
+      "id": "artwork",
+      "when": { "artwork": true },
+      "text": "而你在美術教室留下的這幅作品，讓這段校園路徑有了一個只屬於你的落款。"
+    },
+    {
+      "id": "full-route",
+      "when": { "minimumGames": 4 },
+      "text": "你已經走過不少地方。每一段路徑都不同，放在一起時，才慢慢成為這所學校的樣子。"
+    },
+    {
+      "id": "all-secrets",
+      "when": {
+        "allAchievements": [
+          "school-song",
+          "playground-dog",
+          "garden-perfect",
+          "classroom-perfect",
+          "lab-grade-a"
+        ]
+      },
+      "text": "五個隱藏角落都被你找到了。謝謝你願意停下來，讓這些原本不必被看見的細節也有了位置。"
+    }
+  ]
+}

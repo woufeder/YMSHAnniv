@@ -23,6 +23,7 @@ class DialogueCore {
     // 從 SettingsManager 獲取速度設定，若無則使用預設值 50
     this.typeTextSpeed = SettingsManager.get('textSpeed', 50);
     this.onFinish = options.onFinish || function () {};
+    this.onAction = options.onAction || null;
 
     // 狀態
     this.dialogue = [];
@@ -415,6 +416,11 @@ class DialogueCore {
       btn.onclick = async () => {
         this.optionsArea.classList.add('hidden');
         if (this.nextBtn) this.nextBtn.classList.remove('hidden');
+
+        if (opt.action && typeof this.onAction === 'function') {
+          await this.onAction(opt.action, opt);
+          return;
+        }
 
         if (typeof opt.next === 'number') {
           const targetLine = this.dialogue.find(l => l.id === opt.next);

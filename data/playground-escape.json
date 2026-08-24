@@ -8,6 +8,13 @@
     },
     {
       "text": "小狗在走遠前回頭搖了搖尾巴<sound=bark>，<wait>像是在和你說下次見。"
+    },
+    {
+      "text": "地上只留下幾個凌亂的腳印。",
+      "options": [
+        { "text": "再試一次", "action": "playground:retry" },
+        { "text": "返回地圖", "action": "navigate:map" }
+      ]
     }
   ],
   "student": [
@@ -19,6 +26,13 @@
     },
     {
       "text": "小狗在走遠前回頭搖了搖尾巴<sound=bark>，<wait>像是在和你說下次見。"
+    },
+    {
+      "text": "地上只留下幾個凌亂的腳印。",
+      "options": [
+        { "text": "再試一次", "action": "playground:retry" },
+        { "text": "返回地圖", "action": "navigate:map" }
+      ]
     }
   ],
   "teacher": [
@@ -30,6 +44,13 @@
     },
     {
       "text": "小狗在走遠前回頭搖了搖尾巴<sound=bark>，<wait>像是在和你說下次見。"
+    },
+    {
+      "text": "地上只留下幾個凌亂的腳印。",
+      "options": [
+        { "text": "再試一次", "action": "playground:retry" },
+        { "text": "返回地圖", "action": "navigate:map" }
+      ]
     }
   ]
 }
