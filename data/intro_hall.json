@@ -1,10 +1,50 @@
-[
-  {
-    "text": "穿堂的留言牆上，留下了許多來自不同年份的聲音。",
-    "bg": "assets/images/hall.jpg"
-  },
-  {
-    "text": "寫下一句想說的話，或停下來讀讀其他人的回憶。",
-    "bg": "assets/images/hall-brick.jpg"
-  }
-]
+{
+  "default": [
+    {
+      "text": "穿堂阻擋戶外的日照，<wait>涼快了不少。",
+      "bg": "assets/images/hall.jpg"
+    },
+    {
+      "text": "樹影搖曳著，<wait>碎光掉落，<wait>模糊紅磚的輪廓。"
+    },
+    {
+      "text": "走道末尾的綠色佈告欄上，<wait>貼著好幾張便條紙。",
+      "bg": "assets/images/hall-brick.jpg"
+    },
+    {
+      "text": "不同人，<wait>不同時間留下的跫音，<wait>在這裡迴響著。"
+    }
+  ],
+  "student": [
+    {
+      "text": "穿堂阻擋戶外的日照，<wait>涼快了不少。",
+      "bg": "assets/images/hall.jpg"
+    },
+    {
+      "text": "樹影搖曳著，<wait>碎光掉落，<wait>模糊紅磚的輪廓。"
+    },
+    {
+      "text": "走道末尾的綠色佈告欄上，<wait>貼著好幾張便條紙。",
+      "bg": "assets/images/hall-brick.jpg"
+    },
+    {
+      "text": "不同人，<wait>不同時間留下的跫音，<wait>在這裡迴響著。"
+    }
+  ],
+  "teacher": [
+    {
+      "text": "穿堂阻擋戶外的日照，<wait>涼快了不少。",
+      "bg": "assets/images/hall.jpg"
+    },
+    {
+      "text": "樹影搖曳著，<wait>碎光掉落，<wait>模糊紅磚的輪廓。"
+    },
+    {
+      "text": "走道末尾的綠色佈告欄上，<wait>貼著好幾張便條紙。",
+      "bg": "assets/images/hall-brick.jpg"
+    },
+    {
+      "text": "不同人，<wait>不同時間留下的跫音，<wait>在這裡迴響著。"
+    }
+  ]
+}
