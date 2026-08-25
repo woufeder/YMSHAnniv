@@ -2,6 +2,7 @@
 function initPrincipal() {
   const ARTWORK_STORAGE_KEY = "ymsh:artwork";
   const CONFIG_PATH = "data/memorial-card.json";
+  const CARD_WATERMARK_PATH = "assets/images/ui/logoForCard.png";
   const canvas = document.getElementById("memoryCard");
   const context = canvas.getContext("2d");
   const generateButton = document.getElementById("generateCard");
@@ -40,6 +41,7 @@ function initPrincipal() {
 
   function getState() {
     const completedGames = readCompletedGames();
+    const savedRole = localStorage.getItem("playerRole");
     const earnedAchievements = new Set(
       (window.YMSHAchievements?.all || [])
         .filter((achievement) => window.YMSHAchievements.has(achievement.id))
@@ -51,6 +53,7 @@ function initPrincipal() {
         localStorage.getItem("userName") ||
         localStorage.getItem("playerName") ||
         "訪客",
+      role: savedRole === "student" || savedRole === "teacher" ? savedRole : "default",
       completedGames,
       earnedAchievements,
       artwork: localStorage.getItem(ARTWORK_STORAGE_KEY),
@@ -71,6 +74,29 @@ function initPrincipal() {
       .replaceAll("{date}", formatDate())
       .replaceAll("{gameCount}", state.completedGames.size)
       .replaceAll("{achievementCount}", state.earnedAchievements.size);
+  }
+
+  function getRoleOverrides() {
+    return config?.roleText?.[state.role] || config?.roleText?.default || {};
+  }
+
+  function resolveRoleValue(value) {
+    if (!value || typeof value !== "object" || Array.isArray(value)) {
+      return value;
+    }
+
+    return value[state.role] ?? value.default ?? "";
+  }
+
+  function getRoleText(key, fallback) {
+    const overrides = getRoleOverrides();
+    return resolveRoleValue(overrides[key] ?? fallback);
+  }
+
+  function getSectionText(section) {
+    const overrides = getRoleOverrides();
+    const roleText = resolveRoleValue(overrides.sections?.[section.id]);
+    return roleText || section.text;
   }
 
   function matchesCondition(condition = {}) {
@@ -113,6 +139,8 @@ function initPrincipal() {
     ) {
       return false;
     }
+    if (condition.roles && !condition.roles.includes(state.role)) return false;
+    if (condition.excludeRoles?.includes(state.role)) return false;
 
     return Object.keys(condition).length > 0;
   }
@@ -128,19 +156,31 @@ function initPrincipal() {
     const getTextHeight = (items) => {
       context.font = "27px 'LXGW WenKai Mono TC', serif";
       return items.reduce((height, section) => {
-        const lines = getWrappedLines(replaceVariables(section.text), textWidth);
+        const lines = getWrappedLines(replaceVariables(getSectionText(section)), textWidth);
         return height + lines.length * lineHeight + paragraphGap;
       }, 0);
     };
 
     context.font = "700 48px 'LXGW WenKai Mono TC', serif";
-    const titleHeight = getWrappedLines(replaceVariables(config.title), textWidth).length * 60;
+    const titleHeight = getWrappedLines(
+      replaceVariables(getRoleText("title", config.title)),
+      textWidth,
+    ).length * 60;
     context.font = "700 23px 'LXGW WenKai Mono TC', serif";
     const artworkCaptionHeight = state.artwork
-      ? getWrappedLines(replaceVariables(config.artwork?.caption), textWidth).length * 34 + 24
+      ? getWrappedLines(
+          replaceVariables(getRoleText("artworkCaption", config.artwork?.caption)),
+          textWidth,
+        ).length * 34 + 24
       : 0;
     const leftFixedHeight = 104 + titleHeight + 98;
     const rightFixedHeight = state.artwork ? 94 + artworkCaptionHeight + 308 : 94;
+    const leftPageLimit = 960;
+
+    if (leftFixedHeight + getTextHeight(sections) <= leftPageLimit) {
+      return { left: sections, right: [] };
+    }
+
     let bestSplit = 1;
     let smallestDifference = Number.POSITIVE_INFINITY;
 
@@ -166,7 +206,7 @@ function initPrincipal() {
       ...sections.map((section) => {
         const paragraph = document.createElement("p");
         paragraph.dataset.section = section.id || "";
-        paragraph.textContent = replaceVariables(section.text);
+        paragraph.textContent = replaceVariables(getSectionText(section));
         return paragraph;
       }),
     );
@@ -183,8 +223,27 @@ function initPrincipal() {
 
   function getFixedContentHeight(page, paragraphContainer) {
     return [...page.children]
-      .filter((element) => element !== paragraphContainer)
+      .filter(
+        (element) =>
+          element !== paragraphContainer &&
+          !element.classList.contains("memorial-page__watermark"),
+      )
       .reduce((height, element) => height + getOuterHeight(element), 0);
+  }
+
+  function shouldKeepWebTextOnLeft(sections) {
+    renderParagraphs(leftParagraphs, sections);
+    renderParagraphs(rightParagraphs, []);
+
+    const contentHeight =
+      leftParagraphs.offsetHeight +
+      getFixedContentHeight(leftPage, leftParagraphs);
+    const letterStyles = window.getComputedStyle(
+      document.querySelector(".memorial-letter"),
+    );
+    const pageHeightLimit = Number.parseFloat(letterStyles.maxHeight);
+
+    return !Number.isFinite(pageHeightLimit) || contentHeight <= pageHeightLimit;
   }
 
   function splitSectionsAcrossPages(sections) {
@@ -224,10 +283,10 @@ function initPrincipal() {
   }
 
   function renderArticle() {
-    kicker.textContent = replaceVariables(config.kicker);
-    title.textContent = replaceVariables(config.title);
-    meta.textContent = replaceVariables(config.meta);
-    dateMark.textContent = replaceVariables(config["time-mark"]);
+    kicker.textContent = replaceVariables(getRoleText("kicker", config.kicker));
+    title.textContent = replaceVariables(getRoleText("title", config.title));
+    meta.textContent = replaceVariables(getRoleText("meta", config.meta));
+    dateMark.textContent = replaceVariables(getRoleText("timeMark", config["time-mark"]));
 
     selectedSections = (config.sections || []).filter((section) =>
       matchesCondition(section.when),
@@ -237,18 +296,25 @@ function initPrincipal() {
     if (state.artwork) {
       artworkSection.classList.remove("is-empty");
       artworkImage.src = state.artwork;
-      artworkCaption.textContent = replaceVariables(config.artwork?.caption);
+      artworkCaption.textContent = replaceVariables(
+        getRoleText("artworkCaption", config.artwork?.caption),
+      );
     } else {
       artworkSection.classList.add("is-empty");
       artworkCaption.textContent = replaceVariables(
-        config.artwork?.emptyCaption,
+        getRoleText("artworkEmptyCaption", config.artwork?.emptyCaption),
       );
     }
 
+    if (shouldKeepWebTextOnLeft(selectedSections)) {
+      leftSections = selectedSections;
+      rightSections = [];
+    } else {
+      ({ left: leftSections, right: rightSections } =
+        splitSectionsAcrossPages(selectedSections));
+    }
     ({ left: cardLeftSections, right: cardRightSections } =
       splitSectionsForCard(selectedSections));
-    ({ left: leftSections, right: rightSections } =
-      splitSectionsAcrossPages(selectedSections));
     renderParagraphs(leftParagraphs, leftSections);
     renderParagraphs(rightParagraphs, rightSections);
   }
@@ -305,14 +371,18 @@ function initPrincipal() {
   }
 
   function drawContainImage(image, x, y, width, height) {
+    context.fillStyle = "#ffffff";
+    context.fillRect(x, y, width, height);
+    drawImageContain(image, x, y, width, height);
+  }
+
+  function drawImageContain(image, x, y, width, height) {
     const scale = Math.min(width / image.width, height / image.height);
     const drawnWidth = image.width * scale;
     const drawnHeight = image.height * scale;
     const drawnX = x + (width - drawnWidth) / 2;
     const drawnY = y + (height - drawnHeight) / 2;
 
-    context.fillStyle = "#ffffff";
-    context.fillRect(x, y, width, height);
     context.drawImage(image, drawnX, drawnY, drawnWidth, drawnHeight);
   }
 
@@ -325,12 +395,13 @@ function initPrincipal() {
     const textWidth = pageWidth - pagePadding * 2;
     const lineHeight = 43;
     const paragraphGap = 20;
+    const watermarkPromise = loadImage(CARD_WATERMARK_PATH).catch(() => null);
 
     canvas.width = width;
     context.font = "27px 'LXGW WenKai Mono TC', serif";
     const makeLines = (sections) =>
       sections.map((section) =>
-        getWrappedLines(replaceVariables(section.text), textWidth),
+        getWrappedLines(replaceVariables(getSectionText(section)), textWidth),
       );
     const leftLines = makeLines(cardLeftSections);
     const rightLines = makeLines(cardRightSections);
@@ -341,16 +412,22 @@ function initPrincipal() {
       );
     context.font = "700 48px 'LXGW WenKai Mono TC', serif";
     const titleLines = getWrappedLines(
-      replaceVariables(config.title),
+      replaceVariables(getRoleText("title", config.title)),
       textWidth,
     );
     context.font = "25px 'LXGW WenKai Mono TC', serif";
-    const metaLines = getWrappedLines(replaceVariables(config.meta), textWidth);
+    const metaLines = getWrappedLines(
+      replaceVariables(getRoleText("meta", config.meta)),
+      textWidth,
+    );
     const headerHeight = 104 + titleLines.length * 60 + 98;
     const artworkHeight = state.artwork ? 300 : 0;
     context.font = "700 23px 'LXGW WenKai Mono TC', serif";
     const artworkLabelHeight = state.artwork
-      ? getWrappedLines(replaceVariables(config.artwork?.caption), textWidth).length * 34 + 24
+      ? getWrappedLines(
+          replaceVariables(getRoleText("artworkCaption", config.artwork?.caption)),
+          textWidth,
+        ).length * 34 + 24
       : 0;
     const pageHeight = Math.max(
       1040,
@@ -387,11 +464,19 @@ function initPrincipal() {
       pageHeight - 24,
     );
 
+    const watermark = await watermarkPromise;
+    if (watermark) {
+      context.save();
+      context.globalAlpha = 0.18;
+      drawImageContain(watermark, leftX + 42, outerMargin + pageHeight - 294, 220, 240);
+      context.restore();
+    }
+
     context.textAlign = "left";
     context.fillStyle = "#6c7390";
     context.font = "700 26px 'LXGW WenKai Mono TC', serif";
     context.fillText(
-      replaceVariables(config.kicker),
+      replaceVariables(getRoleText("kicker", config.kicker)),
       contentLeftX,
       outerMargin + 76,
     );
@@ -428,7 +513,10 @@ function initPrincipal() {
         context.fillStyle = "#6c7390";
         context.font = "700 23px 'LXGW WenKai Mono TC', serif";
         rightY = drawTextLines(
-          getWrappedLines(replaceVariables(config.artwork?.caption), textWidth),
+          getWrappedLines(
+            replaceVariables(getRoleText("artworkCaption", config.artwork?.caption)),
+            textWidth,
+          ),
           contentRightX,
           rightY + 16,
           34,
@@ -453,7 +541,7 @@ function initPrincipal() {
     context.font = "23px 'LXGW WenKai Mono TC', serif";
     context.textAlign = "right";
     context.fillText(
-      replaceVariables(config["time-mark"]),
+      replaceVariables(getRoleText("timeMark", config["time-mark"])),
       rightX + pageWidth - pagePadding,
       outerMargin + pageHeight - 48,
     );
@@ -491,6 +579,16 @@ function initPrincipal() {
   });
   backButton.addEventListener("click", () => {
     window.location.href = "map.html";
+  });
+
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    if (!config || !state) return;
+
+    window.clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(() => {
+      renderArticle();
+    }, 120);
   });
 
   loadCardConfig();

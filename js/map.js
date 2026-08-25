@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const MAP_WIDTH = 5959;
   const MAP_HEIGHT = 4092;
   const locations = [
-    { id: "art", name: "藝術大樓", mapX: 950, mapY: 1200, url: "art.html" },
+    { id: "art", name: "藝術大樓", mapX: 1025, mapY: 1200, url: "art.html" },
     {
       id: "classroom",
       name: "教室",
@@ -19,8 +19,8 @@ document.addEventListener("DOMContentLoaded", function () {
       id: "garden",
       name: "花圃",
       event: "花園急救站",
-      mapX: 2600,
-      mapY: 1055,
+      mapX: 2225,
+      mapY: 950,
       url: "games/garden.html",
     },
     {
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
       mapY: 3200,
       url: "principal.html",
     },
-    { id: "hall", name: "穿堂", mapX: 3600, mapY: 2600, url: "hall.html" },
+    { id: "hall", name: "穿堂", mapX: 3355, mapY: 1500, url: "hall.html" },
     {
       id: "playground",
       name: "操場",

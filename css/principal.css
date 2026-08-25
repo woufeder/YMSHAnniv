@@ -8,7 +8,7 @@ body {
   width: min(100% - 32px, 1180px);
   min-height: 100vh;
   margin: 0 auto;
-  padding: 72px 0 32px;
+  padding: 32px 0 32px;
   box-sizing: border-box;
 }
 
@@ -35,6 +35,7 @@ body {
 }
 
 .memorial-letter {
+  min-height: 80vh;
   max-height: 80vh;
   overflow: auto;
   display: grid;
@@ -50,11 +51,37 @@ body {
 }
 
 .memorial-page--left {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   border-right: 1px solid rgba(71, 77, 100, 0.18);
 }
 
+.memorial-page--left > :not(.memorial-page__watermark) {
+  position: relative;
+  z-index: 1;
+}
+
+.memorial-page__watermark {
+  position: absolute;
+  z-index: 0;
+  bottom: 26px;
+  left: 28px;
+  width: min(42%, 220px);
+  opacity: 0.18;
+  pointer-events: none;
+  user-select: none;
+}
+
 .memorial-page--right {
+  display: flex;
+  flex-direction: column;
   background: rgba(231, 237, 247, 0.36);
+}
+
+.memorial-letter__date {
+  margin: auto 34px 26px auto;
+  text-align: right;
 }
 
 .memorial-letter__header {
@@ -192,8 +219,19 @@ body {
     border-bottom: 1px solid rgba(71, 77, 100, 0.18);
   }
 
+  .memorial-page__watermark {
+    bottom: 20px;
+    left: 18px;
+    width: min(38%, 160px);
+  }
+
   .memorial-page--right {
+    display: block;
     background: transparent;
+  }
+
+  .memorial-letter__date {
+    margin: 18px 20px 24px auto;
   }
 
   .principal-room {
