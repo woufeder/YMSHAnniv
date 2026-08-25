@@ -1,7 +1,7 @@
 {
   "kicker": "YMSH ANNIVERSARY LETTER",
   "title": " Dear：{name}",
-  "meta": "小遊戲：{gameCount}/4　隱藏成就：{achievementCount}/5",
+  "meta": "小遊戲：{gameCount}/4　隱藏成就：{achievementCount}/6",
   "time-mark":"{date}．永明高中校長室",
   "artwork": {
     "caption": "美術教室留下的作品",
@@ -11,67 +11,67 @@
     {
       "id": "opening",
       "when": { "always": true },
-      "text": "這張紀念卡記下的不是一份成績單，而是你在校園裡停留、回頭與再次出發的痕跡。"
+      "text": "多年以後，再次踏進生活過的校園。你褪去當年的青澀，成為如此出色的模樣。"
     },
     {
       "id": "first-visit",
       "when": { "noProgress": true },
-      "text": "今天的路才剛開始。校園裡還有許多聲音、問題與風景，等著你用自己的步調遇見。"
+      "text": "今時未盡。校園裡還有許多地方與風景，依然等待你回味曾經。"
     },
     {
       "id": "classroom",
       "when": { "games": ["classroom"] },
-      "text": "你在教室翻過題目，也把那些曾經一起準備、一起記住的片段重新念了一遍。"
+      "text": "每一個細枝末節的規則與過往，堆疊至今，也成了令人懷念不已的舊日時光。"
     },
     {
       "id": "garden",
       "when": { "games": ["garden"] },
-      "text": "花圃裡的枝葉被重新照料；耐心並不總是安靜，它也可以是一連串認真做出的選擇。"
+      "text": "花圃裡的枝葉如你一般，終將在適合的時機盛放屬於自己的獨特。"
     },
     {
       "id": "lab",
       "when": { "games": ["lab"] },
-      "text": "實驗室的資料終於各自回到正確的位置，像一些零散記憶在此刻彼此對照後，有了新的意義。"
+      "text": "實驗小卡已然收攏，整齊歸檔。零散的智識彼此對照，找到該去的地方。"
     },
     {
       "id": "playground",
       "when": { "games": ["playground"] },
-      "text": "你曾在操場追著小狗跑過一段路。無論結果如何，那陣匆忙和笑聲都已經成為今天的一部分。"
+      "text": "在操場追著小狗跑上一段。腳步折返，急促的呼吸與一時慌亂，也是今天的一部分。"
     },
     {
       "id": "school-song",
       "when": { "achievements": ["school-song"] },
-      "text": "音樂教室裡，校歌被一個音一個音地接起來；旋律不必完美，仍然足以把人帶回熟悉的地方。"
+      "text": "琴音迴盪，顆顆音符相約墜跌。或許落拍，或許跑調。但你仍完成了那首歌。"
     },
     {
       "id": "dog",
       "when": { "achievements": ["playground-dog"] },
-      "text": "最後，小狗沒有再從眼前溜走。你替操場留下了一個熱鬧、剛剛好的小插曲。"
+      "text": "最後，小狗沒有再從眼前溜走，這場繞了半個操場的追逐，也終於有個美好收場。"
     },
     {
       "id": "garden-perfect",
       "when": { "achievements": ["garden-perfect"] },
-      "text": "你照顧的花圃仍保有五顆心，這份細緻也被好好記在這張卡上。"
+      "text": "這份對初芽無微不至的溫柔，土壤與陽光也都記得。"
     },
     {
       "id": "classroom-perfect",
       "when": { "achievements": ["classroom-perfect"] },
-      "text": "教室裡的快問快答全數答對；那些熟悉的名字與事情，原來一直都沒有離得太遠。"
+      "text": "而那些熟悉的名字與事物，顯然沒有離得太遠。"
     },
     {
       "id": "lab-grade-a",
       "when": { "achievements": ["lab-grade-a"] },
-      "text": "你完成了一次俐落的實驗校對。看起來凌亂的線索，也能在專心之後逐漸清楚。"
+      "text": "格物致知，辨其微而明其理。望你今後縱有疑難橫陳，始終保有這般純粹的求知之心。"
     },
     {
       "id": "artwork",
       "when": { "artwork": true },
-      "text": "而你在美術教室留下的這幅作品，讓這段校園路徑有了一個只屬於你的落款。"
+      "text": "你所留下的銘印，使得明日獲得通往當下的捷徑。"
     },
     {
       "id": "full-route",
       "when": { "minimumGames": 4 },
-      "text": "你已經走過不少地方。每一段路徑都不同，放在一起時，才慢慢成為這所學校的樣子。"
+      "text": "繞走不少地方。小路依然是你所知的模樣。轉折與岔口也未全然陌生。其所交織的，便是誰也無法取代的記憶。"
     },
     {
       "id": "all-secrets",
@@ -81,10 +81,11 @@
           "playground-dog",
           "garden-perfect",
           "classroom-perfect",
-          "lab-grade-a"
+          "lab-grade-a",
+          "fakerplayer"
         ]
       },
-      "text": "五個隱藏角落都被你找到了。謝謝你願意停下來，讓這些原本不必被看見的細節也有了位置。"
+      "text": "朽葉掃拂，塵去煥然，藏匿的皆已尋見。再往後盡是一片光明燦爛。"
     }
   ]
 }
