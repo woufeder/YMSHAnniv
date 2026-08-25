@@ -15,7 +15,7 @@
   transform: translateX(-50%);
   height: fit-content;
   text-align: center;
-  background: rgba(71, 77, 100, 0.85);
+  background: var(--primary900-op7);
   padding: 14px 18px 21px;
   border-radius: 0px 0px 8px 8px;
   box-shadow: 0 14px 40px rgba(36, 42, 56, 0.22);
