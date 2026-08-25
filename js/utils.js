@@ -288,6 +288,54 @@ function isMobile() {
   );
 }
 
+// alert 提示框
+function showBootstrapAlert(message, type = "danger", duration = 3500) {
+  let region = document.getElementById("bootstrapAlertRegion");
+
+  if (!region) {
+    region = document.createElement("div");
+    region.id = "bootstrapAlertRegion";
+    region.setAttribute("aria-live", "assertive");
+    region.setAttribute("aria-atomic", "true");
+    document.body.appendChild(region);
+  }
+
+  const alertElement = document.createElement("div");
+
+  alertElement.className = `alert alert-${type} alert-dismissible fade show`;
+
+  alertElement.setAttribute("role", "alert");
+
+  const messageElement = document.createElement("span");
+  messageElement.textContent = message;
+
+  const closeButton = document.createElement("button");
+  closeButton.type = "button";
+  closeButton.className = "btn-close";
+  closeButton.setAttribute("data-bs-dismiss", "alert");
+  closeButton.setAttribute("aria-label", "關閉");
+
+  alertElement.append(messageElement, closeButton);
+  region.appendChild(alertElement);
+
+  const closeAlert = () => {
+    if (!alertElement.isConnected) return;
+
+    if (window.bootstrap?.Alert) {
+      bootstrap.Alert.getOrCreateInstance(alertElement).close();
+      return;
+    }
+
+    alertElement.remove();
+  };
+
+  window.setTimeout(closeAlert, duration);
+
+  return alertElement;
+}
+
+window.showBootstrapAlert = showBootstrapAlert;
+
 // 播放音效：未指定副檔名時會依序嘗試 MP3 與 WAV。
 function playSound(soundName) {
   try {
@@ -402,6 +450,12 @@ class BGMManager {
 }
 
 const HIDDEN_ACHIEVEMENTS = Object.freeze([
+  {
+    id: "fakerplayer",
+    title: "I can see you",
+    reason: "在進校門時輸入校長的名字。",
+    storageKey: "achievement_faker",
+  },
   {
     id: "school-song",
     title: "杰倫是你嗎？",
