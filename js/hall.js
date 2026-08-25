@@ -194,15 +194,15 @@ function initHall() {
         const messageText = messageInput.value;
 
         if (!name) {
-            alert('請輸入您的姓名');
+            showBootstrapAlert('請輸入您的姓名', 'warning');
             return;
         }
         if (!messageText.trim()) {
-            alert('請輸入留言內容');
+            showBootstrapAlert('請輸入留言內容', 'warning');
             return;
         }
         if (messageText.length > 500) {
-            alert('留言最多 500 字');
+            showBootstrapAlert('留言最多 500 字', 'warning');
             return;
         }
 
@@ -219,7 +219,7 @@ function initHall() {
                 body: JSON.stringify(messageData)
             });
 
-            alert('留言成功！請重整網頁後稍待');
+            showBootstrapAlert('留言成功！請重整網頁後稍待', 'success');
             messageInput.value = '';
             updateCharacterCount();
             messageModal.hide();
@@ -227,7 +227,7 @@ function initHall() {
 
         } catch (error) {
             console.error('送出留言時發生錯誤:', error);
-            alert('留言送出失敗，請稍後再試');
+            showBootstrapAlert('留言送出失敗，請稍後再試', 'danger');
         }
     }
 
