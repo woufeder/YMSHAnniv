@@ -22,7 +22,8 @@
   --error-color: #b95351;
   --error-text-color: #520404;
   --info-color: #2196f3;
-  --warning-color: #ffc107;
+  --warning-color: #fff2ca;
+  --warning-text-color: #c99700;
   --alert-color: #f8f2eb;
   --alert-text-color: #7a5b50;
 
@@ -166,13 +167,30 @@ body.fade-in {
   }
 
   .question-icon {
-    position: absolute;
+    position: fixed;
     top: 20px;
     left: 20px;
-    font-size: 32px;
-    color: var(--text-color);
+    z-index: 1000;
+
+    display: grid;
+    place-items: center;
+
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+
+    background: var(--primary700-op7);
+    color: #fff;
+    font-size: 18px;
+    line-height: 1;
     cursor: pointer;
-    z-index: 2;
+  }
+
+  .question-icon i {
+    display: block;
+    line-height: 1;
   }
 
   .LOGO-layer {
@@ -268,6 +286,25 @@ body.fade-in {
 
 .flash {
   animation: flash 0.4s ease;
+}
+
+/* alert 提示框 */
+#bootstrapAlertRegion {
+  position: fixed;
+  top: 1.2rem;
+  left: 50%;
+  z-index: 2000;
+  display: grid;
+  gap: 0.6rem;
+  width: min(32rem, calc(100vw - 2rem));
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+#bootstrapAlertRegion .alert {
+  margin: 0;
+  box-shadow: var(--shadow-medium);
+  pointer-events: auto;
 }
 
 /* 設定元件樣式 */
@@ -630,6 +667,34 @@ body.fade-in {
   --bs-alert-color: var(--primary900);
   --bs-alert-bg: var(--primary100);
   --bs-alert-border-color: var(--primary300);
+  --bs-alert-link-color: var(--primary900);
+}
+
+.alert-warning {
+  --bs-alert-color: var(--warning-text-color);
+  --bs-alert-bg: var(--warning-color);
+  --bs-alert-border-color: var(--warning-text-color);
+  --bs-alert-link-color: var(--primary900);
+}
+
+.alert-danger {
+  --bs-alert-color: var(--error-text-color);
+  --bs-alert-bg: #f5d8d7;
+  --bs-alert-border-color: var(--error-color);
+  --bs-alert-link-color: var(--error-text-color);
+}
+
+.alert-success {
+  --bs-alert-color: var(--success-text-color);
+  --bs-alert-bg: #e3f4d3;
+  --bs-alert-border-color: var(--success-color);
+  --bs-alert-link-color: var(--success-text-color);
+}
+
+.alert-info {
+  --bs-alert-color: var(--primary900);
+  --bs-alert-bg: var(--primary100);
+  --bs-alert-border-color: var(--primary500);
   --bs-alert-link-color: var(--primary900);
 }
 .w-fit {
