@@ -10,7 +10,8 @@ function initHall() {
 
     // 初始化 Bootstrap Modal
     const messageModal = new bootstrap.Modal(document.getElementById('messageModal'));
-    const messageDetailModal = new bootstrap.Modal(document.getElementById('messageDetailModal'));
+    const messageDetailModalElement = document.getElementById('messageDetailModal');
+    const messageDetailModal = new bootstrap.Modal(messageDetailModalElement);
     const messageDetailTitle = document.getElementById('messageDetailTitle');
     const messageDetailTime = document.getElementById('messageDetailTime');
     const messageDetailContent = document.getElementById('messageDetailContent');
@@ -32,7 +33,7 @@ function initHall() {
             return (x - Math.floor(x)) * max;
         };
 
-        const colors = ['#fff9c4', '#f8bbd0', '#e1f5fe', '#f0f4c3', '#ffe0b2'];
+        const colors = ['#fff9c4', '#fedfea', '#e1f5fe', '#f0f4c3', '#ffe0b2'];
         const color = colors[Math.floor(pseudoRandom(colors.length))];
 
         // 優化位置：預留邊距，確保便條紙不會超出螢幕
@@ -177,12 +178,13 @@ function initHall() {
             content.textContent = msg.message || '';
             note.setAttribute('aria-label', `閱讀 ${author.textContent} 的完整留言`);
             note.append(author, content);
-            note.addEventListener('click', () => showMessageDetail(msg));
+            note.addEventListener('click', () => showMessageDetail(msg, style['--note-color']));
             messagesList.appendChild(note);
         });
     }
 
-    function showMessageDetail(msg) {
+    function showMessageDetail(msg, noteColor) {
+        messageDetailModalElement.style.setProperty('--message-note-color', noteColor || '#ffffff');
         messageDetailTitle.textContent = msg.name || '匿名';
         messageDetailTime.textContent = formatTimestamp(msg.timestamp);
         messageDetailContent.textContent = msg.message || '';

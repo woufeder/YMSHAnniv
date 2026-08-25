@@ -160,28 +160,32 @@ p.hall-title{
 }
 
 #hallContent .modal-dialog {
-  width: min(100% - 28px, 560px);
+  width: min(100% - 28px, 600px);
   margin: 1rem auto;
 }
 
 #hallContent .modal-content {
   overflow: hidden;
   border: 0;
-  border-radius: var(--border-radius-large);
+  border-radius: unset;
   box-shadow: 0 20px 50px rgba(12, 31, 40, 0.32);
-  width: 550px;
+  width: 600px;
+  padding: 20px 22px;
+}
+
+#messageDetailModal .modal-content {
+  background: var(--message-note-color, #ffffff);
 }
 
 #hallContent .modal-header {
   justify-content: space-between;
   align-items: flex-start;
-  padding: 20px 22px 16px;
-  border-bottom: 1px solid rgba(71, 77, 100, 0.16);
+  padding: 20px 22px 0px;
+  border-bottom: 0px solid rgba(71, 77, 100, 0.16);
 }
 
 #hallContent .modal-title {
   color: var(--primary900);
-  font-size: 1.45rem;
   font-weight: 700;
 }
 
@@ -239,15 +243,16 @@ p.hall-title{
 
 .message-detail-time {
   margin: 6px 0 0;
-  color: #727783;
-  font-size: 0.88rem;
+  color: var(--primary900);
+  opacity: 0.5;
+  font-size: 0.9rem;
 }
 
 .message-detail-content {
   margin: 0;
   color: #1f2830;
   font-size: 1.05rem;
-  line-height: 1.8;
+  line-height: 1.5;
   overflow-wrap: anywhere;
   white-space: pre-wrap;
 }

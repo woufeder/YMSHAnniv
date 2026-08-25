@@ -109,7 +109,7 @@ body {
 
 .memorial-letter__body {
   display: grid;
-  gap: 0.5rem;
+  gap: 1rem;
   padding: 20px 34px;
 }
 

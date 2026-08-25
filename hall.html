@@ -1,40 +1,42 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&display=swap" rel="stylesheet">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>YMSH 周年紀念 - 穿堂留言板</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>YMSH 周年紀念 - 穿堂留言板</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/hall.css">
-    <link rel="stylesheet" href="css/dialogue.css">
-  </head>
-  <body class="hall-body">
-    <a class="return-button" href="map.html" aria-label="返回校園地圖" title="返回校園地圖"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></a>
-    <div id="game"></div>
-    <div id="hallContent" class="location-page-content is-hidden">
-      <div class="hall-container">
-        <h4 class="hall-title">穿堂留言板</h4>
-        <p class="hall-title">留言載入需要較長時間，請耐心等候</p>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/hall.css">
+  <link rel="stylesheet" href="css/dialogue.css">
+</head>
 
-        <!-- Canvas 移到上方，撐滿螢幕 -->
-        <div class="messages-canvas" id="messagesList">
-            <!-- 便條紙將由 JavaScript 動態隨機分佈 -->
-        </div>
+<body class="hall-body">
+  <a class="return-button" href="map.html" aria-label="返回校園地圖" title="返回校園地圖"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></a>
+  <div id="game"></div>
+  <div id="hallContent" class="location-page-content is-hidden">
+    <div class="hall-container">
+      <h4 class="hall-title">穿堂留言板</h4>
+      <p class="hall-title">留言載入需要較長時間，請耐心等候</p>
 
-        <!-- 操作區域放在下方 -->
-        <div class="hall-controls">
-            <button id="openModalBtn" class="btn-write" type="button"><i class="fa-solid fa-pen-nib" aria-hidden="true"></i><span>寫下祝福</span></button>
-            <button id="backToMap" class="back-btn" type="button"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i><span>返回地圖</span></button>
-        </div>
+      <!-- Canvas 移到上方，撐滿螢幕 -->
+      <div class="messages-canvas" id="messagesList">
+        <!-- 便條紙將由 JavaScript 動態隨機分佈 -->
       </div>
 
+      <!-- 操作區域放在下方 -->
+      <div class="hall-controls">
+        <button id="openModalBtn" class="btn-write" type="button"><i class="fa-solid fa-pen-nib" aria-hidden="true"></i><span>寫下祝福</span></button>
+        <button id="backToMap" class="back-btn" type="button"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i><span>返回地圖</span></button>
+      </div>
+    </div>
+
     <!-- 留言 Modal 彈窗 -->
-      <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
@@ -58,31 +60,39 @@
           </div>
         </div>
       </div>
-      </div>
-      <div class="modal fade" id="messageDetailModal" tabindex="-1" aria-labelledby="messageDetailTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-          <div class="modal-content">
-            <div class="modal-header">
-              <div>
-                <h5 class="modal-title" id="messageDetailTitle"></h5>
-                <p id="messageDetailTime" class="message-detail-time"></p>
-              </div>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+    </div>
+    <div class="modal fade" id="messageDetailModal" tabindex="-1" aria-labelledby="messageDetailTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div>
+              <p id="messageDetailTime" class="message-detail-time"></p>
+              <h6 class="modal-title" id="messageDetailTitle"></h6>
             </div>
-            <div class="modal-body">
-              <p id="messageDetailContent" class="message-detail-content"></p>
-            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
+          </div>
+          <div class="modal-body">
+            <p id="messageDetailContent" class="message-detail-content"></p>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/settings.js"></script>
-    <script src="js/dialogue.js"></script>
-    <script src="js/hall.js"></script>
-    <script src="js/location-intro.js"></script>
-    <script>startLocationIntro({ data: 'data/intro_hall.json', storageKey: 'seen_intro_hall', contentSelector: '#hallContent', onReady: initHall });</script>
-  </body>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/dialogue.js"></script>
+  <script src="js/hall.js"></script>
+  <script src="js/location-intro.js"></script>
+  <script>
+    startLocationIntro({
+      data: 'data/intro_hall.json',
+      storageKey: 'seen_intro_hall',
+      contentSelector: '#hallContent',
+      onReady: initHall
+    });
+  </script>
+</body>
+
 </html>

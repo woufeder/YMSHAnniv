@@ -96,7 +96,31 @@ function initPrincipal() {
   function getSectionText(section) {
     const overrides = getRoleOverrides();
     const roleText = resolveRoleValue(overrides.sections?.[section.id]);
-    return roleText || section.text;
+    const baseText = roleText || section.text;
+    const appendedText = (section.appendedSections || [])
+      .map((appendedSection) => getSectionText(appendedSection))
+      .filter(Boolean)
+      .join("");
+
+    return `${baseText || ""}${appendedText}`;
+  }
+
+  function combineAppendedSections(sections) {
+    const combinedSections = [];
+    const sectionsById = new Map();
+
+    sections.forEach((section) => {
+      if (section.appendTo && sectionsById.has(section.appendTo)) {
+        sectionsById.get(section.appendTo).appendedSections.push(section);
+        return;
+      }
+
+      const displaySection = { ...section, appendedSections: [] };
+      combinedSections.push(displaySection);
+      sectionsById.set(section.id, displaySection);
+    });
+
+    return combinedSections;
   }
 
   function matchesCondition(condition = {}) {
@@ -231,55 +255,13 @@ function initPrincipal() {
       .reduce((height, element) => height + getOuterHeight(element), 0);
   }
 
-  function shouldKeepWebTextOnLeft(sections) {
-    renderParagraphs(leftParagraphs, sections);
-    renderParagraphs(rightParagraphs, []);
-
-    const contentHeight =
-      leftParagraphs.offsetHeight +
-      getFixedContentHeight(leftPage, leftParagraphs);
-    const letterStyles = window.getComputedStyle(
-      document.querySelector(".memorial-letter"),
-    );
-    const pageHeightLimit = Number.parseFloat(letterStyles.maxHeight);
-
-    return !Number.isFinite(pageHeightLimit) || contentHeight <= pageHeightLimit;
-  }
-
   function splitSectionsAcrossPages(sections) {
-    if (sections.length < 2) {
-      return { left: sections, right: [] };
-    }
-
-    let bestSplit = 1;
-    let smallestDifference = Number.POSITIVE_INFINITY;
-
-    for (let splitIndex = 1; splitIndex < sections.length; splitIndex += 1) {
-      const left = sections.slice(0, splitIndex);
-      const right = sections.slice(splitIndex);
-      renderParagraphs(leftParagraphs, left);
-      renderParagraphs(rightParagraphs, right);
-
-      const leftHeight =
-        leftParagraphs.offsetHeight +
-        getFixedContentHeight(leftPage, leftParagraphs);
-      const rightHeight =
-        rightParagraphs.offsetHeight +
-        getFixedContentHeight(rightPage, rightParagraphs);
+    return {
+      left: sections.slice(0, 6),
+      right: sections.slice(6),
+    };
         // 有改要記得這裡得高度要記得加
         getOuterHeight(dateMark);
-      const difference = Math.abs(leftHeight - rightHeight);
-
-      if (difference < smallestDifference) {
-        bestSplit = splitIndex;
-        smallestDifference = difference;
-      }
-    }
-
-    return {
-      left: sections.slice(0, bestSplit),
-      right: sections.slice(bestSplit),
-    };
   }
 
   function renderArticle() {
@@ -288,8 +270,10 @@ function initPrincipal() {
     meta.textContent = replaceVariables(getRoleText("meta", config.meta));
     dateMark.textContent = replaceVariables(getRoleText("timeMark", config["time-mark"]));
 
-    selectedSections = (config.sections || []).filter((section) =>
-      matchesCondition(section.when),
+    selectedSections = combineAppendedSections(
+      (config.sections || []).filter((section) =>
+        matchesCondition(section.when),
+      ),
     );
 
     artworkImage.removeAttribute("src");
@@ -306,7 +290,7 @@ function initPrincipal() {
       );
     }
 
-    if (shouldKeepWebTextOnLeft(selectedSections)) {
+    if (selectedSections.length <= 6) {
       leftSections = selectedSections;
       rightSections = [];
     } else {
