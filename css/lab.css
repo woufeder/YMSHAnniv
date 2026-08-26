@@ -28,11 +28,11 @@ body {
   width: min(calc(100% - 32px), 960px);
   height: 100dvh;
   margin: 0 auto;
-  padding: 76px 0 28px;
+  padding: clamp(28px, 7vh, 76px) 0 clamp(12px, 2.5vh, 28px);
   box-sizing: border-box;
   display: grid;
   grid-template-rows: auto auto auto minmax(0, 1fr) auto;
-  gap: 10px;
+  gap: clamp(6px, 1.2vh, 10px);
 }
 
 .lab-header {
@@ -40,8 +40,8 @@ body {
   flex-wrap: wrap;
   align-items: end;
   justify-content: space-between;
-  gap: 12px 24px;
-  padding-bottom: 16px;
+  gap: clamp(6px, 1vh, 12px) 24px;
+  padding-bottom: clamp(6px, 1.5vh, 16px);
   border-bottom: 1px solid var(--primary900-op7);
 }
 
@@ -54,9 +54,9 @@ body {
 
 .objective {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: clamp(0.85rem, 1.4vw, 1.0rem);
   color: var(--primary900);
-  line-height: 1.65;
+  line-height: 1.4;
 }
 
 .game-info {
@@ -68,15 +68,13 @@ body {
 
 .game-info span {
   display: grid;
-  min-height: 48px;
+  min-height: clamp(34px, 6vh, 48px);
   place-items: center;
-  padding: 7px;
+  padding: clamp(3px, 0.8vh, 7px);
   border: 1px solid var(--primary100-op3);
   border-radius: var(--border-radius);
   background: var(--primary900-op7);
   color: var(--white);
-  /* font-size: 0.82rem; */
-  /* font-weight: 700; */
   text-align: center;
 }
 
@@ -95,9 +93,9 @@ body {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   grid-template-rows: repeat(4, minmax(0, 1fr));
   min-height: 0;
-  gap: 12px;
-  padding: 14px;
-  border: 10px solid rgba(255, 255, 255, 0.35);
+  gap: clamp(4px, 1vh, 12px);
+  padding: clamp(5px, 1.2vh, 14px);
+  border: clamp(4px, 1vh, 10px) solid rgba(255, 255, 255, 0.35);
   border-radius: 8px;
   background: rgba(196, 184, 178, 0.873);
   box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22);
@@ -122,8 +120,8 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  padding: clamp(8px, 1.5vw, 16px);
+  gap: clamp(1px, 0.6vh, 5px);
+  padding: clamp(2px, 0.8vh, 8px) clamp(4px, 1vw, 16px);
   box-sizing: border-box;
   border-radius: 4px;
   backface-visibility: hidden;
@@ -152,7 +150,7 @@ body {
 
 .card-front i,
 .card-back i {
-  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-size: clamp(1rem, min(3vw, 4vh), 2.5rem);
 }
 
 .card-front p {
