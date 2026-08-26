@@ -292,7 +292,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             恭喜你獲得滿分！<br>
             永明知識王稱號非你莫屬！
             </div>
-            <img class="hanamaru" src="/assets/images/ui/hanamaru.png" alt="">
+            <img class="hanamaru" src="../assets/images/ui/hanamaru.png" alt="">
         `;
     } else {
       optionsGrid.innerHTML = `
