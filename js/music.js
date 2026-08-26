@@ -123,6 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const restartButton = document.getElementById("restartScore");
   const mapButton = document.getElementById("backToMap");
   const backButton = document.getElementById("backToArt");
+  const backButtonTop = document.getElementById("backToArtTop");
   const notesByName = new Map(NOTES.map((item) => [item.note, item]));
   const score = SCHOOL_SONG_C_MAJOR.flatMap((measure, measureIndex) =>
     measure.map((item) => ({ ...item, measureIndex })),
@@ -258,6 +259,9 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "../map.html";
   });
   backButton.addEventListener("click", () => {
+    window.location.href = "../art.html";
+  });
+  backButtonTop?.addEventListener("click", () => {
     window.location.href = "../art.html";
   });
 
