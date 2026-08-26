@@ -70,7 +70,10 @@ class SettingsUI {
         ${this.createOptionGroup("vol-bgm", "音樂：真島こころ-陽はまた昇る", volumeOptions)}
         ${this.createOptionGroup("vol-se", "音效", volumeOptions)}
         ${this.createOptionGroup("speed-text", "文字速度(變更後重整才會生效)", speedOptions)}
-        <button id="close-settings" class="settings-confirm" type="button">確定</button>
+        <div class="d-grid gap-2 mt-3">
+          <button id="close-settings" class="settings-confirm" type="button">確定</button>
+          <button id="clear-all-data" class="btn btn-outline-danger btn-sm" type="button" style="font-size: 0.8rem;">清空所有數據</button>
+        </div>
         <a class="settings-info mx-auto" href="credits.html">製作資訊・素材來源</a>
       </div>
     `;
@@ -78,6 +81,13 @@ class SettingsUI {
 
     this.modal.querySelector("#close-settings").onclick = () =>
       this.toggleModal(false);
+    this.modal.querySelector("#clear-all-data").onclick = () => {
+      if (confirm('確定要清空所有遊戲進度與設定嗎？此操作無法還原。')) {
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.reload();
+      }
+    };
     this.bindOptionGroup("vol-bgm", "bgmVolume", 0.20, () =>
       window.bgm?.updateVolume(),
     );
