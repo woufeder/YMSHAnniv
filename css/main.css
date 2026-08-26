@@ -452,8 +452,8 @@ body.fade-in {
 /* Fixed return control used across the site. */
 .return-button {
   position: fixed;
-  top: 24px;
-  left: 24px;
+  top: 20px;
+  left: 20px;
   z-index: 20;
   display: grid;
   width: 44px;
@@ -471,13 +471,12 @@ body.fade-in {
   transition:
     background 0.2s ease,
     color 0.2s ease;
-}
-
-.return-button:hover,
-.return-button:focus-visible {
-  background: #fff;
-  color: #1f2631;
-  outline: none;
+  &:hover,
+  &:focus-visible {
+    background: #fff;
+    color: #1f2631;
+    outline: none;
+  }
 }
 
 .location-page-content.is-hidden {
@@ -549,6 +548,19 @@ body.fade-in {
 
 .achievement-toast.is-leaving {
   animation: achievement-toast-out 0.35s ease forwards;
+}
+
+#clearLocalStorage,
+#clear-all-data {
+  text-decoration: none;
+  font-size: 0.8rem;
+  opacity: 0.6;
+  background: var(--error-color);
+  color: var(--white);
+  transition: opacity 0.2s ease;
+  &:hover {
+    opacity: 1;
+  }
 }
 
 @keyframes achievement-toast-in {
@@ -710,13 +722,6 @@ body.fade-in {
 @media (max-width: 640px) {
   :root {
     font-size: 14px;
-  }
-
-  .return-button {
-    top: 16px;
-    left: 16px;
-    width: 32px;
-    height: 32px;
   }
 
   #achievementToastRegion {
