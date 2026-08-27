@@ -152,10 +152,8 @@ function initLab() {
           <p>實驗小卡</p>
         </div>
         <div class="card-face card-back">
-        <div class="card-head">
-            <span class="card-type">${data.type}</span>
-            <i class="fa-solid ${data.icon}" aria-hidden="true"></i>
-        </div>
+          <span class="card-type">${data.type}</span>
+          <i class="fa-solid ${data.icon}" aria-hidden="true"></i>
           <strong>${data.label}</strong>
         </div>
       `;

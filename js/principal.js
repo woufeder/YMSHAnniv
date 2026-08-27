@@ -170,58 +170,9 @@ function initPrincipal() {
   }
 
   function splitSectionsForCard(sections) {
-    if (sections.length < 2) {
-      return { left: sections, right: [] };
-    }
-
-    const textWidth = 792;
-    const lineHeight = 43;
-    const paragraphGap = 20;
-    const getTextHeight = (items) => {
-      context.font = "27px 'LXGW WenKai Mono TC', serif";
-      return items.reduce((height, section) => {
-        const lines = getWrappedLines(replaceVariables(getSectionText(section)), textWidth);
-        return height + lines.length * lineHeight + paragraphGap;
-      }, 0);
-    };
-
-    context.font = "700 48px 'LXGW WenKai Mono TC', serif";
-    const titleHeight = getWrappedLines(
-      replaceVariables(getRoleText("title", config.title)),
-      textWidth,
-    ).length * 60;
-    context.font = "700 23px 'LXGW WenKai Mono TC', serif";
-    const artworkCaptionHeight = state.artwork
-      ? getWrappedLines(
-          replaceVariables(getRoleText("artworkCaption", config.artwork?.caption)),
-          textWidth,
-        ).length * 34 + 24
-      : 0;
-    const leftFixedHeight = 104 + titleHeight + 98;
-    const rightFixedHeight = state.artwork ? 94 + artworkCaptionHeight + 308 : 94;
-    const leftPageLimit = 960;
-
-    if (leftFixedHeight + getTextHeight(sections) <= leftPageLimit) {
-      return { left: sections, right: [] };
-    }
-
-    let bestSplit = 1;
-    let smallestDifference = Number.POSITIVE_INFINITY;
-
-    for (let splitIndex = 1; splitIndex < sections.length; splitIndex += 1) {
-      const leftHeight = leftFixedHeight + getTextHeight(sections.slice(0, splitIndex));
-      const rightHeight = rightFixedHeight + getTextHeight(sections.slice(splitIndex));
-      const difference = Math.abs(leftHeight - rightHeight);
-
-      if (difference < smallestDifference) {
-        bestSplit = splitIndex;
-        smallestDifference = difference;
-      }
-    }
-
     return {
-      left: sections.slice(0, bestSplit),
-      right: sections.slice(bestSplit),
+      left: sections.slice(0, 6),
+      right: sections.slice(6),
     };
   }
 
@@ -354,12 +305,6 @@ function initPrincipal() {
     });
   }
 
-  function drawContainImage(image, x, y, width, height) {
-    context.fillStyle = "#ffffff";
-    context.fillRect(x, y, width, height);
-    drawImageContain(image, x, y, width, height);
-  }
-
   function drawImageContain(image, x, y, width, height) {
     const scale = Math.min(width / image.width, height / image.height);
     const drawnWidth = image.width * scale;
@@ -405,7 +350,7 @@ function initPrincipal() {
       textWidth,
     );
     const headerHeight = 104 + titleLines.length * 60 + 98;
-    const artworkHeight = state.artwork ? 300 : 0;
+    const artworkHeight = state.artwork ? Math.round((textWidth * 2) / 3) : 0;
     context.font = "700 23px 'LXGW WenKai Mono TC', serif";
     const artworkLabelHeight = state.artwork
       ? getWrappedLines(
@@ -506,16 +451,13 @@ function initPrincipal() {
           34,
         );
         const imageY = rightY + 8;
-        drawContainImage(
+        drawImageContain(
           image,
           contentRightX,
           imageY,
           textWidth,
           artworkHeight,
         );
-        context.strokeStyle = "#9ba6c0";
-        context.lineWidth = 3;
-        context.strokeRect(contentRightX, imageY, textWidth, artworkHeight);
       } catch (error) {
         console.warn("Artwork could not be added to memorial card:", error);
       }

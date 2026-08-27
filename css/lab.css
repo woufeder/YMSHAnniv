@@ -161,19 +161,35 @@ body {
 }
 
 .card-back {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  align-items: center;
+  justify-items: center;
+  align-content: stretch;
+  justify-content: stretch;
   transform: rotateY(180deg);
   border: 3px solid var(--primary500);
   background: linear-gradient(145deg, #fff, var(--primary100));
   color: var(--text-color);
-  padding: 0 clamp(8px, 1.5vw, 16px) clamp(8px, 1.5vw, 16px);
-  .card-head {
-    width: 100%;
-    display: grid;
-    grid-template-rows: auto;
-  }
-  .card-type {
-    justify-self: start;
-  }
+  padding: clamp(3px, 0.7vh, 7px) clamp(5px, 1vw, 12px);
+  overflow: hidden;
+}
+
+.card-back > i {
+  align-self: center;
+  font-size: clamp(1.1rem, min(3.2vw, 4.4vh), 2.7rem);
+}
+
+.card-back .card-type {
+  align-self: start;
+  justify-self: start;
+  min-width: 0;
+  padding: 0.12em 0.5em;
+  border: 1px solid rgba(52, 55, 66, 0.2);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.62);
+  font-size: clamp(0.56rem, 1.2vh, 0.72rem);
+  line-height: 1.2;
 }
 
 .card-back i {
@@ -188,11 +204,12 @@ body {
 
 .card-back strong {
   max-width: 100%;
+  align-self: end;
   font-size: 1.15rem;
   line-height: 1.35;
   text-align: center;
   overflow-wrap: anywhere;
-  margin-top: 0.25rem;
+  margin: 0;
 }
 
 .experiment-card:hover:not(.is-flipped):not(.is-matched) .card-front,
@@ -221,12 +238,11 @@ body {
   background: linear-gradient(145deg, #e4fff0, #bcebd8);
   color: var(--success-text-color);
   animation: verified 0.55s ease both;
-  .card-type {
-    color: var(--success-text-color);
-  }
-  i {
-    color: var(--success-text-color);
-  }
+}
+
+.experiment-card.is-matched .card-type,
+.experiment-card.is-matched .card-back i {
+  color: var(--success-text-color);
 }
 
 .experiment-card.is-matched .card-back::after {

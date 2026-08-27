@@ -6,14 +6,14 @@ body {
 
 .principal-room {
   width: min(100% - 32px, 1180px);
-  min-height: 100vh;
+  min-height: 100dvh;
   margin: 0 auto;
-  padding: 32px 0 32px;
+  padding: clamp(16px, 3dvh, 32px) 0;
   box-sizing: border-box;
 }
 
 .principal-heading {
-  margin-bottom: 18px;
+  margin-bottom: clamp(10px, 2.1dvh, 18px);
   color: #ffffff;
   text-shadow: 0 2px 12px rgba(17, 29, 37, 0.72);
 }
@@ -30,13 +30,14 @@ body {
 
 .principal-heading h1 {
   margin-top: 4px;
-  font-size: 2.2rem;
+  font-size: clamp(1.8rem, 5.2dvh, 2.2rem);
   font-weight: 700;
 }
 
 .memorial-letter {
-  min-height: 80vh;
-  max-height: 80vh;
+  --memorial-letter-height: min(80dvh, calc(100dvh - clamp(156px, 28dvh, 208px)));
+  min-height: var(--memorial-letter-height);
+  max-height: var(--memorial-letter-height);
   overflow: auto;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -65,9 +66,9 @@ body {
 .memorial-page__watermark {
   position: absolute;
   z-index: 0;
-  bottom: 26px;
-  left: 28px;
-  width: min(42%, 220px);
+  bottom: clamp(18px, 3.1dvh, 26px);
+  left: clamp(18px, 2.2dvw, 28px);
+  width: min(42%, clamp(150px, 28dvh, 220px));
   opacity: 0.18;
   pointer-events: none;
   user-select: none;
@@ -80,12 +81,12 @@ body {
 }
 
 .memorial-letter__date {
-  margin: auto 34px 26px auto;
+  margin: auto clamp(20px, 2.7dvw, 34px) clamp(18px, 3.1dvh, 26px) auto;
   text-align: right;
 }
 
 .memorial-letter__header {
-  padding: 30px 34px 0px;
+  padding: clamp(18px, 3.6dvh, 30px) clamp(20px, 2.7dvw, 34px) 0;
 }
 
 .memorial-letter__kicker,
@@ -96,21 +97,21 @@ body {
 
 .memorial-letter__kicker {
   color: var(--primary500);
-  font-size: 0.84rem;
+  font-size: clamp(0.72rem, 1.8dvh, 0.84rem);
   font-weight: 700;
 }
 
 .memorial-letter__header h2 {
-  margin-top: 20px;
+  margin-top: clamp(12px, 2.4dvh, 20px);
   color: var(--primary900);
-  font-size: 1.8rem;
+  font-size: clamp(1.45rem, 4.3dvh, 1.8rem);
   font-weight: 700;
 }
 
 .memorial-letter__body {
   display: grid;
-  gap: 1rem;
-  padding: 20px 34px;
+  gap: clamp(0.55rem, 1.7dvh, 1rem);
+  padding: clamp(12px, 2.4dvh, 20px) clamp(20px, 2.7dvw, 34px);
 }
 
 .memorial-letter__body:empty {
@@ -134,8 +135,9 @@ body {
 
 .memorial-artwork img {
   display: block;
-  width: min(100%, 520px);
-  height: 280px;
+  width: min(100%, clamp(240px, 48dvh, 520px));
+  height: auto;
+  aspect-ratio: 3 / 2;
   margin: 0 auto;
   border: 1px solid rgba(71, 77, 100, 0.24);
   object-fit: contain;
@@ -143,17 +145,17 @@ body {
 }
 
 .memorial-artwork figcaption {
-  margin-top: 11px;
+  margin-top: clamp(7px, 1.4dvh, 11px);
   color: var(--primary700);
-  font-size: 0.92rem;
+  font-size: clamp(0.78rem, 1.9dvh, 0.92rem);
   text-align: center;
 }
 
 .memorial-letter__footer {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  padding: 18px 34px 26px;
+  gap: clamp(6px, 1.2dvh, 10px);
+  padding: clamp(10px, 2.1dvh, 18px) clamp(20px, 2.7dvw, 34px) clamp(14px, 3.1dvh, 26px);
   border-top: 1px solid rgba(71, 77, 100, 0.16);
 }
 
@@ -161,9 +163,9 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  min-height: 42px;
-  padding: 9px 14px;
+  gap: clamp(5px, 1dvh, 8px);
+  min-height: clamp(36px, 5dvh, 42px);
+  padding: clamp(7px, 1.1dvh, 9px) clamp(10px, 1.3dvw, 14px);
   border: 1px solid var(--primary300);
   border-radius: var(--border-radius-large);
   background: #ffffff;
@@ -203,7 +205,7 @@ body {
 
 .character-layer img {
   max-width: 90vw;
-  height: 120vh;
+  height: clamp(70dvh, 105dvh, 120dvh);
   margin-top: 0;
   object-fit: contain;
   transition: opacity 0.5s ease;

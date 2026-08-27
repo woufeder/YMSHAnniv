@@ -1,6 +1,7 @@
 #playground {
-  min-height: 100vh;
-  overflow-x: hidden;
+  min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
   color: #f7fbfb;
   background: #315b54 url("../assets/images/playground.jpg") center / cover
     no-repeat;
@@ -9,16 +10,17 @@
 .playground-rescue {
   position: relative;
   z-index: 3;
-  min-height: 100vh;
+  min-height: 0;
+  height: 100%;
   display: grid;
   place-items: center;
-  padding: 72px 24px 72px;
+  padding: clamp(16px, 6dvh, 72px) clamp(12px, 2dvw, 24px);
   box-sizing: border-box;
 }
 
 .rescue-panel {
   width: min(100%, 1200px);
-  padding: 26px 30px;
+  padding: clamp(16px, 3dvh, 26px) clamp(18px, 2.5dvw, 30px);
   border: 1px solid rgba(228, 243, 225, 0.74);
   border-radius: 8px;
   background: rgba(61, 64, 63, 0.88);
@@ -30,8 +32,8 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 18px;
-  padding-bottom: 15px;
+  gap: clamp(10px, 2.2dvh, 18px);
+  padding-bottom: clamp(9px, 1.8dvh, 15px);
   border-bottom: 1px solid rgba(228, 243, 225, 0.32);
 }
 
@@ -53,19 +55,20 @@
   box-shadow: 0 0 10px rgba(255, 216, 93, 0.76);
 }
 
-.rescue-header h1 {
+.rescue-header h3 {
   margin: 0;
   color: #fff;
+  font-size: clamp(1.8rem, 5.2dvh, 2.8rem);
 }
 
 .game-stats {
   display: flex;
-  gap: 16px;
+  gap: clamp(8px, 1.9dvh, 16px);
 }
 
 .lead-meter,
 .time-meter {
-  min-width: 84px;
+  min-width: clamp(72px, 14dvh, 112px);
   display: grid;
   justify-items: end;
   gap: 3px;
@@ -133,7 +136,7 @@
   display: flex;
   flex-direction: column;
   column-gap: 16px;
-  padding: 22px 0 18px;
+  padding: clamp(12px, 3dvh, 22px) 0 clamp(10px, 2.4dvh, 18px);
 }
 
 .scene-icon {
@@ -172,7 +175,7 @@
 }
 
 .game-board {
-  margin-top: 18px;
+  margin-top: clamp(10px, 2.4dvh, 18px);
 }
 
 .game-feedback {
@@ -304,12 +307,12 @@
 
 .active-cue i {
   color: #ffe99a;
-  font-size: 50px;
+  font-size: clamp(2rem, 6dvh, 3rem);
 }
 
 .active-cue strong {
   line-height: 1;
-  font-size: 24px;
+  font-size: clamp(1.15rem, 3.4dvh, 1.5rem);
 }
 
 .active-cue span {
@@ -565,13 +568,13 @@
 }
 
 .game-stats {
-  gap: 10px;
+  gap: clamp(6px, 1.3dvh, 10px);
 }
 
 .lead-meter,
 .time-meter {
-  min-width: 112px;
-  padding: 9px 11px;
+  min-width: clamp(72px, 14dvh, 112px);
+  padding: clamp(6px, 1.3dvh, 9px) clamp(8px, 1.4dvw, 11px);
   border: 1px solid rgba(228, 243, 225, 0.28);
   border-radius: 8px;
   background: rgba(7, 38, 29, 0.3);
@@ -601,11 +604,11 @@
 }
 
 .rhythm-stage {
-  gap: 14px;
+  gap: clamp(8px, 1.7dvh, 14px);
 }
 
 .beat-area {
-  min-height: 250px;
+  min-height: clamp(190px, 31dvh, 250px);
   background:
     linear-gradient(90deg, transparent 0 49.5%, rgba(255, 216, 93, 0.22) 49.5% 50.5%, transparent 50.5%),
     repeating-linear-gradient(0deg, rgba(199, 237, 199, 0.06) 0 1px, transparent 1px 42px),
@@ -628,7 +631,7 @@
 }
 
 .active-cue {
-  width: 128px;
+  width: clamp(94px, 16dvh, 128px);
   box-shadow: 0 10px 22px rgba(2, 20, 14, 0.28);
 }
 
@@ -647,14 +650,14 @@
 }
 
 .cue-queue {
-  min-height: 42px;
-  gap: 6px;
+  min-height: clamp(38px, 6dvh, 42px);
+  gap: clamp(4px, 0.9dvh, 6px);
 }
 
 .cue-chip {
-  min-width: 46px;
-  min-height: 40px;
-  padding: 5px;
+  min-width: clamp(42px, 7dvh, 46px);
+  min-height: clamp(36px, 5.8dvh, 40px);
+  padding: clamp(3px, 0.8dvh, 5px);
 }
 
 .cue-chip span {
@@ -671,11 +674,11 @@
 }
 
 .rhythm-controls {
-  gap: 10px;
+  gap: clamp(5px, 1.2dvh, 10px);
 }
 
 .rhythm-control {
-  min-height: 84px;
+  min-height: clamp(64px, 11dvh, 84px);
   background: rgba(4, 38, 27, 0.48);
 }
 
