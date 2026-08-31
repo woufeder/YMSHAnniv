@@ -1,0 +1,128 @@
+{
+  "intro": "本頁標示本網站使用的字體、音樂、音效與視覺素材。資料可直接在 data/credits.json 維護，更新後頁面會自動生成。",
+  "sections": [
+    {
+      "id": "music",
+      "label": "音樂與音效",
+      "icon": "fa-music",
+      "description": "背景音樂、場景環境音與互動效果音。",
+      "items": [
+        {
+          "name": "真島こころ - 陽はまた昇る",
+          "type": "背景音樂",
+          "creator": "真島こころ",
+          "source": "花鳥風月",
+          "url": "https://flower-prayer.com/bg%EF%BD%8D-vol-16-2/",
+          "note": "全站 BGM"
+        },
+        {
+          "name": "場景與互動效果音",
+          "type": "音效",
+          "creator": "請依實際取得來源補列",
+          "source": "assets/audio/",
+          "url": "",
+          "note": "包含答題、花圃、操場、對話與成就提示音"
+        }
+      ]
+    },
+    {
+      "id": "fonts",
+      "label": "字體",
+      "icon": "fa-font",
+      "description": "介面與對話使用的網頁字體。",
+      "items": [
+        {
+          "name": "LXGW WenKai Mono TC",
+          "type": "主要展示字體",
+          "creator": "LXGW",
+          "source": "Google Fonts",
+          "url": "https://fonts.google.com/specimen/LXGW+WenKai+Mono+TC",
+          "note": "對話、遊戲與紀念卡文字"
+        },
+        {
+          "name": "Noto Sans TC",
+          "type": "輔助字體",
+          "creator": "Google",
+          "source": "Google Fonts",
+          "url": "https://fonts.google.com/noto/specimen/Noto+Sans+TC",
+          "note": "介面備援字體"
+        }
+      ]
+    },
+    {
+      "id": "visuals",
+      "label": "視覺素材",
+      "icon": "fa-image",
+      "description": "校園場景、角色、地圖與介面圖像。",
+      "items": [
+        {
+          "name": "校園場景與地圖素材",
+          "type": "背景與地圖",
+          "creator": "請依素材實際創作者補列",
+          "source": "assets/images/",
+          "url": "",
+          "note": "包含校門、教室、穿堂、花圃、操場與校長室"
+        },
+        {
+          "name": "角色與 UI 圖像",
+          "type": "角色與介面",
+          "creator": "請依素材實際創作者補列",
+          "source": "assets/images/、assets/images/ui/",
+          "url": "",
+          "note": "包含學生、警衛、工友、狗狗、校徽與對話框圖像"
+        }
+      ]
+    },
+    {
+      "id": "tools",
+      "label": "開發與圖示",
+      "icon": "fa-code",
+      "description": "網站使用的前端框架與圖示資源。",
+      "items": [
+        {
+          "name": "Font Awesome Free",
+          "type": "介面圖示",
+          "creator": "Fonticons, Inc.",
+          "source": "Font Awesome",
+          "url": "https://fontawesome.com/",
+          "note": "按鈕、狀態與遊戲圖示"
+        },
+        {
+          "name": "Bootstrap",
+          "type": "基礎樣式與 Modal",
+          "creator": "Bootstrap team",
+          "source": "Bootstrap",
+          "url": "https://getbootstrap.com/",
+          "note": "部分基礎元件與留言板 Modal"
+        },
+        {
+          "name": "GSAP",
+          "type": "動畫函式庫",
+          "creator": "GreenSock",
+          "source": "GSAP",
+          "url": "https://gsap.com/",
+          "note": "首頁與室外對話動畫"
+        }
+      ]
+    },
+    {
+      "id": "notice",
+      "label": "聯絡與聲明",
+      "icon": "fa-envelope-open-text",
+      "description": "聯絡方式與本站使用聲明。",
+      "notice": {
+        "contact": {
+          "label": "企劃聯絡",
+          "value": "",
+          "url": ""
+        },
+        "statements": [
+          "\u672c\u7db2\u70ba\u5657\u6d6a\u4f01\u5283\u300a\u6c38\u660e\u9ad8\u4e2d\u300b\u5468\u5e74\u7d00\u5ff5\u7db2\u7ad9\u3002\u540d\u518a\u4e4b\u8cc7\u6599\u5c6c\u65bc\u89d2\u8272\u5275\u4f5c\u8005\uff0c\u5b98\u65b9\u50c5\u4f5c\u8cc7\u6599\u767b\u5165\uff0c\u975e\u4f01\u5283\u73a9\u5bb6\u8acb\u52ff\u632a\u7528\u6216\u9032\u884c\u4e8c\u6b21\u767c\u5e03\u3002",
+          "本網站為紀念性質的創作企劃展示頁面，非商業用途。",
+          "頁面中引用的素材、角色與相關創作，其權利仍屬原作者、創作者或權利人所有。",
+          "若對素材標示、使用方式或內容有任何疑問，請透過公開聯絡方式告知，將儘速協助確認與調整。"
+        ]
+      }
+    }
+  ]
+}

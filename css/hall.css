@@ -1,22 +1,30 @@
 /* hall.css - 穿堂留言板 */
 .hall-body {
-  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100dvh;
   background: #1d242f;
 }
 
 #hallContent {
-  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100dvh;
   background: #1d242f url("../assets/images/hall-brick.jpg") center / cover fixed no-repeat;
 }
 
 .hall-container {
-  padding: 20px 0 24px;
+  width: min(100% - clamp(20px, 4dvw, 48px), 1180px);
+  height: 100%;
+  margin: 0 auto;
+  padding: clamp(16px, 3dvh, 24px) 0 clamp(12px, 2.4dvh, 20px);
   box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: clamp(8px, 1.6dvh, 14px);
 }
 
 .hall-title {
-  margin: 1.5rem auto 0;
-  padding-left: 58px;
+  margin: 0 auto;
+  padding-left: clamp(44px, 7dvw, 58px);
   width: fit-content;
   color: #ffffff;
   font-weight: 700;
@@ -31,9 +39,10 @@ p.hall-title{
 .messages-canvas {
   --notes-content-height: 0px;
   position: relative;
-  min-height: max(75vh, var(--notes-content-height));
-  width: 100vw;
-  overflow: hidden;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
   border-radius: var(--border-radius-large);
 }
 
@@ -169,8 +178,9 @@ p.hall-title{
   border: 0;
   border-radius: unset;
   box-shadow: 0 20px 50px rgba(12, 31, 40, 0.32);
-  width: 600px;
-  padding: 20px 22px;
+  width: 100%;
+  max-height: calc(100dvh - 32px);
+  padding: clamp(14px, 3dvh, 20px) clamp(16px, 3dvw, 22px);
 }
 
 #messageDetailModal .modal-content {
@@ -258,17 +268,8 @@ p.hall-title{
 }
 
 @media (max-width: 576px) {
-  .hall-container {
-    width: min(100% - 20px, 960px);
-    padding-top: 18px;
-  }
-
   .hall-title {
     margin-bottom: 8px;
-  }
-
-  .messages-canvas {
-    min-height: calc(100vh - 180px);
   }
 
   .sticky-note {
@@ -290,5 +291,9 @@ p.hall-title{
   #hallContent .modal-body,
   #hallContent .modal-footer {
     padding-inline: 18px;
+  }
+
+  #messageInput {
+    min-height: min(13rem, 32dvh);
   }
 }

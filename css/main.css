@@ -43,44 +43,44 @@
   --dialogue-text-color: #151925;
   --dialogue-max-width: 1080px;
 
-  font-size: 17px;
+  font-size: clamp(15px, 1.35vw, 17px);
 }
 
 h1 {
-  font-size: 4.5rem;
+  font-size: clamp(2rem, 7vw, 4.5rem);
   font-weight: 700;
   padding: 0;
   margin: 0;
 }
 
 h2 {
-  font-size: 3rem;
+  font-size: clamp(1.7rem, 5.5vw, 3rem);
   font-weight: 700;
   padding: 0;
   margin: 0;
 }
 
 h3 {
-  font-size: 2.3rem;
+  font-size: clamp(1.45rem, 4.5vw, 2.3rem);
   font-weight: 700;
   padding: 0;
   margin: 0;
 }
 
 h4 {
-  font-size: 1.9rem;
+  font-size: clamp(1.25rem, 3.7vw, 1.9rem);
   padding: 0;
   margin: 0;
 }
 
 h5 {
-  font-size: 1.5rem;
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
   padding: 0;
   margin: 0;
 }
 
 h6 {
-  font-size: 1.3rem;
+  font-size: clamp(1rem, 2.6vw, 1.3rem);
   padding: 0;
   margin: 0;
 }
@@ -93,6 +93,7 @@ p {
 
 body {
   margin: 0;
+  min-height: 100dvh;
   font-family: "LXGW WenKai Mono TC", "Noto Sans TC", sans-serif;
   overflow: hidden;
   position: relative;
@@ -145,7 +146,7 @@ body.fade-in {
 }
 
 .scene-container {
-  height: 100vh;
+  height: 100dvh;
   position: relative;
   overflow: hidden;
   /* 若頁面有固定背景或 Bootstrap 容器，這行能確保抖動有效 */
@@ -155,7 +156,8 @@ body.fade-in {
 /* 首頁 */
 
 #index {
-  height: 100vh;
+  min-height: 100dvh;
+  height: 100dvh;
 
   .bg {
     position: fixed;
@@ -166,7 +168,8 @@ body.fade-in {
     z-index: -1;
   }
 
-  .question-icon {
+.question-icon {
+  text-decoration: none;
     position: fixed;
     top: 20px;
     left: 20px;
@@ -213,6 +216,38 @@ body.fade-in {
       animation: revealOnce 2s ease 1.5s forwards;
     }
   }
+}
+
+#index .scene-container {
+  width: min(100%, 960px);
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: clamp(18px, 5dvh, 56px) clamp(18px, 4dvw, 48px);
+  box-sizing: border-box;
+}
+
+#index .LOGO-layer {
+  width: min(100%, 760px);
+}
+
+#index .scene-container > div:not(.LOGO-layer) {
+  width: min(100%, 520px);
+}
+
+#index .LOGO-layer img {
+  width: clamp(260px, 60vw, 620px);
+  max-width: 100%;
+}
+
+#index .input-group {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  width: 100%;
+}
+
+#index .input-group > input,
+#index .input-group > a {
+  min-width: 0;
 }
 
 @keyframes revealOnce {
@@ -443,6 +478,7 @@ body.fade-in {
 }
 
 .settings-info {
+  align-self: center;
   font-size: 14px;
   color: var(--primary900);
   text-decoration: underline;
@@ -721,11 +757,84 @@ body.fade-in {
 
 @media (max-width: 640px) {
   :root {
-    font-size: 14px;
+    font-size: 15px;
   }
 
   #achievementToastRegion {
     right: 16px;
     bottom: 16px;
+  }
+}
+
+.settings-actions {
+  display: grid;
+  gap: 8px;
+  margin-top: 1rem;
+}
+
+.settings-danger {
+  min-height: 32px;
+  border: 1px solid var(--error-color);
+  border-radius: var(--border-radius);
+  background: transparent;
+  color: var(--error-text-color);
+  font: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.settings-danger:hover,
+.settings-danger:focus-visible {
+  background: var(--error-color);
+  color: #fff;
+  outline: none;
+}
+
+@media (max-width: 700px) {
+  #index .scene-container {
+    padding: clamp(58px, 10dvh, 82px) 18px clamp(18px, 5dvh, 38px);
+  }
+
+  #index .LOGO-layer img {
+    width: min(100%, 460px);
+  }
+
+  #index .input-group {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  #index .input-group > input,
+  #index .input-group > a {
+    width: 100%;
+    border-radius: var(--border-radius) !important;
+  }
+
+  #index .question-icon {
+    top: 12px;
+    left: 12px;
+  }
+
+  .settings-content {
+    width: min(100% - 24px, 400px);
+    max-height: calc(100dvh - 24px);
+    padding: clamp(18px, 4dvh, 28px);
+    overflow: auto;
+  }
+
+  #achievementToastRegion {
+    right: 12px;
+    bottom: 12px;
+    width: min(360px, calc(100vw - 24px));
+  }
+}
+
+@media (max-height: 700px) and (min-width: 701px) {
+  #index .scene-container {
+    padding-block: clamp(14px, 4dvh, 32px);
+  }
+
+  #index .LOGO-layer img {
+    width: clamp(240px, 48vw, 500px);
   }
 }

@@ -28,7 +28,7 @@ body {
   width: min(calc(100% - 32px), 960px);
   height: 100dvh;
   margin: 0 auto;
-  padding: clamp(28px, 7vh, 76px) 0 clamp(12px, 2.5vh, 28px);
+  padding: clamp(56px, 7dvh, 76px) 0 clamp(12px, 2.5dvh, 28px);
   box-sizing: border-box;
   display: grid;
   grid-template-rows: auto auto auto minmax(0, 1fr) auto;
@@ -443,5 +443,35 @@ body {
 
   .complete-popup {
     padding: 24px 16px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 900px) and (orientation: portrait) {
+  .lab-game {
+    width: min(100% - 28px, 760px);
+    padding-top: clamp(58px, 8dvh, 74px);
+  }
+
+  .card-grid {
+    gap: clamp(5px, 0.9dvh, 9px);
+    padding: clamp(7px, 1.2dvh, 11px);
+  }
+
+  .card-back strong {
+    font-size: clamp(0.72rem, 1.9dvh, 0.9rem);
+  }
+}
+
+@media (max-height: 680px) and (min-width: 641px) {
+  .lab-game {
+    padding-top: clamp(48px, 7dvh, 58px);
+  }
+
+  .lab-header {
+    padding-bottom: 4px;
+  }
+
+  .lab-log {
+    padding-block: 0.3rem;
   }
 }

@@ -2,7 +2,7 @@
 .scene-container {
   position: relative;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
   color: var(--dialogue-text-color);
   overflow: hidden;
 }
@@ -36,10 +36,10 @@
 }
 
 .character-layer img {
-  margin-top: 15vh;
-  width: 100vw;
+  margin-top: clamp(5dvh, 12dvh, 15dvh);
+  width: min(100vw, 1200px);
   height: auto;
-  max-height: 130vh;
+  max-height: 118dvh;
   object-fit: contain;
   transition: opacity 0.5s ease;
 }
@@ -101,7 +101,7 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding: 0 20px 24px;
+  padding: 0 clamp(12px, 3dvw, 20px) clamp(16px, 3dvh, 24px);
   pointer-events: none;
   z-index: 5;
 }
@@ -109,8 +109,8 @@
 .dialogue-box {
   position: relative;
   width: min(100%, var(--dialogue-max-width));
-  min-height: 158px;
-  padding: 24px 50px 20px;
+  min-height: clamp(132px, 22dvh, 158px);
+  padding: clamp(18px, 3dvh, 24px) clamp(24px, 5dvw, 50px) clamp(16px, 2.6dvh, 20px);
   box-sizing: border-box;
   border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 8px;
@@ -122,15 +122,15 @@
 
 .dialogue-header {
   position: absolute;
-  top: -50px;
-  left: 25px;
-  padding: 4px 50px;
+  top: clamp(-50px, -6.9dvh, -40px);
+  left: clamp(20px, 3.5dvw, 25px);
+  padding: 4px clamp(34px, 8dvw, 50px);
   border: 1px solid #fff;
   border-left: 0;
   border-radius: 8px;
   background-color: var(--dialogue-header-bg);
   color: #fff;
-  font-size: 24px;
+  font-size: clamp(1rem, 3.2dvw, 1.4rem);
   line-height: 1.4;
 }
 
@@ -138,17 +138,17 @@
   content: "";
   position: absolute;
   top: 40%;
-  left: -25px;
-  width: 50px;
-  height: 50px;
+  left: clamp(-25px, -3.5dvw, -20px);
+  width: clamp(40px, 7dvw, 50px);
+  height: clamp(40px, 7dvw, 50px);
   background: url(../assets/images/ui/dialogLogo.png) center / cover no-repeat;
   transform: translateY(-50%);
 }
 
 .dialogue-text {
-  min-height: 92px;
+  min-height: clamp(76px, 13dvh, 92px);
   color: var(--dialogue-text-color);
-  font-size: 22px;
+  font-size: clamp(1rem, 3.2dvw, 1.3rem);
   line-height: 1.6;
   letter-spacing: 0;
 }
@@ -164,13 +164,13 @@
 }
 
 .next-btn {
-  width: 40px;
-  height: 32px;
+  width: clamp(34px, 6dvw, 40px);
+  height: clamp(28px, 5dvh, 32px);
   padding: 0;
   border: none;
   background: none;
   color: var(--primary100);
-  font-size: 30px;
+  font-size: clamp(1.25rem, 4.5dvw, 1.75rem);
   line-height: 1;
   cursor: pointer;
   transition: var(--transition);
@@ -195,26 +195,25 @@
   }
 
   .dialogue-box {
-    min-height: 146px;
-    padding: 22px 22px 16px;
+    width: 100%;
+  }
+}
+
+@media (max-height: 560px) and (orientation: landscape) {
+  .character-layer img {
+    margin-top: 0;
+    max-height: 105dvh;
   }
 
-  .dialogue-header {
-    top: -44px;
-    left: 18px;
-    min-width: 120px;
-    padding: 4px 34px;
-    font-size: 1.1rem;
+  .dialogue-layer {
+    padding-bottom: 10px;
   }
 
-  .dialogue-header::before {
-    left: -21px;
-    width: 42px;
-    height: 42px;
+  .dialogue-box {
+    min-height: 96px;
   }
 
   .dialogue-text {
-    min-height: 88px;
-    font-size: 18px;
+    min-height: 50px;
   }
 }

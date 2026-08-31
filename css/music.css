@@ -7,9 +7,12 @@ body {
 }
 
 .music-classroom {
-  min-height: 100vh;
-  padding: 42px;
+  min-height: 100dvh;
+  height: 100dvh;
+  padding: clamp(18px, 5dvh, 42px) clamp(14px, 4dvw, 42px) clamp(12px, 3dvh, 28px);
   box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
   background: linear-gradient(
     150deg,
     rgba(25, 36, 61, 0.7),
@@ -31,7 +34,7 @@ body {
 
 .music-stage {
   width: min(1000px, 100%);
-  height: 100%;
+  height: auto;
   min-height: 0;
   margin: clamp(8px, 2vh, 20px) auto 0;
   padding: clamp(12px, 2.5vh, 30px);
@@ -270,20 +273,20 @@ body {
 
 @media (max-width: 680px) {
   .music-classroom {
-    padding: 24px 14px;
+    padding-top: clamp(64px, 10dvh, 78px);
   }
 
   .music-header {
     padding-left: 52px;
   }
 
-  .music-header h1 {
-    font-size: 32px;
+  .music-header h2 {
+    font-size: clamp(1.55rem, 6dvw, 2rem);
   }
 
   .music-stage {
-    margin-top: 52px;
-    padding: 18px 12px;
+    margin-top: 12px;
+    padding: clamp(10px, 2dvh, 18px) 12px;
   }
 
   .sheet-music {
@@ -332,5 +335,37 @@ body {
 
   .piano-key strong {
     font-size: 18px;
+  }
+}
+
+@media (min-width: 681px) and (max-width: 900px) and (orientation: portrait) {
+  .music-classroom {
+    padding-top: clamp(64px, 8dvh, 78px);
+  }
+
+  .sheet-music {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .score-measure:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .piano {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+@media (max-height: 680px) and (min-width: 681px) {
+  .music-classroom {
+    padding-top: clamp(14px, 3dvh, 24px);
+  }
+
+  .sheet-music {
+    margin-block: 8px;
+  }
+
+  .piano-key {
+    min-height: 6.5rem;
   }
 }

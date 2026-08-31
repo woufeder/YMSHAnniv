@@ -36,6 +36,11 @@ body {
   font-size: clamp(1.6rem, 4.6dvh, 2.3rem);
 }
 
+.artroom-header > div {
+  min-width: 0;
+  text-align: right;
+}
+
 .save-status {
   margin: 0;
   color: #513d35;
@@ -255,18 +260,19 @@ body {
   margin-right: 6px;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 900px) {
   .artroom {
-    padding: 18px 10px 12px;
-    gap: 12px;
+    padding: clamp(58px, 9dvh, 76px) 10px 12px;
+    gap: clamp(8px, 1.7dvh, 12px);
   }
 
   .artroom-header {
-    padding-left: 52px;
+    align-items: center;
+    padding-left: clamp(44px, 8dvw, 58px);
   }
 
-  .artroom-header h1 {
-    font-size: 32px;
+  .artroom-header h3 {
+    font-size: clamp(1.35rem, 5dvw, 2rem);
   }
 
   .save-status {
@@ -278,12 +284,18 @@ body {
     flex-wrap: wrap;
   }
 
+  .color-swatches,
+  .brush-tools,
+  .drawing-actions {
+    gap: clamp(4px, 1dvw, 7px);
+  }
+
   .drawing-actions {
     width: 100%;
     justify-content: flex-end;
   }
 
   .canvas-frame {
-    padding: 10px;
+    padding: clamp(5px, 1.2dvw, 10px);
   }
 }

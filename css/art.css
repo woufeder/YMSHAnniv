@@ -1,12 +1,12 @@
 body {
-  min-height: 100vh;
+  min-height: 100dvh;
   overflow: hidden;
   background: #1f2631 url('../assets/images/art-building.jpg') center / cover no-repeat;
 }
 
 .art-building {
-  min-height: 100vh;
-  padding: 48px;
+  min-height: 100dvh;
+  padding: clamp(24px, 6dvh, 48px) clamp(18px, 5dvw, 48px);
   box-sizing: border-box;
   background: rgba(25, 33, 47, 0.2);
   color: #f6f7fb;
@@ -18,7 +18,7 @@ body {
 
 .art-building-header {
   width: min(760px, 100%);
-  margin: 0 auto 44px;
+  margin: 0 auto clamp(24px, 5dvh, 44px);
   text-align: center;
 }
 
@@ -29,15 +29,15 @@ body {
 }
 
 .art-building-header h1 {
-  margin-top: 10px;
-  font-size: 72px;
+  margin-top: clamp(6px, 1.4dvh, 10px);
+  font-size: clamp(2.1rem, 7dvh, 4.25rem);
   color: #fff;
 }
 
 .art-room-choices {
   display: grid;
   grid-template-rows: repeat(2, minmax(0, 1fr));
-  gap: 18px;
+  gap: clamp(12px, 2.6dvh, 18px);
   width: min(900px, 100%);
   margin: 0 auto;
 }
@@ -46,9 +46,9 @@ body {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 18px;
-  min-height: 210px;
-  padding: 28px;
+  gap: clamp(12px, 2.6dvh, 18px);
+  min-height: clamp(132px, 25dvh, 210px);
+  padding: clamp(18px, 3.6dvh, 28px);
   border: 1px solid rgba(255, 255, 255, 0.42);
   border-radius: var(--border-radius-large);
   color: inherit;
@@ -73,7 +73,7 @@ body {
 }
 
 .art-room-choice > i:first-child {
-  font-size: 44px;
+  font-size: clamp(2rem, 5dvh, 2.6rem);
 }
 
 .art-room-choice > i:last-child {
@@ -86,12 +86,12 @@ body {
 }
 
 .room-choice-copy strong {
-  font-size: 27px;
+  font-size: clamp(1.25rem, 3.4dvh, 1.6rem);
 }
 
 .room-choice-copy small {
   margin-top: 7px;
-  font-size: 15px;
+  font-size: clamp(0.82rem, 2dvh, 0.92rem);
 }
 
 @media (max-width: 680px) {
@@ -104,10 +104,6 @@ body {
 
   .art-building-header {
     margin-bottom: 28px;
-  }
-
-  .art-building-header h1 {
-    font-size: 42px;
   }
 
   .art-room-choices {

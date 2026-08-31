@@ -2,8 +2,8 @@
 .options-area {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 15px;
+  gap: clamp(6px, 1.4dvh, 10px);
+  margin-top: clamp(10px, 2dvh, 15px);
   width: 100%;
 }
 
@@ -12,14 +12,14 @@
 }
 
 .dialogue-option-btn {
-  padding: 10px 20px;
+  padding: clamp(8px, 1.6dvh, 10px) clamp(12px, 3dvw, 20px);
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 6px;
   color: var(--dialogue-text-color);
   text-align: left;
   cursor: pointer;
-  font-size: 18px;
+  font-size: clamp(0.92rem, 3vw, 1.05rem);
   transition: all 0.2s ease;
 }
 

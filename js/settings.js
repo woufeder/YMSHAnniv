@@ -62,6 +62,10 @@ class SettingsUI {
       { value: 10, text: "快" },
     ];
 
+    const creditsPath = window.location.pathname.includes("/games/")
+      ? "../credits.html"
+      : "credits.html";
+
     this.modal = document.createElement("div");
     this.modal.className = "settings-modal hidden";
     this.modal.innerHTML = `
@@ -74,10 +78,20 @@ class SettingsUI {
           <button id="close-settings" class="settings-confirm" type="button">確定</button>
           <button id="clear-all-data" class="btn btn-outline-danger btn-sm" type="button" style="font-size: 0.8rem;">清空所有數據</button>
         </div>
-        <a class="settings-info mx-auto" href="credits.html">製作資訊・素材來源</a>
+        <a class="settings-info" href="credits.html">製作資訊・素材來源</a>
       </div>
     `;
     document.body.appendChild(this.modal);
+
+    const settingsActions = this.modal.querySelector(".d-grid");
+    settingsActions?.classList.remove("d-grid", "gap-2", "mt-3");
+    settingsActions?.classList.add("settings-actions");
+
+    const clearAllButton = this.modal.querySelector("#clear-all-data");
+    clearAllButton?.classList.remove("btn", "btn-outline-danger", "btn-sm");
+    clearAllButton?.classList.add("settings-danger");
+
+    this.modal.querySelector(".settings-info").href = creditsPath;
 
     this.modal.querySelector("#close-settings").onclick = () =>
       this.toggleModal(false);

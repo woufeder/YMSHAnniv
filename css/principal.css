@@ -1,6 +1,6 @@
 /* principal.css - 校長室紀念文章 */
 body {
-  min-height: 100vh;
+  min-height: 100dvh;
   background: #26313a url("../assets/images/principal.jpg") center / cover fixed no-repeat;
 }
 
@@ -211,9 +211,21 @@ body {
   transition: opacity 0.5s ease;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 900px) {
+  .principal-room {
+    width: min(100% - 24px, 820px);
+    height: 100dvh;
+    min-height: 0;
+    padding-top: clamp(60px, 9dvh, 72px);
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: clamp(8px, 1.6dvh, 14px);
+  }
+
   .memorial-letter {
     display: block;
+    min-height: 0;
+    max-height: none;
   }
 
   .memorial-page--left {
@@ -234,11 +246,6 @@ body {
 
   .memorial-letter__date {
     margin: 18px 20px 24px auto;
-  }
-
-  .principal-room {
-    width: min(100% - 24px, 820px);
-    padding-top: 68px;
   }
 
   .principal-heading h1 {
