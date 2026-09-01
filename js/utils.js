@@ -60,7 +60,12 @@ function guardPlayerInputAccess() {
   try {
     const currentPage =
       window.location.pathname.split("/").pop() || "index.html";
-    const exemptPages = new Set(["index.html", "hall.html", "whoAreYou.html"]);
+    const exemptPages = new Set([
+      "index.html",
+      "credits.html",
+      "hall.html",
+      "whoAreYou.html",
+    ]);
 
     if (exemptPages.has(currentPage)) {
       return;

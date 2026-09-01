@@ -1,6 +1,32 @@
 {
-  "intro": "本頁標示本網站使用的字體、音樂、音效與視覺素材。資料可直接在 data/credits.json 維護，更新後頁面會自動生成。",
+  "intro": "本頁存放各式素材來源與聯絡聲明",
   "sections": [
+    {
+      "id": "notice",
+      "label": "聯絡與聲明",
+      "icon": "fa-envelope-open-text",
+      "description": "聯絡方式與本站使用聲明。",
+      "notice": {
+        "statements": [
+          "本站為噗浪企劃《永明高中》周年紀念網站。名冊之資料屬於角色創作者，官方僅作資料登入，非企劃玩家請勿挪用或進行二次發布。",
+          "頁面中使用的素材，其權利仍屬原作者或權利人所有。",
+          "若對素材標示、使用方式或內容有任何疑問，請透過下方資訊聯絡。"
+        ],
+        "contact": {
+          "label": "問題回報",
+          "creator": "葬光@woufeder",
+          "description": "如有任何問題或bug回報，請私訊噗浪或Email聯絡，十分感謝。",
+          "plurk": {
+            "value": "噗浪",
+            "url": "https://www.plurk.com/woufeder"
+          },
+          "email": {
+            "value": "una860215@gmail.com",
+            "url": "mailto:una860215@gmail.com?subject=永明高中網站問題回報"
+          }
+        }
+      }
+    },
     {
       "id": "music",
       "label": "音樂與音效",
@@ -11,17 +37,129 @@
           "name": "真島こころ - 陽はまた昇る",
           "type": "背景音樂",
           "creator": "真島こころ",
-          "source": "花鳥風月",
+          "source": "BGM作品 vol.16",
           "url": "https://flower-prayer.com/bg%EF%BD%8D-vol-16-2/",
           "note": "全站 BGM"
         },
         {
-          "name": "場景與互動效果音",
+          "name": "鍵がかかってドアが開かない",
           "type": "音效",
-          "creator": "請依實際取得來源補列",
-          "source": "assets/audio/",
-          "url": "",
-          "note": "包含答題、花圃、操場、對話與成就提示音"
+          "creator": "",
+          "source": "ポケットサウンド",
+          "url": "https://pocket-se.info/",
+          "note": "門鎖提示音"
+        },
+        {
+          "name": "本のページをめくる音",
+          "type": "音效",
+          "creator": "",
+          "source": "ポケットサウンド",
+          "url": "https://pocket-se.info/",
+          "note": "紙張提示音"
+        },
+        {
+          "name": "Passos arrastados",
+          "type": "音效",
+          "creator": "pollyschambers",
+          "source": "freesound",
+          "url": "https://freesound.org/people/pollyschambers/sounds/428981/",
+          "note": "一般腳步聲"
+        },
+        {
+          "name": "Achievement Happy Beeps Jingle",
+          "type": "音效",
+          "creator": "CogFireStudios",
+          "source": "freesound",
+          "url": "https://freesound.org/people/CogFireStudios/sounds/619838/",
+          "note": "成就提示音"
+        },
+        {
+          "name": "Dat's Wrong!",
+          "type": "音效",
+          "creator": "Beetlemuse",
+          "source": "freesound",
+          "url": "https://freesound.org/people/Beetlemuse/sounds/587253/",
+          "note": "錯誤提示音"
+        },
+        {
+          "name": "Box-Correct",
+          "type": "音效",
+          "creator": "onekro117",
+          "source": "freesound",
+          "url": "https://freesound.org/people/onekro117/sounds/745224/",
+          "note": "正確提示音"
+        },
+        {
+          "name": "AMB_Park_children_afternoon_Zhongxing",
+          "type": "音效",
+          "creator": "ljdyfstories",
+          "source": "freesound",
+          "url": "https://freesound.org/people/ljdyfstories/sounds/414138/",
+          "note": "操場白噪音"
+        },
+        {
+          "name": "Ambiance_Cicadas_Loop_01",
+          "type": "音效",
+          "creator": "Nox_Sound",
+          "source": "freesound",
+          "url": "https://freesound.org/people/Nox_Sound/sounds/515055/",
+          "note": "蟬聲"
+        },
+        {
+          "name": "Paper_Jiggle",
+          "type": "音效",
+          "creator": "SholeColtis",
+          "source": "freesound",
+          "url": "https://freesound.org/people/SholeColtis/sounds/683428/",
+          "note": "紙張掉落聲"
+        },
+        {
+          "name": "Live Swoosh_09",
+          "type": "音效",
+          "creator": "s-cheremisinov",
+          "source": "freesound",
+          "url": "https://freesound.org/people/s-cheremisinov/sounds/402181/",
+          "note": "快速移動提示音"
+        },
+        {
+          "name": "bark",
+          "type": "音效",
+          "creator": "SGAK",
+          "source": "freesound",
+          "url": "https://freesound.org/people/SGAK/sounds/467840/",
+          "note": "狗叫聲"
+        },
+        {
+          "name": "Water Drop Tap 4",
+          "type": "音效",
+          "creator": "AleXZavesa",
+          "source": "freesound",
+          "url": "https://freesound.org/people/AleXZavesa/sounds/853900/",
+          "note": "花圃澆水"
+        },
+        {
+          "name": "Putting Old Broom Down Against Wall and Concrete Floor 4",
+          "type": "音效",
+          "creator": "F.M.Audio",
+          "source": "freesound",
+          "url": "https://freesound.org/people/F.M.Audio/sounds/552045/",
+          "note": "花圃施肥"
+        },
+        {
+          "name": "Menu FX 03 (ascending)",
+          "type": "音效",
+          "creator": "Nightflame",
+          "source": "freesound",
+          "url": "https://freesound.org/people/Nightflame/sounds/422516/",
+          "note": "花圃陽光"
+        },
+        {
+          "name": "Grab Item",
+          "type": "音效",
+          "creator": "qubodup",
+          "source": "freesound",
+          "url": "https://freesound.org/people/qubodup/sounds/841596/",
+          "note": "花圃整理"
         }
       ]
     },
@@ -37,11 +175,11 @@
           "creator": "LXGW",
           "source": "Google Fonts",
           "url": "https://fonts.google.com/specimen/LXGW+WenKai+Mono+TC",
-          "note": "對話、遊戲與紀念卡文字"
+          "note": "全站使用文字，包含對話、遊戲與紀念卡"
         },
         {
           "name": "Noto Sans TC",
-          "type": "輔助字體",
+          "type": "備用字體",
           "creator": "Google",
           "source": "Google Fonts",
           "url": "https://fonts.google.com/noto/specimen/Noto+Sans+TC",
@@ -56,20 +194,84 @@
       "description": "校園場景、角色、地圖與介面圖像。",
       "items": [
         {
-          "name": "校園場景與地圖素材",
-          "type": "背景與地圖",
-          "creator": "請依素材實際創作者補列",
-          "source": "assets/images/",
-          "url": "",
-          "note": "包含校門、教室、穿堂、花圃、操場與校長室"
+          "name": "走廊",
+          "type": "各頁背景",
+          "creator": "김은규",
+          "source": "pixabay",
+          "url": "https://pixabay.com/zh/photos/hallway-school-colorful-dazzling-6871955/",
+          "note": "教室走廊(經二次加工)"
         },
         {
-          "name": "角色與 UI 圖像",
+          "name": "教室",
+          "type": "各頁背景",
+          "creator": "MChe Lee",
+          "source": "Unsplash",
+          "url": "https://unsplash.com/photos/white-table-with-black-chairs-PC91Jm1DlWA",
+          "note": "教室走廊背景圖(經二次加工)"
+        },
+        {
+          "name": "穿堂",
+          "type": "各頁背景",
+          "creator": "Joey Zhou",
+          "source": "Unsplash",
+          "url": "https://unsplash.com/photos/repeating-brick-columns-line-a-sunlit-outdoor-corridor-abop444hwl0",
+          "note": "穿堂背景圖(經二次加工)"
+        },
+        {
+          "name": "藝術大樓",
+          "type": "各頁背景",
+          "creator": "Khanh Do",
+          "source": "Unsplash",
+          "url": "https://unsplash.com/photos/a-tall-building-with-lots-of-windows-on-top-of-it-eNmtlueV-a8",
+          "note": "藝術大樓背景圖(經二次加工)"
+        },
+        {
+          "name": "音樂教室",
+          "type": "各頁背景",
+          "creator": "Nguyen Phan Nam Anh",
+          "source": "Unsplash",
+          "url": "https://unsplash.com/photos/a-classroom-with-rows-of-desks-and-windows-RvcgOL5ewfA",
+          "note": "音樂教室背景圖(經二次加工)"
+        },
+        {
+          "name": "美術教室",
+          "type": "各頁背景",
+          "creator": "Cat Guffin",
+          "source": "Unsplash",
+          "url": "https://unsplash.com/photos/an-empty-art-studio-with-easels-awaits-0Ip-dmYYIcI",
+          "note": "美術教室背景圖(經二次加工)"
+        },
+        {
+          "name": "花圃",
+          "type": "各頁背景",
+          "creator": "Duong Nguyen",
+          "source": "Unsplash",
+          "url": "https://unsplash.com/photos/a-stone-fountain-sprays-water-amidst-blooming-roses-Ahup80t3FUQ",
+          "note": "花圃背景圖(經二次加工)"
+        },
+        {
+          "name": "操場",
+          "type": "各頁背景",
+          "creator": "Sincerely Media",
+          "source": "Unsplash",
+          "url": "https://unsplash.com/photos/red-running-track-with-green-field-and-stadium-DCAtBn5o1bA",
+          "note": "操場背景圖(經二次加工)"
+        },
+        {
+          "name": "校長室",
+          "type": "各頁背景",
+          "creator": "yann maignan",
+          "source": "Unsplash",
+          "url": "https://unsplash.com/photos/ottomans-and-chairs-inside-the-room-rRiAzFkJPMo",
+          "note": "校長室背景圖(經二次加工)"
+        },
+        {
+          "name": "角色與UI",
           "type": "角色與介面",
-          "creator": "請依素材實際創作者補列",
-          "source": "assets/images/、assets/images/ui/",
-          "url": "",
-          "note": "包含學生、警衛、工友、狗狗、校徽與對話框圖像"
+          "creator": "葬光@woufeder",
+          "source": "噗浪帳號",
+          "url": "https://www.plurk.com/woufeder",
+          "note": "學生、警衛、工友、狗狗、校徽與對話框圖像"
         }
       ]
     },
@@ -104,25 +306,6 @@
           "note": "首頁與室外對話動畫"
         }
       ]
-    },
-    {
-      "id": "notice",
-      "label": "聯絡與聲明",
-      "icon": "fa-envelope-open-text",
-      "description": "聯絡方式與本站使用聲明。",
-      "notice": {
-        "contact": {
-          "label": "企劃聯絡",
-          "value": "",
-          "url": ""
-        },
-        "statements": [
-          "\u672c\u7db2\u70ba\u5657\u6d6a\u4f01\u5283\u300a\u6c38\u660e\u9ad8\u4e2d\u300b\u5468\u5e74\u7d00\u5ff5\u7db2\u7ad9\u3002\u540d\u518a\u4e4b\u8cc7\u6599\u5c6c\u65bc\u89d2\u8272\u5275\u4f5c\u8005\uff0c\u5b98\u65b9\u50c5\u4f5c\u8cc7\u6599\u767b\u5165\uff0c\u975e\u4f01\u5283\u73a9\u5bb6\u8acb\u52ff\u632a\u7528\u6216\u9032\u884c\u4e8c\u6b21\u767c\u5e03\u3002",
-          "本網站為紀念性質的創作企劃展示頁面，非商業用途。",
-          "頁面中引用的素材、角色與相關創作，其權利仍屬原作者、創作者或權利人所有。",
-          "若對素材標示、使用方式或內容有任何疑問，請透過公開聯絡方式告知，將儘速協助確認與調整。"
-        ]
-      }
     }
   ]
 }

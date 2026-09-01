@@ -12,34 +12,15 @@ body.credits-page {
   width: min(100% - clamp(28px, 8dvw, 112px), 1120px);
   height: 100dvh;
   margin: 0 auto;
-  padding: clamp(28px, 6dvh, 64px) 0 clamp(18px, 3dvh, 30px);
+  padding: clamp(28px, 6dvh, 64px) 0;
   box-sizing: border-box;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
-  gap: clamp(16px, 3dvh, 28px);
+  gap: clamp(6px, 3dvh, 8px);
 }
 
 .credits-header {
-  padding-left: clamp(42px, 6dvw, 70px);
   text-shadow: 0 2px 12px rgba(7, 19, 29, 0.56);
-}
-
-.credits-kicker,
-.credits-header h1,
-.credits-intro {
-  margin: 0;
-}
-
-.credits-kicker {
-  color: #bce7ef;
-  font-size: clamp(0.72rem, 1.7dvh, 0.86rem);
-  font-weight: 700;
-}
-
-.credits-header h1 {
-  margin-top: clamp(4px, 1dvh, 8px);
-  color: #fff;
-  font-size: clamp(1.8rem, 5.2dvh, 3rem);
 }
 
 .credits-intro {
@@ -53,7 +34,9 @@ body.credits-page {
 .credits-content {
   min-height: 0;
   display: grid;
-  grid-template-columns: minmax(172px, 0.3fr) minmax(0, 1fr);
+  grid-template-columns:
+    minmax(172px, 0.3fr)
+    minmax(0, 1fr);
   overflow: hidden;
   border: 1px solid rgba(222, 242, 245, 0.48);
   border-radius: var(--border-radius-large);
@@ -61,6 +44,8 @@ body.credits-page {
   box-shadow: 0 20px 54px rgba(6, 19, 27, 0.38);
   backdrop-filter: blur(8px);
 }
+
+/* 分類按鈕 */
 
 .credits-filters {
   min-width: 0;
@@ -85,7 +70,10 @@ body.credits-page {
   line-height: 1.25;
   text-align: left;
   cursor: pointer;
-  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
 }
 
 .credits-filter i {
@@ -99,14 +87,40 @@ body.credits-page {
 .credits-filter.is-active {
   border-color: rgba(188, 231, 239, 0.56);
   background: rgba(188, 231, 239, 0.14);
-  color: #fff;
+  color: var(--white);
   outline: none;
 }
+
+/* 分類內容 */
 
 .credits-list {
   min-height: 0;
   padding: clamp(16px, 3dvh, 28px);
   overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(188, 231, 239, 0.72) rgba(8, 24, 35, 0.28);
+}
+
+.credits-list::-webkit-scrollbar {
+  width: 9px;
+}
+
+.credits-list::-webkit-scrollbar-track {
+  margin: 10px 0;
+  border-radius: 999px;
+  background: rgba(8, 24, 35, 0.28);
+}
+
+.credits-list::-webkit-scrollbar-thumb {
+  min-height: 44px;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: rgba(188, 231, 239, 0.72);
+  background-clip: padding-box;
+}
+
+.credits-list::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(248, 251, 255, 0.9);
 }
 
 .credits-section {
@@ -125,8 +139,8 @@ body.credits-page {
 }
 
 .credits-section__header i {
-  color: #bce7ef;
-  font-size: clamp(1rem, 2.6dvh, 1.35rem);
+  color: var(--primary100);
+  font-size: clamp(2.7rem, 2.6dvh, 4rem);
 }
 
 .credits-section__header h2,
@@ -135,7 +149,7 @@ body.credits-page {
 }
 
 .credits-section__header h2 {
-  color: #fff;
+  color: var(--white);
   font-size: clamp(1.2rem, 3.2dvh, 1.65rem);
 }
 
@@ -144,6 +158,8 @@ body.credits-page {
   color: rgba(226, 241, 245, 0.72);
   font-size: clamp(0.78rem, 1.7dvh, 0.9rem);
 }
+
+/* 素材列表 */
 
 .credits-records {
   display: grid;
@@ -156,39 +172,57 @@ body.credits-page {
 
 .credits-record {
   display: grid;
-  grid-template-columns: minmax(10rem, 0.8fr) minmax(0, 1.1fr) minmax(0, 1.25fr);
-  gap: clamp(10px, 2dvw, 20px);
-  align-items: center;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.75rem, 2dvw, 1rem);
+  align-items: start;
   padding: clamp(12px, 2.1dvh, 18px) clamp(12px, 2.2dvw, 20px);
   background: rgba(15, 31, 42, 0.82);
 }
 
-.credits-record__name,
-.credits-record__detail,
-.credits-record__source {
+.credits-record > div {
   min-width: 0;
 }
 
-.credits-record__note {
-  grid-column: 2 / -1;
+.credits-record > div:first-child,
+.credits-record > div:nth-child(4) {
+  grid-column: 1 / -1;
 }
 
-.credits-record__name strong,
-.credits-record__detail span,
-.credits-record__source span,
-.credits-record__source a {
+/* 名稱 */
+
+.credits-record > div:first-child .value {
   display: block;
-}
-
-.credits-record__name strong {
-  color: #fff;
+  color: var(--white);
   font-size: clamp(0.92rem, 2dvh, 1.06rem);
+  font-weight: 700;
   line-height: 1.45;
 }
 
-.credits-record__name span,
-.credits-record__detail small,
-.credits-record__source small {
+/* 共用欄位名稱 */
+
+.label {
+  display: block;
+  margin: 0 0 3px;
+  color: var(--primary300-op7);
+  font-size: clamp(0.85rem, 1.55dvh, 0.95rem);
+  line-height: 1.4;
+}
+
+/* 共用欄位內容 */
+
+.value {
+  display: block;
+  margin: 0;
+  color: var(--primary100);
+  font-size: clamp(0.82rem, 1.85dvh, 0.95rem);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+  width: fit-content;
+}
+
+/* 素材類型 */
+
+.type {
   display: block;
   margin-top: 3px;
   color: rgba(226, 241, 245, 0.62);
@@ -196,26 +230,26 @@ body.credits-page {
   line-height: 1.4;
 }
 
-.credits-record__detail span,
-.credits-record__source span,
-.credits-record__source a {
-  color: #d7eef3;
-  font-size: clamp(0.82rem, 1.85dvh, 0.95rem);
-  line-height: 1.55;
-  overflow-wrap: anywhere;
-}
+/* 所有資料連結 */
 
-.credits-record__source a {
-  color: #bce7ef;
+a.value {
+  color: var(--primary100);
   text-decoration: underline;
   text-underline-offset: 0.16em;
 }
 
-.credits-record__source a:hover,
-.credits-record__source a:focus-visible {
-  color: #fff;
+a.value:hover,
+a.value:focus-visible {
+  color: var(--white);
   outline: none;
 }
+
+/*
+  有 note 時，它是素材卡片中的第四個 div。
+  讓它從第二欄延伸到最後一欄。
+*/
+
+/* 空資料及錯誤訊息 */
 
 .credits-empty,
 .credits-error {
@@ -223,6 +257,8 @@ body.credits-page {
   color: rgba(248, 251, 255, 0.82);
   line-height: 1.6;
 }
+
+/* 使用聲明及聯絡資訊 */
 
 .credits-notice {
   display: grid;
@@ -233,42 +269,40 @@ body.credits-page {
   background: rgba(222, 242, 245, 0.22);
 }
 
-.credits-notice__contact,
-.credits-notice__statements {
+/*
+  JS 產生的使用聲明和聯絡資訊，
+  都是 credits-notice 的直接子 div。
+*/
+
+.credits-notice > div {
   padding: clamp(16px, 3dvh, 24px) clamp(16px, 3dvw, 26px);
   background: rgba(15, 31, 42, 0.82);
-}
-
-.credits-notice small {
-  display: block;
-  margin-bottom: 7px;
-  color: rgba(226, 241, 245, 0.62);
-  font-size: clamp(0.7rem, 1.55dvh, 0.8rem);
-}
-
-.credits-notice strong,
-.credits-notice a {
-  color: #fff;
-  font-size: clamp(0.92rem, 2dvh, 1.06rem);
-}
-
-.credits-notice a {
-  color: #bce7ef;
-  text-decoration: underline;
-  text-underline-offset: 0.16em;
-}
-
-.credits-notice__statements {
   display: grid;
-  gap: clamp(8px, 1.6dvh, 14px);
+  gap: clamp(6px, 1.6dvh, 8px);
 }
 
-.credits-notice__statements p {
-  margin: 0;
+
+.credits-notice .label {
+  margin-bottom: 0;
+}
+
+.credits-notice .value {
   color: #e7f2f4;
   font-size: clamp(0.86rem, 1.9dvh, 1rem);
   line-height: 1.75;
 }
+
+/* 聯絡區塊 */
+
+.credits-notice > div:last-child .value {
+  margin-bottom: 0;
+}
+
+.credits-notice > div:last-child a.value {
+  margin-top: 8px;
+}
+
+/* 手機版 */
 
 @media (max-width: 760px) {
   .credits-layout {
@@ -305,19 +339,25 @@ body.credits-page {
     gap: 7px;
   }
 
-  .credits-record__detail,
-  .credits-record__source {
+  /*
+    第一個 div 是名稱，
+    其他 div 是作者、來源及使用範圍。
+  */
+
+  .credits-record > div:not(:first-child) {
     display: grid;
-    grid-template-columns: minmax(4.5rem, auto) minmax(0, 1fr);
+    grid-template-columns:
+      minmax(4.5rem, auto)
+      minmax(0, 1fr);
     gap: 8px;
   }
 
-  .credits-record__note {
+  .credits-record > div:nth-child(4) {
     grid-column: auto;
   }
 
-  .credits-record__detail small,
-  .credits-record__source small {
+  .credits-record .label {
     margin-top: 0;
+    margin-bottom: 0;
   }
 }
