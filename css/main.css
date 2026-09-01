@@ -250,6 +250,10 @@ body.fade-in {
   min-width: 0;
 }
 
+#index .input-group > input {
+  width: 100%;
+}
+
 @keyframes revealOnce {
   from {
     clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
