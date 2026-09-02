@@ -272,7 +272,7 @@ function initLab() {
           : gradeScore <= bThreshold
             ? "B"
             : "C";
-    if (rank === "A") {
+    if (["S", "A"].includes(rank)) {
       window.YMSHAchievements?.earn("lab-grade-a");
     }
     const overlay = document.createElement("div");
