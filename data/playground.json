@@ -1,63 +1,98 @@
 {
   "title": "圍捕小狗大作戰",
   "intro": {
-    "title": "先圍出一條安全路線",
-    "text": "小狗跑得太快，硬追只會讓牠更慌。安排三名同學守住操場的缺口，讓牠最後只能跑向有人接應的集合門。",
+    "title": "圍捕小狗大作戰",
+    "text": "小狗在操場上到處亂跑。避開路障，組成人牆擋住小狗，圍出一條通往集合門的路。",
     "action": "開始規劃"
   },
-  "instructions": "點選虛線格安排人牆。畫面會即時顯示小狗最可能採用的路線；確認只剩綠色集合門可達後，再開始圍捕。",
-  "fenceLimit": 3,
+  "instructions": "在八乘八的場內選擇人牆隊形並旋轉方向，再點選格子放置。利用固定路障切割動線，但不能站進小狗周圍的警戒區；讓小狗只能抵達綠色集合門後，再開始圍捕。",
   "maps": [
     {
-      "id": "track-crossing",
-      "name": "跑道交叉口",
-      "briefing": "三個缺口分散在跑道邊，先找出各自唯一的入口。",
-      "size": 7,
-      "dog": [3, 3],
-      "targetExit": { "cell": [0, 3], "side": "top", "label": "司令台集合門" },
-      "dangerExits": [
-        { "cell": [2, 0], "side": "left", "label": "西側跑道缺口" },
-        { "cell": [4, 6], "side": "right", "label": "東側球場缺口" },
-        { "cell": [6, 1], "side": "bottom", "label": "南側側門" }
-      ],
-      "fixedBlocks": [[0, 2], [0, 4], [1, 0], [3, 0], [3, 6], [5, 6], [6, 0], [6, 2]],
-      "placementCells": [[2, 1], [4, 5], [5, 1], [3, 2], [3, 4], [5, 3]]
+      "id": "north-track",
+      "name": "北側跑道折返",
+      "briefing": "集合門位在北側。跑道動線多次折返，必須借助器材路障拼出一條彎曲但不分岔的通道。",
+      "size": 10,
+      "dog": [6, 6],
+      "targetExit": { "cell": [0, 2], "side": "top", "label": "北側司令台集合門" },
+      "fixedBlocks": [[1, 7], [2, 8], [5, 7], [6, 4], [6, 8], [7, 2], [7, 5], [7, 7], [8, 3], [8, 6]],
+      "noDeployCells": [[5, 6], [6, 5], [6, 7], [7, 6]],
+      "pieces": [
+        { "id": "north-line-3", "name": "三人直線", "shape": [[0, 0], [0, 1], [0, 2]] },
+        { "id": "north-corner-a", "name": "轉角三人組", "shape": [[0, 0], [1, 0], [1, 1]] },
+        { "id": "north-corner-b", "name": "轉角支援組", "shape": [[0, 0], [1, 0], [1, 1]] },
+        { "id": "north-line-2", "name": "雙人直線", "shape": [[0, 0], [0, 1]] },
+        { "id": "north-single", "name": "單人守位", "shape": [[0, 0]] },
+        { "id": "north-line-4", "name": "四人長列", "shape": [[0, 0], [0, 1], [0, 2], [0, 3]] },
+        { "id": "north-tee", "name": "T 型四人組", "shape": [[0, 0], [0, 1], [0, 2], [1, 1]] },
+        { "id": "north-cross", "name": "十字五人組", "shape": [[0, 1], [1, 0], [1, 1], [1, 2], [2, 1]] }
+      ]
     },
     {
-      "id": "court-corner",
-      "name": "球場轉角",
-      "briefing": "跑道與球場交會，別被中央幾個看似重要的位置騙走。",
-      "size": 7,
-      "dog": [3, 2],
-      "targetExit": { "cell": [3, 6], "side": "right", "label": "球場集合門" },
-      "dangerExits": [
-        { "cell": [0, 1], "side": "top", "label": "北側看台缺口" },
-        { "cell": [5, 0], "side": "left", "label": "西側跑道缺口" },
-        { "cell": [6, 4], "side": "bottom", "label": "南側器材門" }
-      ],
-      "fixedBlocks": [[0, 0], [0, 2], [2, 6], [4, 0], [4, 6], [6, 0], [6, 3], [6, 5]],
-      "placementCells": [[1, 1], [5, 1], [5, 4], [2, 3], [3, 3], [4, 3]]
+      "id": "east-court",
+      "name": "東側球場通道",
+      "briefing": "集合門位在東側。器材把場地切成上下兩區，必須封住岔路並保留穿越球場的唯一出口。",
+      "size": 10,
+      "dog": [4, 3],
+      "targetExit": { "cell": [4, 9], "side": "right", "label": "東側球場集合門" },
+      "fixedBlocks": [[3, 2], [3, 6], [3, 8], [4, 1], [4, 6], [5, 2], [6, 3], [7, 2], [7, 6], [8, 4], [8, 7]],
+      "noDeployCells": [[3, 3], [4, 2], [4, 4], [5, 3]],
+      "pieces": [
+        { "id": "east-line-3", "name": "三人直線", "shape": [[0, 0], [0, 1], [0, 2]] },
+        { "id": "east-corner", "name": "轉角三人組", "shape": [[0, 0], [1, 0], [1, 1]] },
+        { "id": "east-line-2-a", "name": "雙人直線", "shape": [[0, 0], [0, 1]] },
+        { "id": "east-line-2-b", "name": "雙人支援組", "shape": [[0, 0], [0, 1]] },
+        { "id": "east-single", "name": "單人守位", "shape": [[0, 0]] },
+        { "id": "east-line-4", "name": "四人長列", "shape": [[0, 0], [0, 1], [0, 2], [0, 3]] },
+        { "id": "east-tee", "name": "T 型四人組", "shape": [[0, 0], [0, 1], [0, 2], [1, 1]] },
+        { "id": "east-cross", "name": "十字五人組", "shape": [[0, 1], [1, 0], [1, 1], [1, 2], [2, 1]] }
+      ]
     },
     {
-      "id": "field-loop",
-      "name": "草地外圈",
-      "briefing": "三條岔路繞著草地展開，留下通往南側集合門的路。",
-      "size": 7,
+      "id": "south-field",
+      "name": "南側草地迴廊",
+      "briefing": "集合門位在南側。草地上的障礙彼此錯開，必須用短隊形接起缺口，再把動線導向南門。",
+      "size": 10,
       "dog": [3, 3],
-      "targetExit": { "cell": [6, 3], "side": "bottom", "label": "南側集合門" },
-      "dangerExits": [
-        { "cell": [1, 0], "side": "left", "label": "西側草地缺口" },
-        { "cell": [0, 5], "side": "top", "label": "北側看台缺口" },
-        { "cell": [5, 6], "side": "right", "label": "東側球場缺口" }
-      ],
-      "fixedBlocks": [[0, 0], [0, 4], [0, 6], [2, 0], [4, 6], [6, 2], [6, 4], [6, 6]],
-      "placementCells": [[1, 1], [1, 5], [5, 5], [2, 2], [3, 4], [4, 2]]
+      "targetExit": { "cell": [9, 6], "side": "bottom", "label": "南側草地集合門" },
+      "fixedBlocks": [[1, 7], [2, 4], [2, 7], [3, 1], [3, 5], [4, 2], [4, 8], [5, 8], [7, 1], [8, 2]],
+      "noDeployCells": [[2, 3], [3, 2], [3, 4], [4, 3]],
+      "pieces": [
+        { "id": "south-line-3", "name": "三人直線", "shape": [[0, 0], [0, 1], [0, 2]] },
+        { "id": "south-corner-a", "name": "轉角三人組", "shape": [[0, 0], [1, 0], [1, 1]] },
+        { "id": "south-corner-b", "name": "轉角支援組", "shape": [[0, 0], [1, 0], [1, 1]] },
+        { "id": "south-line-2", "name": "雙人直線", "shape": [[0, 0], [0, 1]] },
+        { "id": "south-single-a", "name": "單人守位", "shape": [[0, 0]] },
+        { "id": "south-single-b", "name": "單人支援", "shape": [[0, 0]] },
+        { "id": "south-line-4", "name": "四人長列", "shape": [[0, 0], [0, 1], [0, 2], [0, 3]] },
+        { "id": "south-tee", "name": "T 型四人組", "shape": [[0, 0], [0, 1], [0, 2], [1, 1]] }
+      ]
+    },
+    {
+      "id": "west-equipment",
+      "name": "西側器材區",
+      "briefing": "集合門位在西側。器材區形成兩段折線，利用長列與零散守位封住外圈，讓小狗繞向西門。",
+      "size": 10,
+      "dog": [4, 6],
+      "targetExit": { "cell": [5, 0], "side": "left", "label": "西側器材區集合門" },
+      "fixedBlocks": [[1, 2], [2, 2], [3, 7], [4, 4], [4, 8], [5, 3], [5, 7], [6, 1], [6, 3], [7, 1], [7, 7], [8, 7]],
+      "noDeployCells": [[3, 6], [4, 5], [4, 7], [5, 6]],
+      "pieces": [
+        { "id": "west-line-3-a", "name": "三人直線", "shape": [[0, 0], [0, 1], [0, 2]] },
+        { "id": "west-line-3-b", "name": "三人支援組", "shape": [[0, 0], [0, 1], [0, 2]] },
+        { "id": "west-line-2", "name": "雙人直線", "shape": [[0, 0], [0, 1]] },
+        { "id": "west-single-a", "name": "單人守位", "shape": [[0, 0]] },
+        { "id": "west-single-b", "name": "單人支援", "shape": [[0, 0]] },
+        { "id": "west-corner", "name": "轉角三人組", "shape": [[0, 0], [1, 0], [1, 1]] },
+        { "id": "west-line-4", "name": "四人長列", "shape": [[0, 0], [0, 1], [0, 2], [0, 3]] },
+        { "id": "west-tee", "name": "T 型四人組", "shape": [[0, 0], [0, 1], [0, 2], [1, 1]] }
+      ]
     }
   ],
   "feedback": {
     "ready": "只剩集合門可以抵達，可以開始圍捕了。",
-    "open": "還有 {count} 個危險缺口可達，繼續調整站位。",
+    "open": "外圈還有 {count} 個危險缺口可達，繼續拼接人牆。",
     "blocked": "這樣會把小狗完全困住，請留一條通往集合門的路。",
-    "limit": "三名同學都已經站定位了，可以撤回一人再調整。"
+    "select": "先從右側選擇一組人牆，再點選場內格子安排位置。",
+    "invalid": "這個隊形會超出場內、碰到路障、進入警戒區或和其他人牆重疊。"
   }
 }

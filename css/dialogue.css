@@ -36,12 +36,18 @@
 }
 
 .character-layer img {
-  margin-top: clamp(5dvh, 12dvh, 15dvh);
-  width: min(100vw, 1200px);
+  margin-top: clamp(5dvh, 5.7dvh, 15dvh);
+  width: auto;
   height: auto;
-  max-height: 118dvh;
+  max-width: 100dvw;
+  max-height: 100dvh;
   object-fit: contain;
   transition: opacity 0.5s ease;
+}
+
+.character-layer img:not([src]),
+.character-layer img[src=""] {
+  display: none;
 }
 
 /* --- 角色專用動畫 --- */

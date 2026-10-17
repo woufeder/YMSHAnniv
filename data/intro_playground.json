@@ -14,10 +14,10 @@
     {
       "char": "dog.png",
       "name": "狗狗",
-      "text": "不知道哪裡<char:jump>竄出來的小狗狗<char:jump>叼著網球，<wait>一副希望有人和他<char:jump>玩的樣子。"
+      "text": "不知道哪裡竄出來的小狗狗<char:jump>叼著網球，<wait>一副希望有人和他<char:jump>玩的樣子。"
     },
     {
-      "char": "dog2.png",
+      "char": "dog.png",
       "text": "<char:dashAcross>「啊！不好，他要跑去其他地方了。」",
       "effect": "shake"
     }
@@ -45,10 +45,10 @@
     },
     {
       "char": "dog.png",
-      "text": "不知道哪裡<char:jump>竄出來的小狗狗<char:jump>叼著網球，<wait>一副希望有人和他<char:jump>玩的樣子。"
+      "text": "不知道哪裡竄出來的小狗狗<char:jump>叼著網球，<wait>一副希望有人和他<char:jump>玩的樣子。"
     },
     {
-      "char": "dog2.png",
+      "char": "dog.png",
       "text": "<char:dashAcross>「啊！不好，他要跑去其他地方了。」",
       "effect": "shake"
     }
@@ -79,10 +79,10 @@
     },
     {
       "char": "dog.png",
-      "text": "不知道哪裡<char:jump>竄出來的小狗狗<char:jump>叼著網球，<wait>一副希望有人和他<char:jump>玩的樣子。"
+      "text": "不知道哪裡竄出來的小狗狗<char:jump>叼著網球，<wait>一副希望有人和他<char:jump>玩的樣子。"
     },
     {
-      "char": "dog2.png",
+      "char": "dog.png",
       "text": "<char:dashAcross>「啊！不好，他要跑去其他地方了。」",
       "effect": "shake"
     }

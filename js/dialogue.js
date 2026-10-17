@@ -90,7 +90,7 @@ class DialogueCore {
         <img id="bg" class="dialogue-background" alt="" />
         <img class="dialogue-background" alt="" />
       </div>
-      <div class="character-layer"><img id="char" /></div>
+      <div class="character-layer"><img id="char" alt="" /></div>
       <div class="dialogue-layer">
         <div class="dialogue-box">
           <div class="dialogue-header"><span id="name"></span></div>
@@ -122,6 +122,7 @@ class DialogueCore {
         characterLayer.appendChild(this.charImg);
       }
     }
+    if (this.charImg) this.charImg.alt = '';
     this.nameBox = this.container.querySelector('#name');
     this.dialogueHeader = this.container.querySelector('.dialogue-header');
     this.textBox = this.container.querySelector('#text');

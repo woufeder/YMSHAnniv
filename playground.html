@@ -28,13 +28,13 @@
           <h3 id="gameTitle"></h3>
         </div>
         <div class="game-stats">
-          <div class="exit-meter" aria-label="小狗目前可抵達的出口數量">
-            <p>可達出口</p>
-            <strong id="exitCount" aria-live="polite">4</strong>
+          <div class="exit-meter" aria-label="小狗目前可抵達的危險缺口數量">
+            <p>危險缺口</p>
+            <strong id="exitCount" aria-live="polite">35</strong>
           </div>
-          <div class="fence-meter" aria-label="尚可安排的人牆數量">
-            <p>可用人牆</p>
-            <strong id="fenceCount" aria-live="polite">3</strong>
+          <div class="fence-meter" aria-label="尚未使用的人牆隊形數量">
+            <p>剩餘隊形</p>
+            <strong id="fenceCount" aria-live="polite">8</strong>
           </div>
         </div>
       </header>
@@ -51,9 +51,10 @@
       <h2 id="gameIntroTitle">圍捕小狗大作戰</h2>
       <p id="gameIntroText"></p>
       <ul class="playground-modal__rules">
-        <li>點選虛線格，安排或撤回圍捕的同學。</li>
-        <li>腳印會顯示小狗目前最可能前往的出口。</li>
-        <li>讓紅色缺口都無法抵達，只留下綠色集合門。</li>
+        <li>在八乘八的場內選擇一組人牆，旋轉後放到任意可放置區域。</li>
+        <li>小狗十字範圍不能站人，避免阻礙移動路線。</li>
+        <li>腳印會顯示小狗移動路線，檢查是否有漏洞。</li>
+        <li>不必用完所有隊形，阻止小狗從外圈缺口逃跑。</li>
       </ul>
       <button id="startGame" class="rescue-button rescue-button--primary" type="button">
         <i class="fa-solid fa-play" aria-hidden="true"></i> 開始遊戲

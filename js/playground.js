@@ -17,8 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let gameData;
   let currentMap;
   let dogPosition;
-  let placedFences = new Set();
-  let placementOrder = [];
+  let placedPieces = new Map();
+  let pieceRotations = new Map();
+  let selectedPieceId = null;
   let gameActive = false;
   let animationToken = 0;
 
@@ -48,6 +49,21 @@ document.addEventListener("DOMContentLoaded", () => {
     return first[0] === second[0] && first[1] === second[1];
   }
 
+  function isBoundaryCell(cell, size = currentMap.size) {
+    return (
+      cell[0] === 0 ||
+      cell[1] === 0 ||
+      cell[0] === size - 1 ||
+      cell[1] === size - 1
+    );
+  }
+
+  function isNoDeployCell(cell) {
+    return (currentMap.noDeployCells || []).some((reservedCell) =>
+      cellsEqual(reservedCell, cell),
+    );
+  }
+
   function getNeighbors(cell, size) {
     const [row, column] = cell;
     return [
@@ -64,7 +80,45 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  function findPath(start, destination, blockedCells, size) {
+  function getBoundarySide(cell, size) {
+    if (cell[0] === 0) return "top";
+    if (cell[1] === size - 1) return "right";
+    if (cell[0] === size - 1) return "bottom";
+    return "left";
+  }
+
+  function getBoundaryExits() {
+    const sideNames = {
+      top: "北側",
+      right: "東側",
+      bottom: "南側",
+      left: "西側",
+    };
+    const exits = [];
+    let dangerIndex = 0;
+
+    for (let row = 0; row < currentMap.size; row += 1) {
+      for (let column = 0; column < currentMap.size; column += 1) {
+        const cell = [row, column];
+        if (!isBoundaryCell(cell)) continue;
+        if (cellsEqual(cell, currentMap.targetExit.cell)) {
+          exits.push({ ...currentMap.targetExit, type: "target" });
+          continue;
+        }
+        const side = getBoundarySide(cell, currentMap.size);
+        dangerIndex += 1;
+        exits.push({
+          cell,
+          side,
+          type: "danger",
+          label: `${sideNames[side]}缺口 ${dangerIndex}`,
+        });
+      }
+    }
+    return exits;
+  }
+
+  function findPath(start, destination, blockedCells, size, exitKeys) {
     const startKey = cellKey(start);
     const destinationKey = cellKey(destination);
     if (blockedCells.has(startKey) || blockedCells.has(destinationKey)) return null;
@@ -79,7 +133,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       getNeighbors(current, size).forEach((neighbor) => {
         const neighborKey = cellKey(neighbor);
-        if (blockedCells.has(neighborKey) || previous.has(neighborKey)) return;
+        if (
+          blockedCells.has(neighborKey) ||
+          previous.has(neighborKey) ||
+          (exitKeys.has(neighborKey) && neighborKey !== destinationKey)
+        ) {
+          return;
+        }
         previous.set(neighborKey, currentKey);
         queue.push(neighbor);
       });
@@ -96,30 +156,118 @@ document.addEventListener("DOMContentLoaded", () => {
     return path;
   }
 
-  function analyzeBoard() {
-    const blockedCells = new Set([
-      ...currentMap.fixedBlocks.map(cellKey),
-      ...placedFences,
+  function normalizeShape(shape) {
+    const minRow = Math.min(...shape.map((cell) => cell[0]));
+    const minColumn = Math.min(...shape.map((cell) => cell[1]));
+    return shape
+      .map(([row, column]) => [row - minRow, column - minColumn])
+      .sort((first, second) => first[0] - second[0] || first[1] - second[1]);
+  }
+
+  function rotateShape(shape, turns) {
+    let rotated = shape.map((cell) => [...cell]);
+    for (let turn = 0; turn < turns; turn += 1) {
+      rotated = rotated.map(([row, column]) => [column, -row]);
+      rotated = normalizeShape(rotated);
+    }
+    return normalizeShape(rotated);
+  }
+
+  function getPiece(pieceId) {
+    return currentMap.pieces.find((piece) => piece.id === pieceId);
+  }
+
+  function getShapePivotOffset(shape) {
+    const rowCount = Math.max(...shape.map((cell) => cell[0])) + 1;
+    const columnCount = Math.max(...shape.map((cell) => cell[1])) + 1;
+    const occupied = new Set(shape.map(cellKey));
+    const geometricCenter = [(rowCount - 1) / 2, (columnCount - 1) / 2];
+    const cardinalOffsets = [
+      [-1, 0],
+      [1, 0],
+      [0, -1],
+      [0, 1],
+    ];
+    const connectedCells = shape
+      .map((cell) => ({
+        cell,
+        neighborCount: cardinalOffsets.filter(([rowOffset, columnOffset]) =>
+          occupied.has(
+            cellKey([cell[0] + rowOffset, cell[1] + columnOffset]),
+          ),
+        ).length,
+      }))
+      .sort((first, second) => {
+        if (first.neighborCount !== second.neighborCount) {
+          return second.neighborCount - first.neighborCount;
+        }
+        const firstDistance =
+          Math.abs(first.cell[0] - geometricCenter[0]) +
+          Math.abs(first.cell[1] - geometricCenter[1]);
+        const secondDistance =
+          Math.abs(second.cell[0] - geometricCenter[0]) +
+          Math.abs(second.cell[1] - geometricCenter[1]);
+        return firstDistance - secondDistance;
+      });
+
+    if (connectedCells[0]?.neighborCount >= 2) return connectedCells[0].cell;
+
+    return [Math.round(geometricCenter[0]), Math.round(geometricCenter[1])];
+  }
+
+  function getPieceCells(pieceId, center, rotation = pieceRotations.get(pieceId) || 0) {
+    const piece = getPiece(pieceId);
+    const shape = rotateShape(piece.shape, rotation);
+    const pivotOffset = getShapePivotOffset(shape);
+
+    return shape.map(([row, column]) => [
+      center[0] + row - pivotOffset[0],
+      center[1] + column - pivotOffset[1],
     ]);
-    const makeRoute = (exit, type) => ({
-      ...exit,
-      type,
-      path: findPath(dogPosition, exit.cell, blockedCells, currentMap.size),
+  }
+
+  function getPlacedCellOwners() {
+    const owners = new Map();
+    placedPieces.forEach((placement, pieceId) => {
+      getPieceCells(pieceId, placement.center, placement.rotation).forEach((cell) => {
+        owners.set(cellKey(cell), pieceId);
+      });
     });
-    const targetRoute = makeRoute(currentMap.targetExit, "target");
-    const dangerRoutes = currentMap.dangerExits.map((exit) =>
-      makeRoute(exit, "danger"),
-    );
+    return owners;
+  }
+
+  function getBlockedCells() {
+    return new Set([
+      ...currentMap.fixedBlocks.map(cellKey),
+      ...getPlacedCellOwners().keys(),
+    ]);
+  }
+
+  function analyzeBoard() {
+    const blockedCells = getBlockedCells();
+    const exits = getBoundaryExits();
+    const exitKeys = new Set(exits.map((exit) => cellKey(exit.cell)));
+    const routes = exits.map((exit) => ({
+      ...exit,
+      path: findPath(
+        dogPosition,
+        exit.cell,
+        blockedCells,
+        currentMap.size,
+        exitKeys,
+      ),
+    }));
+    const targetRoute = routes.find((route) => route.type === "target");
+    const dangerRoutes = routes.filter((route) => route.type === "danger");
     const reachableDangerRoutes = dangerRoutes.filter((route) => route.path);
-    const reachableRoutes = [targetRoute, ...dangerRoutes].filter(
-      (route) => route.path,
-    );
+    const reachableRoutes = routes.filter((route) => route.path);
     const previewRoute =
       [...reachableDangerRoutes].sort(
         (first, second) => first.path.length - second.path.length,
       )[0] || (targetRoute.path ? targetRoute : null);
 
     return {
+      exits,
       targetRoute,
       dangerRoutes,
       reachableDangerRoutes,
@@ -133,13 +281,9 @@ document.addEventListener("DOMContentLoaded", () => {
     gameFeedback.className = `game-feedback ${type ? `is-${type}` : ""}`.trim();
   }
 
-  function formatFeedback(template, count) {
-    return template.replace("{count}", count);
-  }
-
   function updateBoardStatus(analysis, announce = true) {
-    exitCount.textContent = `${analysis.reachableRoutes.length}`;
-    fenceCount.textContent = `${gameData.fenceLimit - placedFences.size}`;
+    exitCount.textContent = `${analysis.reachableDangerRoutes.length}`;
+    fenceCount.textContent = `${currentMap.pieces.length - placedPieces.size}`;
 
     if (!announce) return;
     if (!analysis.targetRoute.path && analysis.reachableDangerRoutes.length === 0) {
@@ -151,7 +295,10 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
     setFeedback(
-      formatFeedback(gameData.feedback.open, analysis.reachableDangerRoutes.length),
+      gameData.feedback.open.replace(
+        "{count}",
+        analysis.reachableDangerRoutes.length,
+      ),
       "warning",
     );
   }
@@ -163,46 +310,49 @@ document.addEventListener("DOMContentLoaded", () => {
     return icon;
   }
 
-  function getExitAt(cell) {
-    if (cellsEqual(cell, currentMap.targetExit.cell)) {
-      return { ...currentMap.targetExit, type: "target" };
-    }
-    const dangerExit = currentMap.dangerExits.find((exit) =>
-      cellsEqual(cell, exit.cell),
-    );
-    return dangerExit ? { ...dangerExit, type: "danger" } : null;
-  }
-
-  function createCourtCell(row, column, analysis) {
+  function createCourtCell(row, column, analysis, owners) {
     const position = [row, column];
     const key = cellKey(position);
     const fixed = currentMap.fixedBlocks.some((cell) => cellsEqual(cell, position));
-    const placeable = currentMap.placementCells.some((cell) =>
-      cellsEqual(cell, position),
-    );
-    const occupied = placedFences.has(key);
+    const noDeploy = isNoDeployCell(position);
+    const ownerId = owners.get(key);
     const isDog = cellsEqual(position, dogPosition);
-    const exit = getExitAt(position);
+    const exit = analysis.exits.find((item) => cellsEqual(item.cell, position));
     const onPreviewRoute = analysis.previewRoute?.path?.some((cell) =>
       cellsEqual(cell, position),
     );
-    const cell = document.createElement(placeable ? "button" : "div");
+    const interactive = !isBoundaryCell(position);
+    const cell = document.createElement(interactive ? "button" : "div");
 
     cell.className = "court-cell";
+    cell.dataset.cell = key;
     cell.setAttribute("role", "gridcell");
-    if (placeable) {
+    if (interactive) {
       cell.type = "button";
-      cell.classList.add("is-placeable");
-      cell.setAttribute("aria-pressed", occupied ? "true" : "false");
-      cell.setAttribute(
-        "aria-label",
-        occupied ? "撤回這個位置的同學" : "安排同學守住這個位置",
-      );
+      cell.classList.add("is-placement-zone");
       cell.disabled = !gameActive;
-      cell.addEventListener("click", () => toggleFence(position));
+      if (ownerId) {
+        cell.classList.add("is-occupied");
+        cell.setAttribute("aria-label", `收回${getPiece(ownerId).name}`);
+      } else {
+        cell.setAttribute(
+          "aria-label",
+          `以第 ${row + 1} 列第 ${column + 1} 格為中心放置隊形`,
+        );
+      }
+      cell.addEventListener("click", () => {
+        if (ownerId) removePiece(ownerId);
+        else placeSelectedPiece(position);
+      });
     }
-    if (fixed) cell.classList.add("is-fixed");
-    if (occupied) cell.classList.add("is-occupied");
+    if (fixed) {
+      cell.classList.add("is-fixed");
+      cell.title = "固定路障";
+    }
+    if (noDeploy) {
+      cell.classList.add("is-no-deploy");
+      cell.title = "小狗警戒區，不能部署人牆";
+    }
     if (onPreviewRoute) cell.classList.add("is-route");
     if (isDog) cell.classList.add("has-dog");
 
@@ -214,31 +364,32 @@ document.addEventListener("DOMContentLoaded", () => {
       exitMarker.append(
         createIcon(exit.type === "target" ? "fa-people-arrows" : "fa-person-running"),
       );
-      const exitLabel = document.createElement("span");
-      exitLabel.textContent = exit.type === "target" ? "集合" : "缺口";
-      exitMarker.append(exitLabel);
+      if (exit.type === "target") {
+        const exitLabel = document.createElement("span");
+        exitLabel.textContent = "集合";
+        exitMarker.append(exitLabel);
+      }
       cell.append(exitMarker);
     }
 
     if (fixed) {
       const blocker = document.createElement("span");
       blocker.className = "fixed-blocker";
-      blocker.append(createIcon("fa-person"));
-      blocker.title = "已經站定位的同學";
+      blocker.append(createIcon("fa-road-barrier"));
       cell.append(blocker);
     }
 
-    if (placeable && !occupied) {
-      const slot = document.createElement("span");
-      slot.className = "placement-slot";
-      slot.append(createIcon("fa-shoe-prints"));
-      cell.append(slot);
+    if (noDeploy && !isDog) {
+      const marker = document.createElement("span");
+      marker.className = "no-deploy-marker";
+      marker.append(createIcon("fa-eye"));
+      cell.append(marker);
     }
 
-    if (occupied) {
+    if (ownerId) {
       const fence = document.createElement("span");
       fence.className = "player-fence";
-      fence.append(createIcon("fa-person-circle-check"));
+      fence.append(createIcon("fa-person"));
       cell.append(fence);
     }
 
@@ -259,32 +410,164 @@ document.addEventListener("DOMContentLoaded", () => {
     return cell;
   }
 
-  function createExitList(analysis) {
-    const list = document.createElement("ul");
-    list.className = "exit-list";
-    [analysis.targetRoute, ...analysis.dangerRoutes].forEach((route) => {
-      const item = document.createElement("li");
-      const reachable = Boolean(route.path);
-      item.className = `exit-list__item is-${route.type} ${
-        reachable ? "is-open" : "is-closed"
-      }`;
-      item.append(
-        createIcon(
-          reachable
-            ? route.type === "target"
-              ? "fa-circle-check"
-              : "fa-triangle-exclamation"
-            : "fa-lock",
-        ),
+  function canPlacePiece(pieceId, center) {
+    const owners = getPlacedCellOwners();
+    return getPieceCells(pieceId, center).every((cell) => {
+      const key = cellKey(cell);
+      return (
+        cell[0] > 0 &&
+        cell[1] > 0 &&
+        cell[0] < currentMap.size - 1 &&
+        cell[1] < currentMap.size - 1 &&
+        !cellsEqual(cell, dogPosition) &&
+        !currentMap.fixedBlocks.some((fixed) => cellsEqual(fixed, cell)) &&
+        !isNoDeployCell(cell) &&
+        !owners.has(key)
       );
-      const text = document.createElement("span");
-      text.textContent = route.label;
-      const state = document.createElement("strong");
-      state.textContent = reachable ? "可達" : "已封鎖";
-      item.append(text, state);
-      list.append(item);
     });
-    return list;
+  }
+
+  function clearPlacementPreview(board) {
+    board
+      .querySelectorAll(".is-piece-preview, .is-piece-preview-invalid")
+      .forEach((cell) =>
+        cell.classList.remove("is-piece-preview", "is-piece-preview-invalid"),
+      );
+  }
+
+  function showPlacementPreview(board, center) {
+    clearPlacementPreview(board);
+    if (!selectedPieceId || placedPieces.has(selectedPieceId)) return;
+    const valid = canPlacePiece(selectedPieceId, center);
+    getPieceCells(selectedPieceId, center).forEach((cell) => {
+      const previewCell = board.querySelector(`[data-cell="${cellKey(cell)}"]`);
+      previewCell?.classList.add(
+        valid ? "is-piece-preview" : "is-piece-preview-invalid",
+      );
+    });
+  }
+
+  function createPieceMiniature(piece) {
+    const shape = rotateShape(piece.shape, pieceRotations.get(piece.id) || 0);
+    const rows = Math.max(...shape.map((cell) => cell[0])) + 1;
+    const columns = Math.max(...shape.map((cell) => cell[1])) + 1;
+    const miniature = document.createElement("span");
+    miniature.className = "piece-miniature";
+    miniature.style.setProperty("--piece-rows", rows);
+    miniature.style.setProperty("--piece-columns", columns);
+    shape.forEach(([row, column]) => {
+      const member = document.createElement("span");
+      member.style.gridRow = `${row + 1}`;
+      member.style.gridColumn = `${column + 1}`;
+      member.append(createIcon("fa-person"));
+      miniature.append(member);
+    });
+    return miniature;
+  }
+
+  function createPieceTray() {
+    const section = document.createElement("section");
+    section.className = "piece-section";
+    const heading = document.createElement("div");
+    heading.className = "piece-section__heading";
+    const title = document.createElement("h5");
+    title.textContent = "人牆隊形";
+    const note = document.createElement("span");
+    note.textContent = "選取後放入場內";
+    heading.append(title, note);
+
+    const tray = document.createElement("div");
+    tray.className = "piece-tray";
+    currentMap.pieces.forEach((piece) => {
+      const placed = placedPieces.has(piece.id);
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "piece-card";
+      if (piece.id === selectedPieceId && !placed) button.classList.add("is-selected");
+      if (placed) button.classList.add("is-placed");
+      button.disabled = !gameActive;
+      button.setAttribute("aria-pressed", piece.id === selectedPieceId ? "true" : "false");
+      button.setAttribute(
+        "aria-label",
+        placed ? `收回${piece.name}` : `選擇${piece.name}`,
+      );
+      button.append(createPieceMiniature(piece));
+      const label = document.createElement("span");
+      label.className = "piece-card__label";
+      label.textContent = piece.name;
+      const state = document.createElement("span");
+      state.className = "piece-card__state";
+      state.textContent = placed ? "已上場" : "可使用";
+      button.append(label, state);
+      button.addEventListener("click", () => {
+        if (placed) removePiece(piece.id);
+        else {
+          selectedPieceId = piece.id;
+          renderGameBoard(false);
+          setFeedback(`已選擇「${piece.name}」，可旋轉後放入場內。`);
+        }
+      });
+      tray.append(button);
+    });
+    section.append(heading, tray);
+    return section;
+  }
+
+  function createRouteSummary(analysis) {
+    const summary = document.createElement("div");
+    summary.className = "route-summary";
+    const target = document.createElement("div");
+    target.className = `route-summary__target ${
+      analysis.targetRoute.path ? "is-open" : "is-closed"
+    }`;
+    target.append(
+      createIcon(analysis.targetRoute.path ? "fa-circle-check" : "fa-lock"),
+    );
+    const targetText = document.createElement("span");
+    targetText.textContent = currentMap.targetExit.label;
+    const targetState = document.createElement("strong");
+    targetState.textContent = analysis.targetRoute.path ? "可達" : "被封鎖";
+    target.append(targetText, targetState);
+    summary.append(target);
+
+    const sideNames = {
+      top: "北側",
+      right: "東側",
+      bottom: "南側",
+      left: "西側",
+    };
+    const sideList = document.createElement("div");
+    sideList.className = "side-counts";
+    Object.entries(sideNames).forEach(([side, label]) => {
+      const total = analysis.dangerRoutes.filter((route) => route.side === side).length;
+      const open = analysis.reachableDangerRoutes.filter(
+        (route) => route.side === side,
+      ).length;
+      const item = document.createElement("span");
+      if (open === 0) item.classList.add("is-closed");
+      const sideLabel = document.createElement("strong");
+      sideLabel.textContent = label;
+      const sideValue = document.createElement("span");
+      sideValue.textContent = `${open} / ${total}`;
+      item.append(sideLabel, sideValue);
+      sideList.append(item);
+    });
+    summary.append(sideList);
+    return summary;
+  }
+
+  function createBoardLegend() {
+    const legend = document.createElement("div");
+    legend.className = "board-legend";
+    [
+      ["fa-road-barrier", "固定路障"],
+      ["fa-eye", "警戒區不可部署"],
+    ].forEach(([iconName, label]) => {
+      const item = document.createElement("span");
+      item.append(createIcon(iconName), document.createTextNode(label));
+      legend.append(item);
+    });
+    return legend;
   }
 
   function makeActionButton(label, icon, className, onClick) {
@@ -299,6 +582,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function renderGameBoard(announce = true) {
     const analysis = analyzeBoard();
+    const owners = getPlacedCellOwners();
     const layout = document.createElement("div");
     layout.className = "pursuit-layout";
 
@@ -311,9 +595,20 @@ document.addEventListener("DOMContentLoaded", () => {
     board.setAttribute("aria-label", `${currentMap.name}圍捕路線圖`);
     for (let row = 0; row < currentMap.size; row += 1) {
       for (let column = 0; column < currentMap.size; column += 1) {
-        board.append(createCourtCell(row, column, analysis));
+        board.append(createCourtCell(row, column, analysis, owners));
       }
     }
+    board.addEventListener("pointerover", (event) => {
+      const cell = event.target.closest(".court-cell");
+      if (!cell?.dataset.cell) return;
+      showPlacementPreview(board, cell.dataset.cell.split(",").map(Number));
+    });
+    board.addEventListener("pointerleave", () => clearPlacementPreview(board));
+    board.addEventListener("focusin", (event) => {
+      const cell = event.target.closest(".court-cell");
+      if (!cell?.dataset.cell) return;
+      showPlacementPreview(board, cell.dataset.cell.split(",").map(Number));
+    });
     boardFrame.append(board);
 
     const routePanel = document.createElement("aside");
@@ -336,56 +631,77 @@ document.addEventListener("DOMContentLoaded", () => {
           : "目前沒有可通行的出口",
       ),
     );
-    routePanel.append(mapLabel, mapName, briefing, createExitList(analysis), routeHint);
+    routePanel.append(
+      mapLabel,
+      mapName,
+      briefing,
+      createBoardLegend(),
+      createRouteSummary(analysis),
+      createPieceTray(),
+      routeHint,
+    );
 
     const actions = document.createElement("div");
     actions.className = "puzzle-actions";
-    const undoButton = makeActionButton("撤回", "fa-rotate-left", "", undoFence);
-    undoButton.disabled = !gameActive || placementOrder.length === 0;
-    const resetButton = makeActionButton("重設", "fa-arrow-rotate-right", "", resetBoard);
-    resetButton.disabled = !gameActive || placedFences.size === 0;
+    const rotateButton = makeActionButton("旋轉", "fa-rotate-right", "", rotateSelectedPiece);
+    rotateButton.disabled = !gameActive || !selectedPieceId || placedPieces.has(selectedPieceId);
+    const resetButton = makeActionButton("重設", "fa-broom", "", resetBoard);
+    resetButton.disabled = !gameActive || placedPieces.size === 0;
     const releaseButton = makeActionButton(
       "開始圍捕",
       "fa-flag-checkered",
       "rescue-button--primary",
       releaseDog,
     );
-    actions.append(undoButton, resetButton, releaseButton);
+    actions.append(rotateButton, resetButton, releaseButton);
 
     layout.append(boardFrame, routePanel, actions);
     gameBoard.replaceChildren(layout);
     updateBoardStatus(analysis, announce);
   }
 
-  function toggleFence(position) {
+  function selectNextUnusedPiece() {
+    selectedPieceId =
+      currentMap.pieces.find((piece) => !placedPieces.has(piece.id))?.id || null;
+  }
+
+  function placeSelectedPiece(center) {
     if (!gameActive) return;
-    const key = cellKey(position);
-    if (placedFences.has(key)) {
-      placedFences.delete(key);
-      placementOrder = placementOrder.filter((placedKey) => placedKey !== key);
-      renderGameBoard();
+    if (!selectedPieceId || placedPieces.has(selectedPieceId)) {
+      setFeedback(gameData.feedback.select, "warning");
       return;
     }
-    if (placedFences.size >= gameData.fenceLimit) {
-      setFeedback(gameData.feedback.limit, "error");
+    if (!canPlacePiece(selectedPieceId, center)) {
+      setFeedback(gameData.feedback.invalid, "error");
       return;
     }
-    placedFences.add(key);
-    placementOrder.push(key);
+    placedPieces.set(selectedPieceId, {
+      center: [...center],
+      rotation: pieceRotations.get(selectedPieceId) || 0,
+    });
+    selectNextUnusedPiece();
     renderGameBoard();
   }
 
-  function undoFence() {
-    if (!gameActive || placementOrder.length === 0) return;
-    const lastFence = placementOrder.pop();
-    placedFences.delete(lastFence);
+  function removePiece(pieceId) {
+    if (!gameActive || !placedPieces.has(pieceId)) return;
+    placedPieces.delete(pieceId);
+    selectedPieceId = pieceId;
     renderGameBoard();
+  }
+
+  function rotateSelectedPiece() {
+    if (!gameActive || !selectedPieceId || placedPieces.has(selectedPieceId)) return;
+    pieceRotations.set(selectedPieceId, ((pieceRotations.get(selectedPieceId) || 0) + 1) % 4);
+    renderGameBoard(false);
+    setFeedback(`已旋轉「${getPiece(selectedPieceId).name}」。`);
   }
 
   function resetBoard() {
     if (!gameActive) return;
-    placedFences.clear();
-    placementOrder = [];
+    placedPieces.clear();
+    pieceRotations = new Map(currentMap.pieces.map((piece) => [piece.id, 0]));
+    selectedPieceId = currentMap.pieces[0]?.id || null;
     dogPosition = [...currentMap.dog];
     renderGameBoard();
   }
@@ -400,7 +716,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setFeedback(
       outcome === "success"
         ? "路線成立！大家收緊包圍，小狗正往集合門跑。"
-        : "還有缺口！小狗立刻往沒有人守住的方向跑去。",
+        : "外圈還有缺口！小狗立刻往沒有人守住的方向跑去。",
       outcome === "success" ? "success" : "error",
     );
     renderGameBoard(false);
@@ -423,7 +739,6 @@ document.addEventListener("DOMContentLoaded", () => {
       setFeedback(gameData.feedback.blocked, "error");
       return;
     }
-
     if (analysis.reachableDangerRoutes.length > 0) {
       const escapeRoute = [...analysis.reachableDangerRoutes].sort(
         (first, second) => first.path.length - second.path.length,
@@ -431,10 +746,7 @@ document.addEventListener("DOMContentLoaded", () => {
       animateDog(escapeRoute.path, "escape");
       return;
     }
-
-    if (analysis.targetRoute.path) {
-      animateDog(analysis.targetRoute.path, "success");
-    }
+    if (analysis.targetRoute.path) animateDog(analysis.targetRoute.path, "success");
   }
 
   function chooseRandomMap() {
@@ -468,7 +780,6 @@ document.addEventListener("DOMContentLoaded", () => {
     gameIntroModal.classList.add("hidden");
     playgroundRescue.classList.remove("hidden");
     gameTitle.textContent = gameData.title;
-    setFeedback();
     renderGameBoard();
   }
 
@@ -507,9 +818,7 @@ document.addEventListener("DOMContentLoaded", () => {
           endingDialogue.style.display = "none";
           startGame();
         }
-        if (action === "navigate:map") {
-          window.location.href = "map.html";
-        }
+        if (action === "navigate:map") window.location.href = "map.html";
       },
     });
     dialogue.init().catch((error) => {
@@ -523,8 +832,9 @@ document.addEventListener("DOMContentLoaded", () => {
     animationToken += 1;
     currentMap = chooseRandomMap();
     dogPosition = [...currentMap.dog];
-    placedFences = new Set();
-    placementOrder = [];
+    placedPieces = new Map();
+    pieceRotations = new Map(currentMap.pieces.map((piece) => [piece.id, 0]));
+    selectedPieceId = currentMap.pieces[0]?.id || null;
     renderGame();
   }
 
@@ -557,9 +867,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function handleKeyboard(event) {
     if (!gameActive || event.repeat) return;
-    if (event.key === "Backspace" || event.key.toLowerCase() === "z") {
+    if (event.key.toLowerCase() === "e") {
       event.preventDefault();
-      undoFence();
+      rotateSelectedPiece();
       return;
     }
     if (event.key.toLowerCase() === "r") {
@@ -581,8 +891,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       gameData = await response.json();
       gameTitle.textContent = gameData.title;
-      exitCount.textContent = `${gameData.maps[0].dangerExits.length + 1}`;
-      fenceCount.textContent = `${gameData.fenceLimit}`;
+      exitCount.textContent = `${gameData.maps[0].size * 4 - 5}`;
+      fenceCount.textContent = `${gameData.maps[0].pieces.length}`;
       document.addEventListener("keydown", handleKeyboard);
       document.addEventListener("pointerdown", startAmbience);
       document.addEventListener("keydown", startAmbience);

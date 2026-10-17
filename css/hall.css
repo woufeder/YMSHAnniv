@@ -168,8 +168,12 @@ p.hall-title{
   transform: translateY(1px);
 }
 
+.modal{
+  --bs-modal-width:min(100% - 28px, 650px) !important;
+}
+
 #hallContent .modal-dialog {
-  width: min(100% - 28px, 600px);
+  width: min(100% - 28px, 60dvw) !important;
   margin: 1rem auto;
 }
 

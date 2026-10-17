@@ -1,14 +1,18 @@
 {
   "default": [
     {
-      "text": "你終於追上小狗的腳步。"
+      "char": "dog.png",
+      "text": "<char:jump>在眾人的配合下，<wait=1000>你終於成功追上小狗的腳步。"
     },
     {
-      "text": "「等等，他有項圈耶。」"
+      "char": "dog.png",
+      "text": "「等等，<wait>他有項圈耶。」",
+      "effect": "shake"
     },
     {
+      "char": "owner.png",
       "name": "主人",
-      "text": "「呼呼呼，原來跑到這裡來了。謝謝你們陪牠玩。」"
+      "text": "「<char:dropPause>呼呼<char:dropPause>呼，<wait=1000><char:dropPause>原來跑到這裡來了。謝謝你們陪牠玩。」"
     },
     {
       "char": "dog.png",
@@ -16,22 +20,26 @@
       "text": "<char:jump><sound=bark>「汪！」"
     },
     {
-      "text": "小狗叼著網球，<wait>甩著尾巴跟著主人離開。<wait>"
+      "text": "小狗叼著網球，<wait>甩著尾巴跟著主人離開。"
     },
     {
-      "text": "操場的人群很快又分散，<wait>留下一地凌亂的腳印。<wait>"
+      "text": "操場的人群慢慢散開，<wait>方才陌生人間的齊心協力，只是一日的小小插曲。"
     }
   ],
   "student": [
     {
-      "text": "你終於追上小狗的腳步。"
+      "char": "dog.png",
+      "text": "<char:jump>在眾人的配合下，<wait=1000>你終於成功追上小狗的腳步。"
     },
     {
-      "text": "「等等，他有項圈耶。」"
+      "char": "dog.png",
+      "text": "「等等，<wait>他有項圈耶。」",
+      "effect": "shake"
     },
     {
+      "char": "owner.png",
       "name": "主人",
-      "text": "「呼呼呼，原來跑到這裡來了。謝謝你們陪牠玩。」"
+      "text": "「<char:dropPause>呼呼<char:dropPause>呼，<wait=1000><char:dropPause>原來跑到這裡來了。謝謝你們陪牠玩。」"
     },
     {
       "char": "dog.png",
@@ -39,22 +47,26 @@
       "text": "<char:jump><sound=bark>「汪！」"
     },
     {
-      "text": "小狗叼著網球，<wait>甩著尾巴跟著主人離開。<wait>"
+      "text": "小狗叼著網球，<wait>甩著尾巴跟著主人離開。"
     },
     {
-      "text": "操場的人群很快又分散，<wait>留下一地凌亂的腳印。<wait>"
+      "text": "操場的人群慢慢散開，<wait>方才陌生人間的齊心協力，只是一日的小小插曲。"
     }
   ],
   "teacher": [
     {
-      "text": "你終於追上小狗的腳步。"
+      "char": "dog.png",
+      "text": "<char:jump>在眾人的配合下，<wait=1000>你終於成功追上小狗的腳步。"
     },
     {
-      "text": "「等等，他有項圈耶。」"
+      "char": "dog.png",
+      "text": "「等等，<wait>他有項圈耶。」",
+      "effect": "shake"
     },
     {
+      "char": "owner.png",
       "name": "主人",
-      "text": "「呼呼呼，原來跑到這裡來了。謝謝你們陪牠玩。」"
+      "text": "「<char:dropPause>呼呼<char:dropPause>呼，<wait=1000><char:dropPause>原來跑到這裡來了。謝謝你們陪牠玩。」"
     },
     {
       "char": "dog.png",
@@ -62,10 +74,10 @@
       "text": "<char:jump><sound=bark>「汪！」"
     },
     {
-      "text": "小狗叼著網球，<wait>甩著尾巴跟著主人離開。<wait>"
+      "text": "小狗叼著網球，<wait>甩著尾巴跟著主人離開。"
     },
     {
-      "text": "操場的人群很快又分散，<wait>留下一地凌亂的腳印。<wait>"
+      "text": "操場的人群慢慢散開，<wait>方才陌生人間的齊心協力，只是一日的小小插曲。"
     }
   ]
 }

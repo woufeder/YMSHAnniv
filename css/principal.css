@@ -203,13 +203,13 @@ body {
   display: none;
 }
 
-.character-layer img {
+/* .character-layer img {
   max-width: 90vw;
   height: clamp(70dvh, 105dvh, 120dvh);
   margin-top: 0;
   object-fit: contain;
   transition: opacity 0.5s ease;
-}
+} */
 
 @media (max-width: 900px) {
   .principal-room {

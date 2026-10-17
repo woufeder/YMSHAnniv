@@ -46,6 +46,13 @@ document.addEventListener("DOMContentLoaded", function () {
       mapY: 1600,
       url: "playground.html",
     },
+    {
+      id: "index",
+      name: "校門口",
+      mapX: 4400,
+      mapY: 3600,
+      url: "index.html",
+    },
   ];
 
   // 初始化進度
