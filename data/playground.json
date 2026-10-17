@@ -1,55 +1,63 @@
 {
   "title": "圍捕小狗大作戰",
   "intro": {
-    "title": "小狗一溜進跑道，大家立刻開始圍著他",
-    "text": "牠抱著網球左閃右躲，操場旁的人自然而然圍成一圈。跟上大家的動作，在最亮的時候回應方向，幫忙擋住小狗。",
-    "action": "加入圍捕"
+    "title": "先圍出一條安全路線",
+    "text": "小狗跑得太快，硬追只會讓牠更慌。安排三名同學守住操場的缺口，讓牠最後只能跑向有人接應的集合門。",
+    "action": "開始規劃"
   },
-  "instructions": "使用方向鍵或畫面上的方向按鈕。動作指令會持續重複，等節拍環最亮時按下相同方向；只有成功命中才會換下一個動作。",
-  "timeLimit": 30,
-  "captureHits": 20,
-  "tempo": 720,
-  "cues": [
+  "instructions": "點選虛線格安排人牆。畫面會即時顯示小狗最可能採用的路線；確認只剩綠色集合門可達後，再開始圍捕。",
+  "fenceLimit": 3,
+  "maps": [
     {
-      "id": "left",
-      "key": "ArrowLeft",
-      "label": "左",
-      "hint": "往左邊跑",
-      "icon": "fa-arrow-left"
+      "id": "track-crossing",
+      "name": "跑道交叉口",
+      "briefing": "三個缺口分散在跑道邊，先找出各自唯一的入口。",
+      "size": 7,
+      "dog": [3, 3],
+      "targetExit": { "cell": [0, 3], "side": "top", "label": "司令台集合門" },
+      "dangerExits": [
+        { "cell": [2, 0], "side": "left", "label": "西側跑道缺口" },
+        { "cell": [4, 6], "side": "right", "label": "東側球場缺口" },
+        { "cell": [6, 1], "side": "bottom", "label": "南側側門" }
+      ],
+      "fixedBlocks": [[0, 2], [0, 4], [1, 0], [3, 0], [3, 6], [5, 6], [6, 0], [6, 2]],
+      "placementCells": [[2, 1], [4, 5], [5, 1], [3, 2], [3, 4], [5, 3]]
     },
     {
-      "id": "right",
-      "key": "ArrowRight",
-      "label": "右",
-      "hint": "往右邊跑",
-      "icon": "fa-arrow-right"
+      "id": "court-corner",
+      "name": "球場轉角",
+      "briefing": "跑道與球場交會，別被中央幾個看似重要的位置騙走。",
+      "size": 7,
+      "dog": [3, 2],
+      "targetExit": { "cell": [3, 6], "side": "right", "label": "球場集合門" },
+      "dangerExits": [
+        { "cell": [0, 1], "side": "top", "label": "北側看台缺口" },
+        { "cell": [5, 0], "side": "left", "label": "西側跑道缺口" },
+        { "cell": [6, 4], "side": "bottom", "label": "南側器材門" }
+      ],
+      "fixedBlocks": [[0, 0], [0, 2], [2, 6], [4, 0], [4, 6], [6, 0], [6, 3], [6, 5]],
+      "placementCells": [[1, 1], [5, 1], [5, 4], [2, 3], [3, 3], [4, 3]]
     },
     {
-      "id": "forward",
-      "key": "ArrowUp",
-      "label": "前",
-      "hint": "慢慢靠近",
-      "icon": "fa-arrow-up"
-    },
-    {
-      "id": "wait",
-      "key": "ArrowDown",
-      "label": "停",
-      "hint": "原地觀察",
-      "icon": "fa-arrow-down"
+      "id": "field-loop",
+      "name": "草地外圈",
+      "briefing": "三條岔路繞著草地展開，留下通往南側集合門的路。",
+      "size": 7,
+      "dog": [3, 3],
+      "targetExit": { "cell": [6, 3], "side": "bottom", "label": "南側集合門" },
+      "dangerExits": [
+        { "cell": [1, 0], "side": "left", "label": "西側草地缺口" },
+        { "cell": [0, 5], "side": "top", "label": "北側看台缺口" },
+        { "cell": [5, 6], "side": "right", "label": "東側球場缺口" }
+      ],
+      "fixedBlocks": [[0, 0], [0, 4], [0, 6], [2, 0], [4, 6], [6, 2], [6, 4], [6, 6]],
+      "placementCells": [[1, 1], [1, 5], [5, 5], [2, 2], [3, 4], [4, 2]]
     }
   ],
   "feedback": {
-    "perfect": "漂亮，動作剛好跟上。",
-    "good": "接到了，繼續跟上下一個指令。",
-    "wrong": "方向不對，先看清楚方向。",
-    "timing": "再等節拍環靠近中央一點。",
-    "miss": "動作慢了一點，再重複一次。"
-  },
-  "success": {
-    "title": "大家的默契很好，成功圍住小狗了！",
-    "text": "牠叼著網球鑽出門口，操場邊立刻笑成一團。原來大家剛剛不只是在追牠，還臨時組成了一段很亂但很有默契的節奏。",
-    "replayAction": "再玩一次",
-    "mapAction": "回到校園地圖"
+    "ready": "只剩集合門可以抵達，可以開始圍捕了。",
+    "open": "還有 {count} 個危險缺口可達，繼續調整站位。",
+    "blocked": "這樣會把小狗完全困住，請留一條通往集合門的路。",
+    "limit": "三名同學都已經站定位了，可以撤回一人再調整。"
   }
 }

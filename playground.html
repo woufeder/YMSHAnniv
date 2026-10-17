@@ -24,18 +24,17 @@
     <section class="rescue-panel">
       <header class="rescue-header">
         <div>
-          <p class="game-kicker"><i class="fa-solid fa-paw" aria-hidden="true"></i> 追蹤進行中</p>
+          <p class="game-kicker"><i class="fa-solid fa-paw" aria-hidden="true"></i> 圍捕路線規劃</p>
           <h3 id="gameTitle"></h3>
         </div>
         <div class="game-stats">
-          <div class="lead-meter" aria-label="成功口令">
-            <p>成功口令</p>
-            <strong id="leadCount" aria-live="polite">0 / 12</strong>
-            <span class="lead-progress" aria-hidden="true"><span id="leadProgress"></span></span>
+          <div class="exit-meter" aria-label="小狗目前可抵達的出口數量">
+            <p>可達出口</p>
+            <strong id="exitCount" aria-live="polite">4</strong>
           </div>
-          <div class="time-meter" aria-label="剩餘時間">
-            <p>剩餘時間</p>
-            <strong id="timeCount" aria-live="polite">30</strong>
+          <div class="fence-meter" aria-label="尚可安排的人牆數量">
+            <p>可用人牆</p>
+            <strong id="fenceCount" aria-live="polite">3</strong>
           </div>
         </div>
       </header>
@@ -51,6 +50,11 @@
     <div class="playground-modal__content">
       <h2 id="gameIntroTitle">圍捕小狗大作戰</h2>
       <p id="gameIntroText"></p>
+      <ul class="playground-modal__rules">
+        <li>點選虛線格，安排或撤回圍捕的同學。</li>
+        <li>腳印會顯示小狗目前最可能前往的出口。</li>
+        <li>讓紅色缺口都無法抵達，只留下綠色集合門。</li>
+      </ul>
       <button id="startGame" class="rescue-button rescue-button--primary" type="button">
         <i class="fa-solid fa-play" aria-hidden="true"></i> 開始遊戲
       </button>

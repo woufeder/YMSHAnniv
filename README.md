@@ -15,7 +15,7 @@
 - `games/classroom.html`：從題庫隨機抽取 10 題的快問快答。
 - `games/garden.html`：4 x 4 花圃急救站；在時限內以正確工具處理事件。
 - `games/lab.html`：實驗紀錄的翻牌配對。
-- `playground.html`：30 秒節奏遊戲，協助把小狗引到側門。
+- `playground.html`：隨機三盤的圍捕路線解謎，安排人牆將小狗引向唯一的集合門。
 - `hall.html`：穿堂留言板，便條紙可開啟完整留言。
 - `principal.html`：校長室對話、通關紀錄與紀念卡。
 
