@@ -24,16 +24,16 @@
     <section class="rescue-panel">
       <header class="rescue-header">
         <div>
-          <p class="game-kicker"><i class="fa-solid fa-paw" aria-hidden="true"></i> 圍捕路線規劃</p>
           <h3 id="gameTitle"></h3>
+          <p id="gameFeedback" class="game-feedback" aria-live="assertive"></p>
         </div>
         <div class="game-stats">
           <div class="exit-meter" aria-label="小狗目前可抵達的危險缺口數量">
-            <p>危險缺口</p>
+            <p>未阻擋缺口</p>
             <strong id="exitCount" aria-live="polite">35</strong>
           </div>
           <div class="fence-meter" aria-label="尚未使用的人牆隊形數量">
-            <p>剩餘隊形</p>
+            <p>剩餘隊伍</p>
             <strong id="fenceCount" aria-live="polite">8</strong>
           </div>
         </div>
@@ -41,7 +41,7 @@
 
       <section class="rescue-scene" aria-live="polite">
         <div id="gameBoard" class="game-board"></div>
-        <p id="gameFeedback" class="game-feedback" aria-live="assertive"></p>
+        
       </section>
     </section>
   </main>
@@ -51,13 +51,13 @@
       <h2 id="gameIntroTitle">圍捕小狗大作戰</h2>
       <p id="gameIntroText"></p>
       <ul class="playground-modal__rules">
-        <li>在八乘八的場內選擇一組人牆，旋轉後放到任意可放置區域。</li>
-        <li>小狗十字範圍不能站人，避免阻礙移動路線。</li>
-        <li>腳印會顯示小狗移動路線，檢查是否有漏洞。</li>
-        <li>不必用完所有隊形，阻止小狗從外圈缺口逃跑。</li>
+        <li>指揮人牆，調整方向後安排到任意空曠區域，再次點擊即可撤回</li>
+        <li>小狗十字範圍不能站人，請注意安全，保持友善</li>
+        <li>腳印為預測小狗移動路線，幫助檢查漏洞</li>
+        <li>不必安排完所有隊伍，阻止小狗從外圈缺口逃跑，圍出唯一通道</li>
       </ul>
       <button id="startGame" class="rescue-button rescue-button--primary" type="button">
-        <i class="fa-solid fa-play" aria-hidden="true"></i> 開始遊戲
+        <i class="fa-solid fa-person-running" aria-hidden="true"></i> 開始指揮
       </button>
     </div>
   </section>

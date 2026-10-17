@@ -351,7 +351,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (noDeploy) {
       cell.classList.add("is-no-deploy");
-      cell.title = "小狗警戒區，不能部署人牆";
+      cell.title = "小狗警戒範圍，不能部署人牆";
     }
     if (onPreviewRoute) cell.classList.add("is-route");
     if (isDog) cell.classList.add("has-dog");
@@ -561,7 +561,7 @@ document.addEventListener("DOMContentLoaded", () => {
     legend.className = "board-legend";
     [
       ["fa-road-barrier", "固定路障"],
-      ["fa-eye", "警戒區不可部署"],
+      ["fa-eye", "小狗警戒範圍不可部署"],
     ].forEach(([iconName, label]) => {
       const item = document.createElement("span");
       item.append(createIcon(iconName), document.createTextNode(label));
@@ -615,7 +615,6 @@ document.addEventListener("DOMContentLoaded", () => {
     routePanel.className = "route-panel";
     const mapLabel = document.createElement("p");
     mapLabel.className = "route-panel__label";
-    mapLabel.textContent = "本次路線";
     const mapName = document.createElement("h4");
     mapName.textContent = currentMap.name;
     const briefing = document.createElement("p");
@@ -715,7 +714,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const token = ++animationToken;
     setFeedback(
       outcome === "success"
-        ? "路線成立！大家收緊包圍，小狗正往集合門跑。"
+        ? "路線成立！大家收緊包圍，小狗正往集合口跑。"
         : "外圈還有缺口！小狗立刻往沒有人守住的方向跑去。",
       outcome === "success" ? "success" : "error",
     );

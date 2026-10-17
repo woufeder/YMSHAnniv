@@ -16,6 +16,7 @@
   padding: clamp(56px, 7dvh, 76px) clamp(12px, 3dvw, 34px)
     clamp(14px, 2.5dvh, 28px);
   box-sizing: border-box;
+  background: rgba(16, 39, 31, 0.3);
 }
 
 .rescue-panel {
@@ -25,10 +26,10 @@
   flex-direction: column;
   overflow: auto;
   padding: clamp(14px, 2.4dvh, 24px) clamp(14px, 2.2dvw, 28px);
-  border: 1px solid rgba(228, 243, 225, 0.74);
+  border: 1px solid rgba(206, 225, 225, 0.74);
   border-radius: 8px;
   box-sizing: border-box;
-  background: rgba(46, 53, 50, 0.9);
+  background: rgba(103, 99, 99, 0.97);
   box-shadow: 0 20px 56px rgba(6, 28, 21, 0.5);
   backdrop-filter: blur(6px);
   scrollbar-width: thin;
@@ -54,7 +55,7 @@
   justify-content: space-between;
   gap: clamp(12px, 2dvw, 24px);
   padding-bottom: clamp(9px, 1.6dvh, 15px);
-  border-bottom: 1px solid rgba(228, 243, 225, 0.3);
+  border-bottom: 1px solid rgba(206, 225, 225, 0.3);
 }
 
 .game-kicker {
@@ -91,16 +92,16 @@
   justify-items: center;
   gap: 2px;
   padding: clamp(6px, 1.2dvh, 9px) clamp(8px, 1.2vw, 12px);
-  border: 1px solid rgba(228, 243, 225, 0.3);
+  border: 1px solid rgba(206, 225, 225, 0.3);
   border-radius: 8px;
-  background: rgba(7, 38, 29, 0.38);
+  background: rgba(68, 66, 66);
   box-sizing: border-box;
 }
 
 .exit-meter p,
 .fence-meter p {
   margin: 0;
-  color: #c7edc7;
+  color: #fdfffd;
   font-size: clamp(0.72rem, 1.55dvh, 0.84rem);
   font-weight: 700;
 }
@@ -127,28 +128,29 @@
   place-items: center;
   padding: clamp(16px, 4dvw, 32px);
   box-sizing: border-box;
-  background: rgba(16, 39, 31, 0.6);
+  background: rgba(16, 39, 31, 0.3);
 }
 
 .playground-modal__content {
-  width: min(500px, 100%);
+  width: min(600px, 100%);
   padding: clamp(20px, 4dvw, 30px);
-  border: 1px solid rgba(228, 243, 225, 0.74);
+  border: 1px solid rgba(243, 229, 225, 0.74);
   border-radius: 8px;
   box-sizing: border-box;
-  background: rgba(62, 67, 64, 0.97);
+  background: rgba(155, 67, 67, 0.97);
   box-shadow: 0 20px 56px rgba(6, 28, 21, 0.5);
   color: #f7fbfb;
 }
 
 .playground-modal__content h2 {
   margin: 0;
-  color: #fff5c9;
-  font-size: clamp(1.45rem, 4.2vw, 1.8rem);
+  color: rgb(249, 244, 244);
+  font-size: clamp(1.45rem, 4.2vw, 2rem);
   text-align: center;
 }
 
 .playground-modal__content > p {
+  font-size: 17px;
   margin: 14px 0;
   line-height: 1.75;
 }
@@ -158,10 +160,10 @@
   gap: 8px;
   margin: 0 0 20px;
   padding: 14px 16px 14px 38px;
-  border: 1px solid rgba(199, 237, 199, 0.28);
+  border: 1px solid rgba(237, 212, 199, 0.28);
   border-radius: 8px;
   background: rgba(7, 38, 29, 0.26);
-  color: #e4f1e2;
+  color: #f1efe2;
   line-height: 1.55;
 }
 
@@ -184,16 +186,22 @@
 .pursuit-layout {
   display: grid;
   grid-template-columns: minmax(280px, 1fr) minmax(280px, 0.72fr);
-  align-items: center;
-  gap: clamp(12px, 2vw, 24px);
+  grid-template-areas:
+    "board panel"
+    "actions panel";
+  grid-template-rows: minmax(0, 1fr) auto;
+  align-items: stretch;
+  column-gap: clamp(12px, 2vw, 24px);
+  row-gap: 8px;
 }
 
 .court-frame {
+  grid-area: board;
   width: 100%;
   display: grid;
   place-items: center;
   padding: clamp(8px, 1.2vw, 14px);
-  border: 1px solid rgba(228, 243, 225, 0.5);
+  border: 1px solid rgba(206, 225, 225, 0.5);
   border-radius: 8px;
   box-sizing: border-box;
   background:
@@ -203,7 +211,7 @@
       transparent 0 18px,
       rgba(217, 242, 219, 0.045) 18px 19px
     ),
-    rgba(10, 51, 37, 0.68);
+    rgba(197, 195, 194, 0.68);
 }
 
 .court-board {
@@ -214,24 +222,14 @@
   grid-template-columns: repeat(var(--court-size), minmax(0, 1fr));
   grid-template-rows: repeat(var(--court-size), minmax(0, 1fr));
   overflow: hidden;
-  border: clamp(3px, 0.45vw, 6px) solid rgba(239, 248, 229, 0.82);
+  border: clamp(3px, 0.45vw, 6px) solid rgba(255, 255, 255, 1);
   border-radius: 8px;
   box-sizing: border-box;
   background:
-    linear-gradient(
-      90deg,
-      transparent 49.5%,
-      rgba(255, 255, 255, 0.2) 49.5% 50.5%,
-      transparent 50.5%
-    ),
-    linear-gradient(
-      transparent 49.5%,
-      rgba(255, 255, 255, 0.2) 49.5% 50.5%,
-      transparent 50.5%
-    ),
+
     #376b52;
   box-shadow: 0 14px 30px rgba(3, 23, 16, 0.34);
-  container-type: inline-size;
+  /* container-type: inline-size; */
 }
 
 .court-cell {
@@ -310,20 +308,20 @@ button.court-cell:focus-visible {
   background:
     repeating-linear-gradient(
       45deg,
-      rgba(255, 255, 255, 0.07) 0 5px,
-      rgba(0, 0, 0, 0.05) 5px 10px
+      rgba(145, 74, 74, 0.07) 0 5px,
+      rgba(145, 74, 74, 0.05) 5px 10px
     ),
-    rgba(20, 48, 38, 0.75);
+    rgba(240, 196, 100, 0.75);
 }
 
 .court-cell.is-target-exit {
-  background: rgba(111, 192, 133, 0.28);
+  background: rgba(66, 241, 113, 0.28);
   box-shadow: inset 0 0 0 3px rgba(177, 246, 176, 0.75);
 }
 
 .court-cell.is-danger-exit {
-  background: rgba(202, 99, 72, 0.12);
-  box-shadow: inset 0 0 0 1px rgba(255, 182, 135, 0.42);
+  background: rgba(162, 78, 78, 0.8);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.42);
 }
 
 .exit-marker,
@@ -343,7 +341,7 @@ button.court-cell:focus-visible {
   align-content: center;
   gap: 1px;
   color: #fff;
-  font-size: clamp(0.48rem, 1.25dvh, 0.7rem);
+  font-size: clamp(0.6rem, 1.75dvh, 0.7rem);
   font-weight: 700;
   line-height: 1;
 }
@@ -353,7 +351,7 @@ button.court-cell:focus-visible {
 }
 
 .is-danger-exit .exit-marker {
-  color: rgba(255, 221, 197, 0.56);
+  color: rgba(177, 177, 176, 0.8);
 }
 
 .is-danger-exit .exit-marker i {
@@ -371,10 +369,9 @@ button.court-cell:focus-visible {
   z-index: 2;
   width: min(76%, 44px);
   aspect-ratio: 1.2;
-  border: 1px solid rgba(210, 230, 213, 0.38);
   border-radius: 5px;
-  background: rgba(17, 38, 31, 0.78);
-  color: #d8e8d9;
+  background: rgba(102, 68, 6, 0.78);
+  color: #e8e3d8;
   font-size: clamp(0.58rem, 3cqw, 1.25rem);
   box-shadow: 0 4px 12px rgba(5, 23, 17, 0.32);
 }
@@ -398,8 +395,8 @@ button.court-cell:focus-visible {
 
 .route-paw {
   z-index: 1;
-  color: rgba(255, 231, 144, 0.76);
-  font-size: clamp(0.45rem, 1.6cqw, 0.7rem);
+  color: rgba(255, 255, 255, 1);
+  font-size: clamp(0.7rem, 1.6cqw, 0.9rem);
   transform: rotate(-18deg);
 }
 
@@ -419,14 +416,15 @@ button.court-cell:focus-visible {
 }
 
 .route-panel {
+  grid-area: panel;
   min-width: 0;
   align-self: stretch;
   display: flex;
   flex-direction: column;
   padding: clamp(11px, 1.7dvh, 17px);
-  border: 1px solid rgba(228, 243, 225, 0.38);
+  border: 1px solid rgba(206, 225, 225, 0.38);
   border-radius: 8px;
-  background: rgba(7, 38, 29, 0.38);
+  background: rgba(68, 66, 66, 0.38);
 }
 
 .route-panel__label {
@@ -453,8 +451,7 @@ button.court-cell:focus-visible {
   flex-wrap: wrap;
   gap: 5px 12px;
   margin-bottom: clamp(7px, 1.1dvh, 10px);
-  color: #c5d8c8;
-  font-size: clamp(0.68rem, 1.4dvh, 0.78rem);
+  font-size: clamp(0.7rem, 1.8dvh, 0.8rem);
 }
 
 .board-legend span {
@@ -527,7 +524,7 @@ button.court-cell:focus-visible {
   min-height: 0;
   margin-top: clamp(8px, 1.3dvh, 12px);
   padding-top: clamp(8px, 1.3dvh, 12px);
-  border-top: 1px solid rgba(228, 243, 225, 0.2);
+  border-top: 1px solid rgba(206, 225, 225, 0.2);
 }
 
 .piece-section__heading {
@@ -564,7 +561,7 @@ button.court-cell:focus-visible {
   align-items: center;
   column-gap: 7px;
   padding: 5px 7px;
-  border: 1px solid rgba(228, 243, 225, 0.28);
+  border: 1px solid rgba(206, 225, 225, 0.28);
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.04);
   color: #eff9ed;
@@ -652,9 +649,9 @@ button.court-cell:focus-visible {
 }
 
 .puzzle-actions {
-  grid-column: 1 / -1;
+  grid-area: actions;
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 8px;
 }
 
@@ -665,11 +662,12 @@ button.court-cell:focus-visible {
   justify-content: center;
   gap: 8px;
   padding: 8px 14px;
-  border: 1px solid rgba(228, 243, 225, 0.7);
+  border: 1px solid rgba(206, 225, 225, 0.7);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.08);
   color: #f7fbfb;
   font: inherit;
+  font-size: 18px;
   font-weight: 700;
   cursor: pointer;
   transition:
@@ -695,7 +693,7 @@ button.court-cell:focus-visible {
 .rescue-button--primary {
   border-color: #ffd85d;
   background: #ffd85d;
-  color: #285344;
+  color: #090909;
 }
 
 .rescue-button--primary:hover:not(:disabled),
@@ -791,6 +789,11 @@ button.court-cell:focus-visible {
 
   .pursuit-layout {
     grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "board"
+      "actions"
+      "panel";
+    grid-template-rows: auto auto auto;
   }
 
   .court-board {
@@ -814,10 +817,9 @@ button.court-cell:focus-visible {
   }
 
   .puzzle-actions {
-    position: sticky;
-    bottom: 0;
-    padding-top: 4px;
-    background: rgba(46, 53, 50, 0.94);
+    position: static;
+    padding: 0;
+    background: transparent;
   }
 }
 

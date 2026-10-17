@@ -8,7 +8,8 @@
 #hallContent {
   min-height: 100dvh;
   height: 100dvh;
-  background: #1d242f url("../assets/images/hall-brick.jpg") center / cover fixed no-repeat;
+  background: #1d242f url("../assets/images/hall-brick.jpg") center / cover
+    fixed no-repeat;
 }
 
 .hall-container {
@@ -30,11 +31,10 @@
   font-weight: 700;
   line-height: 1.3;
   text-shadow: 0 2px 8px rgba(12, 28, 34, 0.65);
-
 }
-p.hall-title{
-    margin-top: 0.1rem;
-  }
+p.hall-title {
+  margin-top: 0.1rem;
+}
 
 .messages-canvas {
   --notes-content-height: 0px;
@@ -44,6 +44,8 @@ p.hall-title{
   width: 100%;
   overflow: auto;
   border-radius: var(--border-radius-large);
+  scrollbar-width: thin;
+  scrollbar-color: #ffffff rgba(68, 68, 68, 0.2);
 }
 
 .sticky-note {
@@ -69,7 +71,9 @@ p.hall-title{
   text-align: left;
   transform: rotate(var(--note-rotation));
   transform-origin: center;
-  transition: transform 160ms ease, box-shadow 160ms ease;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease;
   display: flex;
   flex-direction: column;
 }
@@ -135,7 +139,11 @@ p.hall-title{
   font: inherit;
   font-weight: 700;
   line-height: 1;
-  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
 }
 
 .btn-write {
@@ -168,8 +176,8 @@ p.hall-title{
   transform: translateY(1px);
 }
 
-.modal{
-  --bs-modal-width:min(100% - 28px, 650px) !important;
+.modal {
+  --bs-modal-width: min(100% - 28px, 650px) !important;
 }
 
 #hallContent .modal-dialog {
@@ -189,6 +197,8 @@ p.hall-title{
 
 #messageDetailModal .modal-content {
   background: var(--message-note-color, #ffffff);
+  scrollbar-width: thin;
+  scrollbar-color: var(--message-note-color, #ffffff) rgba(68, 68, 68, 0.2);
 }
 
 #hallContent .modal-header {
