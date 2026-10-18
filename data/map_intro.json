@@ -3,7 +3,7 @@
     {
       "char": "guard.png",
       "name": "警衛",
-      "text": "<wait=1000>「<char:jump>唷！<wait>新面孔，<wait>進來之前讓阿伯登記一下名字。」"
+      "text": "<wait=1000>「<char:jump>唷！<wait>你是……？<wait=800>好像沒有什麼印象，<wait>進來之前讓阿伯登記一下名字。」"
     },
     {
       "char": "guard.png",
@@ -13,12 +13,12 @@
     {
       "char": "guard.png",
       "name": "警衛",
-      "text": "「嗯？你說今天辦什麼活動，<wait><char:jump>是永明的創校一百周年校慶啊！"
+      "text": "「嗯？<wait>你說今天辦什麼活動，<wait><char:jump>是永明的創校一百周年校慶啊！"
     },
     {
       "char": "guard.png",
       "name": "警衛",
-      "text": "「好啦進來吧，<wait>今天人不少，小心身上的東西，別搞丟錢包手機啦。」"
+      "text": "「好啦快進來，<wait>今天人不少，小心身上的東西，<wait>別搞丟錢包手機啦。」"
     }
   ],
   "student": [
@@ -45,12 +45,12 @@
     {
       "char": "guard.png",
       "name": "警衛",
-      "text": "「真好真好，真高興看到你回來。<wait>在外面有照顧好自己嗎？<wait>欲會記得食飯欸(要記得吃飯欸)。」"
+      "text": "「真好真好，<char:dropPause>真高興看到你回來。<wait>在外面有照顧好自己嗎？<char:dropPause><wait>欲會記得食飯欸(要記得吃飯欸)。」"
     },
     {
       "char": "guard.png",
       "name": "警衛",
-      "text": "「好啦好啦快進來吧，<wait>今年也有一些小遊戲，<wait>聽說校長有準備小東西紀念，<wait>回去之前別忘了去校長室看看啊！」"
+      "text": "「<wait><char:jump>好啦好啦快進來吧，<wait>今年也有一些小遊戲，<wait>聽說校長有準備小東西紀念，<wait>回去之前別忘了去校長室看看啊！」"
     }
   ],
   "teacher": [
@@ -69,17 +69,17 @@
     {
       "char": "guard.png",
       "name": "警衛",
-      "text": "「唉唷，{{input}}老師。<wait>今天起這麼早啊，<wait>一定也是來參加校慶的對吧！」"
+      "text": "「<char:jump>唉唷，{{input}}老師。<wait>今天起這麼早啊，<wait>一定也是來參加校慶的對吧！」"
     },
     {
       "char": "guard.png",
       "name": "警衛",
-      "text": "「聽說以前的學生也會回來看看呢，<wait>我剛剛就看到了好幾個，<wait>都長大了啊。」"
+      "text": "「聽說以前的學生也會回來看看呢，<wait>我剛剛就看到了好幾個，<wait><char:dropPause>都長大了啊。」"
     },
     {
       "char": "guard.png",
       "name": "警衛",
-      "text": "「哈哈哈，<wait>不耽誤您時間啦，<wait>快進來吧，外頭熱著呢。」"
+      "text": "「哈哈哈<char:jump>，<wait>不耽誤您時間啦，<wait>快進來吧，外頭熱著呢。」"
     },
     {
       "char": "guard.png",
