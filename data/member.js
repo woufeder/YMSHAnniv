@@ -163,6 +163,8 @@ window.memberData = [
 { "name": "茶荼", "class": "一年級", "role": "student" },
 { "name": "許馮安", "class": "一年級", "role": "student" },
 { "name": "方小雪", "class": "一年級", "role": "student" },
+{ "name": "花暮暮", "class": "一年級", "role": "student" },
+
 // 一年信班
 { "name": "姜煦青", "class": "一年信班", "role": "student" },
 { "name": "熊稲月", "class": "一年信班", "role": "student" },
@@ -385,6 +387,7 @@ window.memberData = [
 { "name": "林靖", "class": "三年級理組班", "role": "student" },
 { "name": "傅書晗", "class": "三年級理組班", "role": "student" },
 { "name": "向澤", "class": "三年級理組班", "role": "student" },
+{ "name": "花朝朝", "class": "三年級理組班", "role": "student" },
 // 三年信班
 { "name": "蘇殘陽", "class": "三年信班", "role": "student" },
 { "name": "范白渚", "class": "三年信班", "role": "student" },
