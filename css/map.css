@@ -76,6 +76,9 @@
   object-fit: contain;
   object-position: center;
   background: var(--primary100);
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
 .location-markers {
@@ -293,14 +296,193 @@
   }
 }
 
-@media (max-width: 480px) {
-  .map-legend {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+/* ============================
+   RPG Mode Styles
+   ============================ */
+
+#collisionPreview {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+
+  width: 100%;
+  height: 100%;
+  display: block;
+
+  object-fit: contain;
+  object-position: center;
+
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+#collisionCanvas {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* 玩家角色 */
+.player-character {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -100%);
+  z-index: 20;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+#playerSprite {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: 32px;
+  height: 32px;
+  background-repeat: no-repeat;
+  background-size: 96px 128px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.player-shadow {
+  position: absolute;
+  z-index: 1;
+  bottom: -2px;
+  left: 50%;
+  width: 24px;
+  height: 10px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  filter: blur(2px);
+}
+
+#playerSprite {
+  width: 32px;
+  height: 32px;
+  display: block;
+  background-size: 128px 128px; /* 4 directions x 32px = 128px */
+}
+
+.player-shadow {
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 50%;
+  filter: blur(2px);
+}
+
+.player-character img,
+.player-character .player-shadow {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* 觸控控制按鈕 */
+.rpg-controls {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 100;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.direction-pad {
+  display: grid;
+  grid-template-areas:
+    ". up ."
+    "left . right"
+    ". down .";
+  gap: 4px;
+}
+
+.dir-btn {
+  width: 56px;
+  height: 56px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  background: rgba(36, 42, 56, 0.85);
+  border-radius: 14px;
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  transition: all 0.1s ease;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dir-btn:active,
+.dir-btn.active {
+  background: rgba(255, 193, 7, 0.9);
+  transform: scale(0.95);
+  border-color: #ffc107;
+}
+
+.dir-btn.up {
+  grid-area: up;
+}
+
+.dir-btn.down {
+  grid-area: down;
+}
+
+.dir-btn.left {
+  grid-area: left;
+}
+
+.dir-btn.right {
+  grid-area: right;
+}
+
+.controls-hint {
+  background: rgba(36, 42, 56, 0.85);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  backdrop-filter: blur(4px);
+  white-space: nowrap;
+}
+
+/* 觸控模式下顯示控制按鈕 */
+@media (max-width: 768px) and (hover: none) and (pointer: coarse) {
+  .rpg-controls {
+    display: flex;
   }
 
-  .legend-item {
-    justify-content: center;
+  .controls-hint {
+    display: none;
+  }
+}
+
+/* 桌面版顯示提示文字 */
+@media (min-width: 769px) {
+  .controls-hint {
+    display: block;
+  }
+}
+
+@media (max-width: 480px) {
+  .rpg-controls {
+    bottom: 16px;
+    left: 16px;
+  }
+
+  .dir-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 18px;
   }
 }
