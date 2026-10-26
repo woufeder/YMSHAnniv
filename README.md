@@ -8,7 +8,7 @@
 
 - `index.html`：校門口入口與名字輸入。
 - `whoAreYou.html`：身分辨識與角色分流。
-- `map.html`：地圖前導對話、校園地圖、地點進度與隱藏成就清單。
+- `map.html`：地圖前導對話、可點擊建築、鍵盤角色探索、地點進度與隱藏成就清單。
 - `art.html`：藝術大樓前導對話與教室選擇。
 - `games/music.html`：依 C 大調校歌旋律彈琴。
 - `games/artroom.html`：繪圖板，可儲存作品至瀏覽器。

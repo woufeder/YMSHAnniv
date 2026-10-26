@@ -2,116 +2,246 @@
 document.addEventListener("DOMContentLoaded", function () {
   const progressChecklist = document.getElementById("progress-checklist");
   const campusMap = document.getElementById("campusMap");
-  const markers = document.querySelector(".location-markers");
-  const MAP_WIDTH = 5959;
-  const MAP_HEIGHT = 4092;
-  const locations = [
-    { id: "art", name: "藝術大樓", mapX: 1025, mapY: 1200, url: "art.html" },
-    {
-      id: "classroom",
-      name: "教室",
-      event: "快問快答",
-      mapX: 565,
-      mapY: 3000,
-      url: "games/classroom.html",
-    },
-    {
-      id: "garden",
-      name: "花圃",
-      event: "花園急救站",
-      mapX: 2225,
-      mapY: 950,
-      url: "games/garden.html",
-    },
-    {
-      id: "lab",
-      name: "實驗室",
-      event: "記憶翻牌",
-      mapX: 2550,
-      mapY: 2600,
-      url: "games/lab.html",
-    },
-    {
-      id: "principal",
-      name: "校長室",
-      mapX: 3500,
-      mapY: 3200,
-      url: "principal.html",
-    },
-    { id: "hall", name: "穿堂", mapX: 3355, mapY: 1500, url: "hall.html" },
-    {
-      id: "playground",
-      name: "操場",
-      mapX: 4850,
-      mapY: 1600,
-      url: "playground.html",
-    },
-    {
-      id: "index",
-      name: "校門口",
-      mapX: 4400,
-      mapY: 3600,
-      url: "index.html",
-    },
-  ];
+  const markers = document.querySelector(".location-hotspots");
+  const debugOverlays = document.querySelector(".map-debug-overlays");
+  const achievementToggle = document.getElementById("achievementToggle");
+  const achievementDrawer = document.getElementById("achievementDrawer");
+  const achievementClose = document.getElementById("achievementClose");
+  const achievementBackdrop = document.getElementById("achievementBackdrop");
+  const mapConfig = window.YMSHMapConfig;
+
+  if (!mapConfig) {
+    console.error("Map: 找不到 YMSHMapConfig");
+    return;
+  }
+
+  const {
+    width: mapWidth,
+    height: mapHeight,
+    locations,
+    easterEggs = [],
+  } = mapConfig;
 
   // 初始化進度
   let completedGames = JSON.parse(localStorage.getItem("completedGames")) || [];
   updateProgress();
+  setupAchievementDrawer();
 
-  // 建立地點標記
-  createLocationMarkers();
-  positionLocationMarkers();
-  window.addEventListener("resize", positionLocationMarkers);
-  window.addEventListener("ymsh:map-revealed", positionLocationMarkers);
-  campusMap?.addEventListener("load", positionLocationMarkers);
+  // 建立覆蓋在建築本體上的滑鼠熱區
+  createLocationHotspots();
+  createMapDebugOverlays();
+  positionLocationHotspots();
+  window.addEventListener("resize", positionLocationHotspots);
+  window.addEventListener("ymsh:map-revealed", positionLocationHotspots);
+  campusMap?.addEventListener("load", positionLocationHotspots);
 
-  function createLocationMarkers() {
-    if (!markers) return;
+  function rememberReturnLocation(locationId) {
+    try {
+      sessionStorage.setItem(mapConfig.returnLocationKey, locationId);
+    } catch (error) {
+      console.warn("Map: 無法記錄返回位置", error);
+    }
+  }
 
-    locations.forEach((location) => {
-      const marker = document.createElement("button");
-      marker.className = "location-marker";
-      marker.type = "button";
-      marker.dataset.mapX = location.mapX;
-      marker.dataset.mapY = location.mapY;
-      marker.setAttribute("aria-label", `前往${location.name}`);
-      marker.innerHTML = `
-            <div class="d-flex flex-column justify-content-center align-items-center gap-1">
-                <span class="location-label">${location.name}</span>
-                <span class="location-pin" aria-hidden="true"><i class="fa-solid fa-location-dot"></i></span>
-            </div>
-            `;
+  function setupAchievementDrawer() {
+    if (!achievementToggle || !achievementDrawer || !achievementBackdrop) {
+      return;
+    }
 
-      // 檢查是否已完成
-      if (completedGames.includes(location.id)) {
-        marker.classList.add("completed");
+    const setOpen = (isOpen, returnFocus = true) => {
+      achievementDrawer.classList.toggle("is-open", isOpen);
+      achievementBackdrop.classList.toggle("is-open", isOpen);
+      achievementDrawer.setAttribute("aria-hidden", String(!isOpen));
+      achievementDrawer.inert = !isOpen;
+      achievementToggle.setAttribute("aria-expanded", String(isOpen));
+      window.dispatchEvent(
+        new CustomEvent("ymsh:map-ui-lock", {
+          detail: { locked: isOpen },
+        }),
+      );
+
+      if (isOpen) {
+        achievementClose?.focus();
+      } else if (returnFocus) {
+        achievementToggle.focus();
       }
+    };
 
-      marker.addEventListener("click", () => {
-        window.location.href = location.url;
-      });
+    achievementToggle.addEventListener("click", () => {
+      setOpen(!achievementDrawer.classList.contains("is-open"), false);
+    });
+    achievementClose?.addEventListener("click", () => setOpen(false));
+    achievementBackdrop.addEventListener("click", () => setOpen(false));
 
-      markers.appendChild(marker);
+    window.addEventListener("keydown", (event) => {
+      if (
+        event.key === "Escape" &&
+        achievementDrawer.classList.contains("is-open")
+      ) {
+        setOpen(false);
+      }
     });
   }
 
-  function positionLocationMarkers() {
+  function createLocationHotspots() {
+    if (!markers) return;
+
+    locations.forEach((location) => {
+      const hotspot = document.createElement("button");
+      hotspot.className = "location-hotspot";
+      hotspot.type = "button";
+      hotspot.dataset.locationId = location.id;
+      hotspot.setAttribute("aria-label", `前往${location.name}`);
+
+      const label = document.createElement("span");
+      label.className = "location-label";
+      label.textContent = location.name;
+      setLocationLabelPosition(label, location.namePosition);
+      hotspot.append(label);
+
+      // 檢查是否已完成
+      if (completedGames.includes(location.id)) {
+        hotspot.classList.add("completed");
+      }
+
+      hotspot.addEventListener("click", () => {
+        rememberReturnLocation(location.id);
+        window.location.href = location.url;
+      });
+
+      markers.appendChild(hotspot);
+    });
+  }
+
+  function setLocationLabelPosition(label, position = {}) {
+    const resolvedPosition = {
+      left: "50%",
+      right: "auto",
+      top: "auto",
+      bottom: "7%",
+      transform: "translateX(-50%)",
+      ...position,
+    };
+
+    Object.entries(resolvedPosition).forEach(([property, value]) => {
+      label.style[property] = value;
+    });
+  }
+
+  function getLocationTriggerAreas(location) {
+    if (Array.isArray(location.triggerArea)) {
+      return location.triggerArea.filter(Boolean);
+    }
+
+    return location.triggerArea ? [location.triggerArea] : [];
+  }
+
+  function createMapDebugOverlays() {
+    if (!debugOverlays) return;
+
+    locations.forEach((location) => {
+      const triggerAreas = getLocationTriggerAreas(location);
+
+      triggerAreas.forEach((area, index) => {
+        const trigger = document.createElement("div");
+        trigger.className = "map-debug-trigger";
+        trigger.dataset.locationId = location.id;
+        trigger.dataset.triggerIndex = String(index);
+        const suffix = triggerAreas.length > 1 ? ` ${index + 1}` : "";
+        trigger.innerHTML = `<span>${location.name} 觸發區${suffix}</span>`;
+        debugOverlays.append(trigger);
+      });
+
+      const spawn = document.createElement("div");
+      spawn.className = "map-debug-spawn";
+      spawn.dataset.locationId = location.id;
+      spawn.innerHTML = `<span>${location.name} spawn</span>`;
+
+      debugOverlays.append(spawn);
+    });
+
+    easterEggs
+      .filter((easterEgg) => easterEgg.enabled !== false)
+      .forEach((easterEgg) => {
+        const marker = document.createElement("div");
+        marker.className = "map-debug-easter-egg";
+        marker.dataset.easterEggId = easterEgg.id;
+        // marker.innerHTML = `<span>${easterEgg.name || easterEgg.id} 彩蛋區</span>`;
+        debugOverlays.append(marker);
+      });
+  }
+
+  function positionLocationHotspots() {
     if (!markers) return;
 
     const rect = markers.getBoundingClientRect();
-    const scale = Math.min(rect.width / MAP_WIDTH, rect.height / MAP_HEIGHT);
-    const renderedWidth = MAP_WIDTH * scale;
-    const renderedHeight = MAP_HEIGHT * scale;
+    const scale = Math.min(rect.width / mapWidth, rect.height / mapHeight);
+    const renderedWidth = mapWidth * scale;
+    const renderedHeight = mapHeight * scale;
     const offsetX = (rect.width - renderedWidth) / 2;
     const offsetY = (rect.height - renderedHeight) / 2;
 
-    markers.querySelectorAll(".location-marker").forEach((marker) => {
-      const mapX = Number(marker.dataset.mapX);
-      const mapY = Number(marker.dataset.mapY);
-      marker.style.left = `${offsetX + mapX * scale}px`;
-      marker.style.top = `${offsetY + mapY * scale}px`;
+    markers.querySelectorAll(".location-hotspot").forEach((hotspot) => {
+      const location = locations.find(
+        (item) => item.id === hotspot.dataset.locationId,
+      );
+      if (!location) return;
+
+      const area = location.clickArea;
+      hotspot.style.left = `${offsetX + area.x * scale}px`;
+      hotspot.style.top = `${offsetY + area.y * scale}px`;
+      hotspot.style.width = `${area.width * scale}px`;
+      hotspot.style.height = `${area.height * scale}px`;
+      hotspot.style.clipPath = area.clipPath || "none";
     });
+
+    debugOverlays
+      ?.querySelectorAll(".map-debug-trigger")
+      .forEach((trigger) => {
+        const location = locations.find(
+          (item) => item.id === trigger.dataset.locationId,
+        );
+        if (!location) return;
+
+        const triggerIndex = Number.parseInt(trigger.dataset.triggerIndex, 10);
+        const area = getLocationTriggerAreas(location)[triggerIndex];
+        if (!area) return;
+        trigger.style.left = `${offsetX + area.x * scale}px`;
+        trigger.style.top = `${offsetY + area.y * scale}px`;
+        trigger.style.width = `${area.width * scale}px`;
+        trigger.style.height = `${area.height * scale}px`;
+        trigger.style.setProperty(
+          "--debug-trigger-shape",
+          area.clipPath || "inset(0)",
+        );
+      });
+
+    debugOverlays
+      ?.querySelectorAll(".map-debug-spawn")
+      .forEach((spawn) => {
+        const location = locations.find(
+          (item) => item.id === spawn.dataset.locationId,
+        );
+        if (!location) return;
+
+        spawn.style.left = `${offsetX + location.spawn.x * scale}px`;
+        spawn.style.top = `${offsetY + location.spawn.y * scale}px`;
+      });
+
+    debugOverlays
+      ?.querySelectorAll(".map-debug-easter-egg")
+      .forEach((marker) => {
+        const easterEgg = easterEggs.find(
+          (item) => item.id === marker.dataset.easterEggId,
+        );
+        if (!easterEgg) return;
+
+        const area = easterEgg.area;
+        marker.style.left = `${offsetX + area.x * scale}px`;
+        marker.style.top = `${offsetY + area.y * scale}px`;
+        marker.style.width = `${area.width * scale}px`;
+        marker.style.height = `${area.height * scale}px`;
+      });
   }
 
   function updateProgress() {
@@ -122,13 +252,18 @@ document.addEventListener("DOMContentLoaded", function () {
       const earned = window.YMSHAchievements.has(achievement.id);
       const item = document.createElement("div");
       item.className = `progress-achievement${earned ? " is-earned" : ""}`;
-      item.innerHTML = earned
-        ? `<i class="fa-solid fa-star" aria-hidden="true"></i>`
-        : "";
+
+      const icon = document.createElement("i");
+      icon.className = earned
+        ? "fa-solid fa-star"
+        : "fa-solid fa-question";
+      icon.setAttribute("aria-hidden", "true");
 
       const name = document.createElement("span");
-      name.textContent = earned ? `達成成就：${achievement.title}` : "";
-      item.append(name);
+      name.textContent = earned
+        ? `達成成就：${achievement.title}`
+        : "？？？？？";
+      item.append(icon, name);
       return item;
     });
 

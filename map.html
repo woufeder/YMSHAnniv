@@ -34,15 +34,31 @@
 
   <div id="mapContent" class="map-container location-page-content is-hidden">
     <div class="map-header">
-      <h6>校園地圖</h6>
-      <hr class="my-3 text-light">
-      <div id="progress-checklist" class="progress-checklist" aria-label="隱藏成就"></div>
+      <button id="achievementToggle" class="achievement-toggle" type="button" aria-expanded="false" aria-controls="achievementDrawer" title="查看隱藏成就">
+        <i class="fa-solid fa-star" aria-hidden="true"></i>
+        <span class="visually-hidden">查看隱藏成就</span>
+      </button>
+
+      <div id="achievementBackdrop" class="achievement-backdrop" aria-hidden="true"></div>
+
+      <aside id="achievementDrawer" class="achievement-drawer" aria-labelledby="achievementDrawerTitle" aria-hidden="true" role="dialog" aria-modal="true" inert>
+        <div class="achievement-drawer-header">
+          <div>
+            <h4 id="achievementDrawerTitle">隱藏成就</h4>
+          </div>
+          <button id="achievementClose" class="achievement-close" type="button" title="關閉成就冊">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+            <span class="visually-hidden">關閉成就冊</span>
+          </button>
+        </div>
+        <div id="progress-checklist" class="progress-checklist" aria-label="隱藏成就"></div>
+      </aside>
     </div>
     <div class="map-area">
       <img src="assets/images/map.png" alt="校園地圖" id="campusMap">
       <!-- 測試是否有疊圖到地圖上 -->
       <!-- <img src="assets/images/map-collision.png" alt="" id="collisionPreview"> -->
-      
+
       <canvas id="collisionCanvas" hidden></canvas>
 
       <!-- RPG 角色 -->
@@ -50,9 +66,10 @@
         <div id="playerSprite"></div>
         <div class="player-shadow"></div>
       </div>
-      <div class="location-markers">
-        <!-- 各地點標記將由 JavaScript 動態生成 -->
+      <div class="location-hotspots">
+        <!-- 各建築與場地的點擊熱區將由 JavaScript 動態生成 -->
       </div>
+      <div class="map-debug-overlays" aria-hidden="true"></div>
     </div>
 
     <!-- 觸控按鈕（手機用） -->
@@ -68,30 +85,43 @@
       </div>
     </div>
   </div>
+  <div id="EggDialogue" class="scene-container map-easter-egg-dialogue" hidden></div>
   <div class="modal fade" id="locationConfirmModal" tabindex="-1" aria-labelledby="locationConfirmTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="locationConfirmTitle">
-            是否進入目前地點？
+            是否進入<strong id="locationConfirmBuildName"></strong>的<strong id="locationConfirmName"></strong>？
           </h5>
 
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
         </div>
 
-        <div class="modal-body">
-          已抵達
-          <strong id="locationConfirmName"></strong>
-          ，是否進入目前地點？
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="confirmEnterLocation">
+            是
+          </button>
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            否
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="exitConfirmModal" tabindex="-1" aria-labelledby="exitConfirmTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exitConfirmTitle">是否要離開校園？</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="關閉"></button>
         </div>
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-            暫不進入
+          <button type="button" class="btn btn-primary" id="confirmExitCampus">
+            返回首頁
           </button>
-
-          <button type="button" class="btn btn-primary" id="confirmEnterLocation">
-            進入地點
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            繼續逛逛
           </button>
         </div>
       </div>
@@ -102,6 +132,7 @@
   <script src="js/settings.js"></script>
   <script src="js/dialogue.js"></script>
   <script src="js/location-intro.js"></script>
+  <script src="js/map-config.js"></script>
   <script src="js/map.js"></script>
   <script src="js/map-intro.js"></script>
   <script src="js/map-rpg.js"></script>

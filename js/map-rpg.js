@@ -2,115 +2,243 @@
 (function () {
   "use strict";
 
-  const MAP_WIDTH = 5959;
-  const MAP_HEIGHT = 4092;
+  const MAP_CONFIG = window.YMSHMapConfig;
+
+  if (!MAP_CONFIG) {
+    console.error("RPG Mode: 找不到 YMSHMapConfig");
+    return;
+  }
+
+  const MAP_WIDTH = MAP_CONFIG.width;
+  const MAP_HEIGHT = MAP_CONFIG.height;
+  const LOCATIONS = MAP_CONFIG.locations;
+  const EASTER_EGGS = (MAP_CONFIG.easterEggs || []).filter(
+    (easterEgg) => easterEgg.enabled !== false,
+  );
 
   // 角色設定
   const CHARACTER_CONFIG = {
-    tileSize: 32, // 每個格子大小
+    tileSize: 48, // 144 x 192 sprite sheet，每格為 48 x 48
     framesPerDirection: 3, // 每個方向 3 幀動畫
     totalDirections: 4, // 上、下、左、右
     spriteSheet: "assets/images/RPG-avatar.png", // Sprite sheet 路徑
-    speed: 400, // 移動速度
+    speed: 150, // 依 1867 × 1280 地圖尺寸換算後的移動速度
   };
 
   // 計算 sprite sheet 尺寸
-  // 排列方式：4 行 x 3 列 = 96x128
-  const SPRITE_WIDTH = CHARACTER_CONFIG.tileSize * 3; // 96px (3 frames wideF)
-  const SPRITE_HEIGHT = CHARACTER_CONFIG.tileSize * 4; // 128px (4 rows high)
+  // 排列方式：4 行 x 3 列 = 144 x 192
+  const SPRITE_WIDTH = CHARACTER_CONFIG.tileSize * 3;
+  const SPRITE_HEIGHT = CHARACTER_CONFIG.tileSize * 4;
 
-  // 各地點的觸發範圍（縮小避免誤觸）
-  const LOCATIONS = Object.freeze([
-    {
-      id: "art",
-      name: "藝術大樓",
-      x: 1025,
-      y: 1200,
-      radius: 120, // 縮小觸發範圍
-      url: "art.html",
-    },
-    {
-      id: "classroom",
-      name: "教室",
-      x: 565,
-      y: 3000,
-      radius: 120,
-      url: "games/classroom.html",
-    },
-    {
-      id: "garden",
-      name: "花圃",
-      x: 2225,
-      y: 950,
-      radius: 120,
-      url: "games/garden.html",
-    },
-    {
-      id: "lab",
-      name: "實驗室",
-      x: 2550,
-      y: 2600,
-      radius: 120,
-      url: "games/lab.html",
-    },
-    {
-      id: "principal",
-      name: "校長室",
-      x: 3500,
-      y: 3200,
-      radius: 120,
-      url: "principal.html",
-    },
-    {
-      id: "hall",
-      name: "穿堂",
-      x: 3355,
-      y: 1500,
-      radius: 120,
-      url: "hall.html",
-    },
-    {
-      id: "playground",
-      name: "操場",
-      x: 4850,
-      y: 1600,
-      radius: 120,
-      url: "playground.html",
-    },
-    {
-      id: "index",
-      name: "校門口",
-      x: 4400,
-      y: 3600,
-      radius: 120,
-      url: "index.html",
-    },
-  ]);
-
-  // 可行走區域（簡單的矩形範圍，可根據實際地圖調整）
+  // 遮罩外框仍保留少量邊距，實際可行走範圍由碰撞圖決定。
   const WALKABLE_AREA = {
-    left: 100,
-    top: 100,
-    right: MAP_WIDTH - 100,
-    bottom: MAP_HEIGHT - 100,
+    left: 8,
+    top: 8,
+    right: MAP_WIDTH - 8,
+    bottom: MAP_HEIGHT - 8,
   };
+
+  function resolveAreaLength(value, size) {
+    const token = String(value).trim();
+    const number = Number.parseFloat(token);
+    if (!Number.isFinite(number)) return null;
+    return token.endsWith("%") ? (number / 100) * size : number;
+  }
+
+  function resolveAreaPosition(value, size) {
+    const token = String(value || "50%").trim().toLowerCase();
+    if (token === "left" || token === "top") return 0;
+    if (token === "center") return size / 2;
+    if (token === "right" || token === "bottom") return size;
+    return resolveAreaLength(token, size);
+  }
+
+  function isInsidePolygon(x, y, points) {
+    let inside = false;
+
+    for (let index = 0, previous = points.length - 1; index < points.length; previous = index++) {
+      const currentPoint = points[index];
+      const previousPoint = points[previous];
+      const crossesY = currentPoint.y > y !== previousPoint.y > y;
+      const crossingX =
+        ((previousPoint.x - currentPoint.x) * (y - currentPoint.y)) /
+          (previousPoint.y - currentPoint.y) +
+        currentPoint.x;
+
+      if (crossesY && x < crossingX) inside = !inside;
+    }
+
+    return inside;
+  }
+
+  function isInsideClipPath(localX, localY, area) {
+    const clipPath = area.clipPath?.trim();
+    if (!clipPath || clipPath === "none") return true;
+
+    const circleMatch = clipPath.match(
+      /^circle\(\s*([^\s]+)(?:\s+at\s+([^\s]+)\s+([^\s]+))?\s*\)$/i,
+    );
+    if (circleMatch) {
+      const centerX = resolveAreaPosition(circleMatch[2], area.width);
+      const centerY = resolveAreaPosition(circleMatch[3], area.height);
+      const radiusToken = circleMatch[1].toLowerCase();
+      let radius;
+
+      if (radiusToken === "closest-side") {
+        radius = Math.min(
+          centerX,
+          area.width - centerX,
+          centerY,
+          area.height - centerY,
+        );
+      } else if (radiusToken === "farthest-side") {
+        radius = Math.max(
+          centerX,
+          area.width - centerX,
+          centerY,
+          area.height - centerY,
+        );
+      } else {
+        radius = resolveAreaLength(
+          radiusToken,
+          Math.hypot(area.width, area.height) / Math.SQRT2,
+        );
+      }
+
+      if (radius === null || centerX === null || centerY === null) return true;
+      return Math.hypot(localX - centerX, localY - centerY) <= radius;
+    }
+
+    const ellipseMatch = clipPath.match(
+      /^ellipse\(\s*([^\s]+)\s+([^\s]+)(?:\s+at\s+([^\s]+)\s+([^\s]+))?\s*\)$/i,
+    );
+    if (ellipseMatch) {
+      const centerX = resolveAreaPosition(ellipseMatch[3], area.width);
+      const centerY = resolveAreaPosition(ellipseMatch[4], area.height);
+      const radiusX = resolveAreaLength(ellipseMatch[1], area.width);
+      const radiusY = resolveAreaLength(ellipseMatch[2], area.height);
+
+      if (
+        radiusX === null ||
+        radiusY === null ||
+        radiusX === 0 ||
+        radiusY === 0 ||
+        centerX === null ||
+        centerY === null
+      ) {
+        return true;
+      }
+
+      const normalizedX = (localX - centerX) / radiusX;
+      const normalizedY = (localY - centerY) / radiusY;
+      return normalizedX ** 2 + normalizedY ** 2 <= 1;
+    }
+
+    const polygonMatch = clipPath.match(/^polygon\(\s*(.+)\s*\)$/i);
+    if (polygonMatch) {
+      const pointTokens = polygonMatch[1]
+        .replace(/^(?:nonzero|evenodd)\s*,\s*/i, "")
+        .split(",");
+      const points = pointTokens.map((pointToken) => {
+        const [pointX, pointY] = pointToken.trim().split(/\s+/);
+        return {
+          x: resolveAreaLength(pointX, area.width),
+          y: resolveAreaLength(pointY, area.height),
+        };
+      });
+
+      if (
+        points.length < 3 ||
+        points.some((point) => point.x === null || point.y === null)
+      ) {
+        return true;
+      }
+
+      return isInsidePolygon(localX, localY, points);
+    }
+
+    return true;
+  }
+
+  function isInsideArea(x, y, area) {
+    const isInsideBounds =
+      x >= area.x &&
+      x <= area.x + area.width &&
+      y >= area.y &&
+      y <= area.y + area.height;
+
+    if (!isInsideBounds) return false;
+
+    return isInsideClipPath(x - area.x, y - area.y, area);
+  }
+
+  function getLocationTriggerAreas(location) {
+    if (Array.isArray(location.triggerArea)) {
+      return location.triggerArea.filter(Boolean);
+    }
+
+    return location.triggerArea ? [location.triggerArea] : [];
+  }
+
+  function isInsideLocationTrigger(x, y, location) {
+    return getLocationTriggerAreas(location).some((area) =>
+      isInsideArea(x, y, area),
+    );
+  }
+
+  function findReferrerLocation() {
+    if (!document.referrer) return null;
+
+    try {
+      const pageName = new URL(document.referrer).pathname.split("/").pop();
+      return LOCATIONS.find((location) =>
+        location.returnPages?.includes(pageName),
+      ) || null;
+    } catch (error) {
+      console.warn("RPG Mode: 無法解析來源頁面", error);
+      return null;
+    }
+  }
+
+  function consumeReturnLocation() {
+    let locationId = null;
+
+    try {
+      locationId = sessionStorage.getItem(MAP_CONFIG.returnLocationKey);
+      sessionStorage.removeItem(MAP_CONFIG.returnLocationKey);
+    } catch (error) {
+      console.warn("RPG Mode: 無法讀取返回位置", error);
+    }
+
+    return (
+      LOCATIONS.find((location) => location.id === locationId) ||
+      findReferrerLocation()
+    );
+  }
 
   class RPGMapController {
     constructor() {
-      this.player = { x: 4400, y: 3600 }; // 從校門口開始
+      const returnLocation = consumeReturnLocation();
+      const initialSpawn = returnLocation?.spawn || MAP_CONFIG.defaultSpawn;
+
+      this.player = { x: initialSpawn.x, y: initialSpawn.y };
+      this.initialLocationId = returnLocation?.id || null;
       this.speed = CHARACTER_CONFIG.speed;
       this.isMoving = false;
+      this.isUiLocked = false;
       this.currentTrigger = null;
+      this.currentEasterEgg = null;
       // 出生時所在的傳送點先封鎖，必須離開該範圍後才能重新觸發
       this.isAnimating = false;
       this.isTransitioning = false;
       this.currentFrame = 0;
       this.frameTimer = 0;
       this.animationInterval = 150; // 動畫幀率（毫秒）
-      this.lastDirection = "front";
+      this.lastDirection = initialSpawn.direction || "front";
 
       // 避免出生點及取消 Modal 後重複觸發
       this.blockedTriggerIds = new Set();
+      this.blockedEasterEggIds = new Set();
 
       // 道路碰撞遮罩
       this.collisionCanvas = null;
@@ -119,8 +247,10 @@
 
       // 地點確認 Modal
       this.locationModal = null;
+      this.exitModal = null;
       this.pendingLocation = null;
       this.confirmEnterButton = null;
+      this.confirmExitButton = null;
 
       // 遊戲迴圈時間
       this.lastFrameTime = 0;
@@ -142,6 +272,7 @@
       this.playerElement = null;
       this.spriteImg = null;
       this.rpgControls = null;
+      this.easterEggDialogueContainer = null;
 
       this.init();
     }
@@ -150,6 +281,9 @@
       this.playerElement = document.getElementById("playerCharacter");
       this.spriteImg = document.getElementById("playerSprite");
       this.rpgControls = document.getElementById("rpgControls");
+      this.easterEggDialogueContainer = document.getElementById(
+        "EggDialogue",
+      );
 
       if (!this.playerElement || !this.spriteImg) {
         console.warn("RPG Mode: player element not found");
@@ -167,6 +301,10 @@
       this.playerElement.style.display = "block";
 
       this.setupKeyboardControls();
+      window.addEventListener("ymsh:map-ui-lock", (event) => {
+        this.isUiLocked = Boolean(event.detail?.locked);
+        if (this.isUiLocked) this.clearMovementKeys();
+      });
 
       if (this.isTouchDevice()) {
         if (this.rpgControls) {
@@ -184,7 +322,39 @@
         this.updatePlayerElement();
       });
 
+      window.addEventListener("pageshow", (event) => {
+        if (event.persisted) this.restoreReturnPosition();
+      });
+
       this.gameLoop();
+    }
+
+    restoreReturnPosition() {
+      let locationId = null;
+
+      try {
+        locationId = sessionStorage.getItem(MAP_CONFIG.returnLocationKey);
+        sessionStorage.removeItem(MAP_CONFIG.returnLocationKey);
+      } catch (error) {
+        console.warn("RPG Mode: 無法還原返回位置", error);
+      }
+
+      const location = LOCATIONS.find((item) => item.id === locationId);
+      if (!location) return;
+
+      this.player = { x: location.spawn.x, y: location.spawn.y };
+      this.initialLocationId = location.id;
+      this.lastDirection = location.spawn.direction || "front";
+      this.currentTrigger = null;
+      this.currentEasterEgg = null;
+      this.pendingLocation = null;
+      this.isAnimating = false;
+      this.isTransitioning = false;
+      this.blockedTriggerIds.clear();
+      this.blockedEasterEggIds.clear();
+      this.blockInitialTriggers();
+      this.clearMovementKeys();
+      this.updatePlayerElement();
     }
 
     loadSpriteSheet() {
@@ -272,11 +442,13 @@
 
     setupLocationModal() {
       const modalElement = document.getElementById("locationConfirmModal");
+      const exitModalElement = document.getElementById("exitConfirmModal");
 
       this.confirmEnterButton = document.getElementById("confirmEnterLocation");
+      this.confirmExitButton = document.getElementById("confirmExitCampus");
 
-      if (!modalElement) {
-        console.error("RPG Mode: 找不到 #locationConfirmModal");
+      if (!modalElement || !exitModalElement) {
+        console.error("RPG Mode: 找不到地點確認 Modal");
         return;
       }
 
@@ -286,6 +458,10 @@
       }
 
       this.locationModal = new bootstrap.Modal(modalElement, {
+        backdrop: "static",
+        keyboard: true,
+      });
+      this.exitModal = new bootstrap.Modal(exitModalElement, {
         backdrop: "static",
         keyboard: true,
       });
@@ -302,8 +478,24 @@
         this.enterLocation(location);
       });
 
+      this.confirmExitButton?.addEventListener("click", () => {
+        if (!this.pendingLocation) return;
+
+        const location = this.pendingLocation;
+        this.isTransitioning = true;
+
+        this.exitModal.hide();
+        this.enterLocation(location);
+      });
+
       modalElement.addEventListener("hidden.bs.modal", () => {
         // 按「進入地點」關閉 Modal 時，不執行取消
+        if (this.isTransitioning) return;
+
+        this.cancelLocationEntry();
+      });
+
+      exitModalElement.addEventListener("hidden.bs.modal", () => {
         if (this.isTransitioning) return;
 
         this.cancelLocationEntry();
@@ -356,6 +548,12 @@
 
         if (!hasSeenIntro) {
           await this.showLocationIntro(location);
+        }
+
+        try {
+          sessionStorage.setItem(MAP_CONFIG.returnLocationKey, location.id);
+        } catch (error) {
+          console.warn("RPG Mode: 無法記錄返回位置", error);
         }
 
         window.location.href = location.url;
@@ -469,6 +667,7 @@
     updatePlayerPosition(deltaSeconds) {
       if (
         !this.isMoving ||
+        this.isUiLocked ||
         this.isTransitioning ||
         this.isAnimating ||
         this.currentTrigger
@@ -694,12 +893,17 @@
 
     blockInitialTriggers() {
       for (const location of LOCATIONS) {
-        const dx = this.player.x - location.x;
-        const dy = this.player.y - location.y;
-        const distance = Math.hypot(dx, dy);
-
-        if (distance < location.radius) {
+        if (
+          location.id === this.initialLocationId ||
+          isInsideLocationTrigger(this.player.x, this.player.y, location)
+        ) {
           this.blockedTriggerIds.add(location.id);
+        }
+      }
+
+      for (const easterEgg of EASTER_EGGS) {
+        if (isInsideArea(this.player.x, this.player.y, easterEgg.area)) {
+          this.blockedEasterEggIds.add(easterEgg.id);
         }
       }
     }
@@ -707,11 +911,37 @@
     checkTriggers() {
       if (this.isAnimating || this.isTransitioning) return;
 
+      for (const easterEgg of EASTER_EGGS) {
+        const isInside = isInsideArea(
+          this.player.x,
+          this.player.y,
+          easterEgg.area,
+        );
+
+        if (easterEgg.once && this.hasSeenEasterEgg(easterEgg)) {
+          continue;
+        }
+
+        if (this.blockedEasterEggIds.has(easterEgg.id)) {
+          if (!isInside) {
+            this.blockedEasterEggIds.delete(easterEgg.id);
+          }
+          continue;
+        }
+
+        if (isInside && !this.currentTrigger && !this.currentEasterEgg) {
+          this.currentEasterEgg = easterEgg;
+          this.handleEasterEggTrigger(easterEgg);
+          return;
+        }
+      }
+
       for (const location of LOCATIONS) {
-        const dx = this.player.x - location.x;
-        const dy = this.player.y - location.y;
-        const distance = Math.hypot(dx, dy);
-        const isInside = distance < location.radius;
+        const isInside = isInsideLocationTrigger(
+          this.player.x,
+          this.player.y,
+          location,
+        );
 
         // 出生時就在此傳送點內，離開範圍前不觸發
         if (this.blockedTriggerIds.has(location.id)) {
@@ -723,12 +953,92 @@
           continue;
         }
 
-        if (isInside && !this.currentTrigger) {
+        if (isInside && !this.currentTrigger && !this.currentEasterEgg) {
           this.currentTrigger = location;
           this.handleLocationTrigger(location);
           break;
         }
       }
+    }
+
+    getEasterEggStorageKey(easterEgg) {
+      return easterEgg.storageKey || `seen_map_easter_egg_${easterEgg.id}`;
+    }
+
+    hasSeenEasterEgg(easterEgg) {
+      try {
+        return (
+          localStorage.getItem(this.getEasterEggStorageKey(easterEgg)) ===
+          "true"
+        );
+      } catch (error) {
+        console.warn("RPG Mode: unable to read easter egg state", error);
+        return false;
+      }
+    }
+
+    markEasterEggSeen(easterEgg) {
+      if (!easterEgg.once) return;
+
+      try {
+        localStorage.setItem(this.getEasterEggStorageKey(easterEgg), "true");
+      } catch (error) {
+        console.warn("RPG Mode: unable to save easter egg state", error);
+      }
+    }
+
+    async handleEasterEggTrigger(easterEgg) {
+      this.isAnimating = true;
+      this.isMoving = false;
+      this.clearMovementKeys();
+
+      try {
+        await this.showEasterEggDialogue(easterEgg);
+        this.markEasterEggSeen(easterEgg);
+      } catch (error) {
+        console.warn(`Could not load map easter egg ${easterEgg.id}:`, error);
+      } finally {
+        this.easterEggDialogueContainer?.replaceChildren();
+        if (this.easterEggDialogueContainer) {
+          this.easterEggDialogueContainer.hidden = true;
+        }
+        this.blockedEasterEggIds.add(easterEgg.id);
+        this.currentEasterEgg = null;
+        this.isAnimating = false;
+        this.isTransitioning = false;
+        this.clearMovementKeys();
+        this.updatePlayerElement();
+      }
+    }
+
+    showEasterEggDialogue(easterEgg) {
+      if (
+        !this.easterEggDialogueContainer ||
+        typeof DialogueCore !== "function"
+      ) {
+        return Promise.reject(
+          new Error("Map easter egg dialogue is unavailable"),
+        );
+      }
+
+      this.easterEggDialogueContainer.hidden = false;
+
+      const name = localStorage.getItem("playerName");
+      const role = localStorage.getItem("playerRole") || "default";
+      const className = localStorage.getItem("playerClass");
+
+      return new Promise((resolve, reject) => {
+        const dialogue = new DialogueCore({
+          container: "#EggDialogue",
+          data: easterEgg.dialoguePath || "data/map_easter_eggs.json",
+          dialogueKey: easterEgg.dialogueKey || easterEgg.id,
+          role,
+          playerInfo: { name, className, role },
+          onFinish: resolve,
+        });
+
+        dialogue.init().catch(reject);
+      });
     }
 
     handleLocationTrigger(location) {
@@ -739,12 +1049,22 @@
       this.clearMovementKeys();
 
       const nameElement = document.getElementById("locationConfirmName");
+      const buildNameElement = document.getElementById(
+        "locationConfirmBuildName",
+      );
 
       if (nameElement) {
         nameElement.textContent = location.name;
       }
 
-      if (!this.locationModal) {
+      if (buildNameElement) {
+        buildNameElement.textContent = location.build_name || location.name;
+      }
+
+      const selectedModal =
+        location.modalType === "exit" ? this.exitModal : this.locationModal;
+
+      if (!selectedModal) {
         console.error(
           "地點 Modal 尚未初始化，請檢查 Bootstrap JS 和 Modal HTML",
         );
@@ -753,7 +1073,7 @@
         return;
       }
 
-      this.locationModal.show();
+      selectedModal.show();
     }
 
     async showLocationIntro(location) {

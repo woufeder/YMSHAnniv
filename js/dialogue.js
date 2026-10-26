@@ -69,7 +69,25 @@ class DialogueCore {
       if (Array.isArray(data)) {
         this.dialogue = data;
       } else {
-        const selected = data[this.dialogueKey] || data[this.role] || data.default || Object.values(data).find(Array.isArray);
+        const keyedDialogue = this.dialogueKey
+          ? data[this.dialogueKey]
+          : null;
+        let selected;
+
+        if (Array.isArray(keyedDialogue)) {
+          selected = keyedDialogue;
+        } else if (keyedDialogue && typeof keyedDialogue === 'object') {
+          selected =
+            keyedDialogue[this.role] ||
+            keyedDialogue.default ||
+            Object.values(keyedDialogue).find(Array.isArray);
+        } else {
+          selected =
+            data[this.role] ||
+            data.default ||
+            Object.values(data).find(Array.isArray);
+        }
+
         this.dialogue = Array.isArray(selected) ? selected : [];
       }
 
