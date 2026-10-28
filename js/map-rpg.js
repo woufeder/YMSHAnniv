@@ -46,7 +46,9 @@
   }
 
   function resolveAreaPosition(value, size) {
-    const token = String(value || "50%").trim().toLowerCase();
+    const token = String(value || "50%")
+      .trim()
+      .toLowerCase();
     if (token === "left" || token === "top") return 0;
     if (token === "center") return size / 2;
     if (token === "right" || token === "bottom") return size;
@@ -56,7 +58,11 @@
   function isInsidePolygon(x, y, points) {
     let inside = false;
 
-    for (let index = 0, previous = points.length - 1; index < points.length; previous = index++) {
+    for (
+      let index = 0, previous = points.length - 1;
+      index < points.length;
+      previous = index++
+    ) {
       const currentPoint = points[index];
       const previousPoint = points[previous];
       const crossesY = currentPoint.y > y !== previousPoint.y > y;
@@ -191,9 +197,11 @@
 
     try {
       const pageName = new URL(document.referrer).pathname.split("/").pop();
-      return LOCATIONS.find((location) =>
-        location.returnPages?.includes(pageName),
-      ) || null;
+      return (
+        LOCATIONS.find((location) =>
+          location.returnPages?.includes(pageName),
+        ) || null
+      );
     } catch (error) {
       console.warn("RPG Mode: 無法解析來源頁面", error);
       return null;
@@ -269,10 +277,28 @@
         D: false,
       };
 
+      this.joystick = {
+        x: 0,
+        y: 0,
+        force: 0,
+        active: false,
+      };
+
       this.playerElement = null;
       this.spriteImg = null;
       this.rpgControls = null;
+      this.joystickZone = null;
+      this.joystickManager = null;
       this.easterEggDialogueContainer = null;
+
+      this.mapArea = null;
+      this.mapWorld = null;
+
+      this.camera = {
+        x: 0,
+        y: 0,
+        scale: 1,
+      };
 
       this.init();
     }
@@ -281,13 +307,26 @@
       this.playerElement = document.getElementById("playerCharacter");
       this.spriteImg = document.getElementById("playerSprite");
       this.rpgControls = document.getElementById("rpgControls");
-      this.easterEggDialogueContainer = document.getElementById(
-        "EggDialogue",
-      );
+      this.joystickZone = document.getElementById("joystickZone");
+      this.mapArea = document.querySelector(".map-area");
+      this.mapWorld = document.getElementById("mapWorld");
+      this.easterEggDialogueContainer = document.getElementById("EggDialogue");
 
-      if (!this.playerElement || !this.spriteImg) {
-        console.warn("RPG Mode: player element not found");
+      if (
+        !this.playerElement ||
+        !this.spriteImg ||
+        !this.mapArea ||
+        !this.mapWorld
+      ) {
+        console.warn("RPG Mode: 地圖或角色元素不存在");
         return;
+      }
+
+      if (this.isMobileControlMode()) {
+        if (this.rpgControls && this.joystickZone) {
+          this.rpgControls.style.display = "flex";
+          this.setupJoystick();
+        }
       }
 
       this.loadSpriteSheet();
@@ -305,21 +344,20 @@
         this.isUiLocked = Boolean(event.detail?.locked);
         if (this.isUiLocked) this.clearMovementKeys();
       });
-
-      if (this.isTouchDevice()) {
-        if (this.rpgControls) {
-          this.rpgControls.style.display = "flex";
-          this.setupTouchControls();
-        }
-      }
-
       // 出生點如果正好位於傳送區，先暫時封鎖
       this.blockInitialTriggers();
 
       this.updatePlayerElement();
+      this.updateCamera();
 
       window.addEventListener("resize", () => {
         this.updatePlayerElement();
+        this.updateCamera();
+      });
+
+      window.addEventListener("ymsh:map-revealed", () => {
+        this.updatePlayerElement();
+        this.updateCamera();
       });
 
       window.addEventListener("pageshow", (event) => {
@@ -355,6 +393,7 @@
       this.blockInitialTriggers();
       this.clearMovementKeys();
       this.updatePlayerElement();
+      this.updateCamera();
     }
 
     loadSpriteSheet() {
@@ -507,13 +546,8 @@
         this.keys[key] = false;
       });
 
+      this.resetJoystick();
       this.isMoving = false;
-
-      this.rpgControls
-        ?.querySelectorAll(".dir-btn.active")
-        .forEach((button) => {
-          button.classList.remove("active");
-        });
     }
 
     cancelLocationEntry() {
@@ -573,6 +607,12 @@
       );
     }
 
+    isMobileControlMode() {
+      return window.matchMedia(
+        "(max-width: 768px) and (hover: none) and (pointer: coarse)",
+      ).matches;
+    }
+
     setupKeyboardControls() {
       window.addEventListener("keydown", (e) => {
         const key = e.key.toLowerCase();
@@ -605,68 +645,84 @@
       });
     }
 
-    setupTouchControls() {
-      const buttons = this.rpgControls?.querySelectorAll(".dir-btn");
-      if (!buttons) return;
+    setupJoystick() {
+      if (!this.joystickZone) {
+        console.error("RPG Mode: 找不到 #joystickZone");
+        return;
+      }
 
-      buttons.forEach((btn) => {
-        const key = btn.dataset.key;
+      if (typeof nipplejs === "undefined") {
+        console.error("RPG Mode: nipplejs 尚未載入");
+        return;
+      }
 
-        btn.addEventListener(
-          "touchstart",
-          (e) => {
-            e.preventDefault();
-            this.keys[key] = true;
-            this.isMoving = true;
-            btn.classList.add("active");
-          },
-          { passive: false },
-        );
-
-        btn.addEventListener("touchend", (e) => {
-          e.preventDefault();
-          this.keys[key] = false;
-          btn.classList.remove("active");
-
-          const stillPressed = Object.values(this.keys).some((v) => v);
-          if (!stillPressed) {
-            this.isMoving = false;
-          }
-        });
-
-        btn.addEventListener("mousedown", (e) => {
-          e.preventDefault();
-          this.keys[key] = true;
-          this.isMoving = true;
-          btn.classList.add("active");
-        });
-
-        btn.addEventListener("mouseup", (e) => {
-          e.preventDefault();
-          this.keys[key] = false;
-          btn.classList.remove("active");
-
-          const stillPressed = Object.values(this.keys).some((v) => v);
-          if (!stillPressed) {
-            this.isMoving = false;
-          }
-        });
-
-        btn.addEventListener("mouseleave", (e) => {
-          this.keys[key] = false;
-          btn.classList.remove("active");
-
-          const stillPressed = Object.values(this.keys).some((v) => v);
-          if (!stillPressed) {
-            this.isMoving = false;
-          }
-        });
+      this.joystickManager = nipplejs.create({
+        zone: this.joystickZone,
+        mode: "static",
+        position: {
+          left: "50%",
+          top: "50%",
+        },
+        size: 90,
+        color: "white",
+        restOpacity: 0.55,
+        fadeTime: 150,
+        multitouch: false,
+        maxNumberOfNipples: 1,
       });
+
+      this.joystickManager.on("start", () => {
+        if (
+          this.isUiLocked ||
+          this.isAnimating ||
+          this.isTransitioning ||
+          this.currentTrigger
+        ) {
+          this.resetJoystick();
+          return;
+        }
+
+        this.joystick.active = true;
+      });
+
+      this.joystickManager.on("move", (event, data) => {
+        if (!data || !data.vector) {
+          return;
+        }
+
+        if (
+          this.isUiLocked ||
+          this.isAnimating ||
+          this.isTransitioning ||
+          this.currentTrigger
+        ) {
+          this.resetJoystick();
+          return;
+        }
+
+        this.joystick.x = data.vector.x;
+        this.joystick.y = -data.vector.y;
+        this.joystick.force = Math.min(data.force || 0, 1);
+        this.joystick.active = true;
+        this.isMoving = true;
+      });
+
+      this.joystickManager.on("end", () => {
+        this.resetJoystick();
+      });
+    }
+
+    resetJoystick() {
+      this.joystick.x = 0;
+      this.joystick.y = 0;
+      this.joystick.force = 0;
+      this.joystick.active = false;
+
+      this.isMoving = Object.values(this.keys).some((value) => value);
     }
 
     updatePlayerPosition(deltaSeconds) {
       if (
-        !this.isMoving ||
         this.isUiLocked ||
         this.isTransitioning ||
         this.isAnimating ||
@@ -675,44 +731,75 @@
         return;
       }
 
-      // 碰撞圖尚未載入完成時，先禁止移動
       if (!this.collisionReady) {
         return;
       }
 
-      let dx = 0;
-      let dy = 0;
+      let directionX = 0;
+      let directionY = 0;
+      let movementStrength = 1;
 
-      if (this.keys.ArrowUp || this.keys.w || this.keys.W) {
-        dy = -1;
+      const keyboardUp = this.keys.ArrowUp || this.keys.w || this.keys.W;
+
+      const keyboardDown = this.keys.ArrowDown || this.keys.s || this.keys.S;
+
+      const keyboardLeft = this.keys.ArrowLeft || this.keys.a || this.keys.A;
+
+      const keyboardRight = this.keys.ArrowRight || this.keys.d || this.keys.D;
+
+      if (keyboardLeft) {
+        directionX -= 1;
       }
 
-      if (this.keys.ArrowDown || this.keys.s || this.keys.S) {
-        dy = 1;
+      if (keyboardRight) {
+        directionX += 1;
       }
 
-      if (this.keys.ArrowLeft || this.keys.a || this.keys.A) {
-        dx = -1;
+      if (keyboardUp) {
+        directionY -= 1;
       }
 
-      if (this.keys.ArrowRight || this.keys.d || this.keys.D) {
-        dx = 1;
+      if (keyboardDown) {
+        directionY += 1;
       }
 
-      if (dx === 0 && dy === 0) {
-        this.isMoving = false;
+      const hasKeyboardInput = directionX !== 0 || directionY !== 0;
+
+      if (!hasKeyboardInput && this.joystick.active) {
+        directionX = this.joystick.x;
+        directionY = this.joystick.y;
+        movementStrength = this.joystick.force;
+      }
+
+      const directionLength = Math.hypot(directionX, directionY);
+
+      if (directionLength === 0 || movementStrength === 0) {
+        if (this.isMoving) {
+          this.isMoving = false;
+          this.currentFrame = 0;
+          this.frameTimer = 0;
+          this.updatePlayerElement();
+        }
+
         return;
       }
 
-      // 對角線保持相同總速度
-      const length = Math.hypot(dx, dy);
+      this.isMoving = true;
 
-      dx = (dx / length) * this.speed * deltaSeconds;
-      dy = (dy / length) * this.speed * deltaSeconds;
+      const normalizedX = directionX / directionLength;
+
+      const normalizedY = directionY / directionLength;
+
+      const moveDistance = this.speed * movementStrength * deltaSeconds;
+
+      const dx = normalizedX * moveDistance;
+
+      const dy = normalizedY * moveDistance;
 
       const nextX = this.player.x + dx;
+
       const nextY = this.player.y + dy;
-      // 先檢查水平方向
+
       if (
         this.isInsideMap(nextX, this.player.y) &&
         this.isWalkable(nextX, this.player.y)
@@ -720,7 +807,6 @@
         this.player.x = nextX;
       }
 
-      // 再檢查垂直方向
       if (
         this.isInsideMap(this.player.x, nextY) &&
         this.isWalkable(this.player.x, nextY)
@@ -730,6 +816,7 @@
 
       this.updateAnimation(deltaSeconds);
       this.updatePlayerElement();
+      this.updateCamera();
       this.checkTriggers();
     }
 
@@ -791,45 +878,12 @@
       });
     }
 
-    mapToScreen(mapX, mapY) {
-      const mapImage = document.getElementById("campusMap");
-      const mapArea = document.querySelector(".map-area");
-
-      if (!mapImage || !mapArea) {
-        return { x: 0, y: 0 };
-      }
-
-      const containerWidth = mapArea.clientWidth;
-      const containerHeight = mapArea.clientHeight;
-
-      // object-fit: contain 的實際縮放比例
-      const scale = Math.min(
-        containerWidth / MAP_WIDTH,
-        containerHeight / MAP_HEIGHT,
-      );
-
-      // 縮放後的圖片尺寸
-      const renderedWidth = MAP_WIDTH * scale;
-      const renderedHeight = MAP_HEIGHT * scale;
-
-      // object-position: center 所產生的留白
-      const offsetX = (containerWidth - renderedWidth) / 2;
-      const offsetY = (containerHeight - renderedHeight) / 2;
-
-      return {
-        x: offsetX + mapX * scale,
-        y: offsetY + mapY * scale,
-      };
-    }
-
     updatePlayerElement() {
       if (!this.playerElement || !this.spriteImg) return;
 
       // 將地圖原始座標轉換成目前畫面座標
-      const screenPosition = this.mapToScreen(this.player.x, this.player.y);
-
-      this.playerElement.style.left = `${screenPosition.x}px`;
-      this.playerElement.style.top = `${screenPosition.y}px`;
+      this.playerElement.style.left = `${this.player.x}px`;
+      this.playerElement.style.top = `${this.player.y}px`;
 
       const direction = this.getCurrentDirection();
       const row = this.getDirectionRow(direction);
@@ -848,15 +902,141 @@
       this.spriteImg.style.backgroundPosition = `-${frameX}px -${frameY}px`;
     }
 
+    getCameraScale() {
+      if (!this.mapArea) {
+        return 1;
+      }
+
+      const viewportWidth = this.mapArea.clientWidth;
+      const viewportHeight = this.mapArea.clientHeight;
+
+      const isMobile = this.isMobileControlMode();
+
+      // 手機版保持地圖與角色原始大小
+      if (isMobile) {
+        return 1;
+      }
+
+      // 桌面版維持整張地圖縮放至畫面內
+      return Math.min(viewportWidth / MAP_WIDTH, viewportHeight / MAP_HEIGHT);
+    }
+
+    updateCamera() {
+      if (!this.mapArea || !this.mapWorld) {
+        return;
+      }
+
+      const viewportWidth = this.mapArea.clientWidth;
+      const viewportHeight = this.mapArea.clientHeight;
+      const scale = this.getCameraScale();
+
+      if (viewportWidth <= 0 || viewportHeight <= 0 || scale <= 0) {
+        return;
+      }
+
+      const visibleWorldWidth = viewportWidth / scale;
+      const visibleWorldHeight = viewportHeight / scale;
+
+      const isMobile = this.isMobileControlMode();
+
+      let cameraX = 0;
+      let cameraY = 0;
+
+      if (isMobile) {
+        // 手機版以角色為攝影機中心
+        cameraX = this.player.x - visibleWorldWidth / 2;
+        cameraY = this.player.y - visibleWorldHeight / 2;
+
+        // 水平方向限制在地圖範圍內
+        if (MAP_WIDTH > visibleWorldWidth) {
+          const maxCameraX = MAP_WIDTH - visibleWorldWidth;
+
+          cameraX = Math.max(0, Math.min(cameraX, maxCameraX));
+        } else {
+          // 如果地圖比畫面窄，就將地圖置中
+          cameraX = (MAP_WIDTH - visibleWorldWidth) / 2;
+        }
+
+        // 垂直方向限制在地圖範圍內
+        if (MAP_HEIGHT > visibleWorldHeight) {
+          const maxCameraY = MAP_HEIGHT - visibleWorldHeight;
+
+          cameraY = Math.max(0, Math.min(cameraY, maxCameraY));
+        } else {
+          // 如果地圖比畫面矮，就將地圖置中
+          cameraY = (MAP_HEIGHT - visibleWorldHeight) / 2;
+        }
+      } else {
+        /*
+         * 桌面版使用 contain 比例。
+         * 地圖較小的方向會產生留白，因此要置中。
+         */
+        cameraX = (MAP_WIDTH - visibleWorldWidth) / 2;
+        cameraY = (MAP_HEIGHT - visibleWorldHeight) / 2;
+      }
+
+      this.camera.x = cameraX;
+      this.camera.y = cameraY;
+      this.camera.scale = scale;
+
+      const translateX = -cameraX * scale;
+      const translateY = -cameraY * scale;
+
+      this.mapWorld.style.transform =
+        `translate3d(${translateX}px, ${translateY}px, 0) ` + `scale(${scale})`;
+    }
+
     getCurrentDirection() {
-      if (this.keys.ArrowUp || this.keys.w || this.keys.W) {
-        this.lastDirection = "back";
-      } else if (this.keys.ArrowDown || this.keys.s || this.keys.S) {
-        this.lastDirection = "front";
-      } else if (this.keys.ArrowRight || this.keys.d || this.keys.D) {
-        this.lastDirection = "right";
-      } else if (this.keys.ArrowLeft || this.keys.a || this.keys.A) {
-        this.lastDirection = "left";
+      let directionX = 0;
+      let directionY = 0;
+
+      const keyboardUp = this.keys.ArrowUp || this.keys.w || this.keys.W;
+
+      const keyboardDown = this.keys.ArrowDown || this.keys.s || this.keys.S;
+
+      const keyboardLeft = this.keys.ArrowLeft || this.keys.a || this.keys.A;
+
+      const keyboardRight = this.keys.ArrowRight || this.keys.d || this.keys.D;
+
+      if (keyboardLeft) {
+        directionX -= 1;
+      }
+
+      if (keyboardRight) {
+        directionX += 1;
+      }
+
+      if (keyboardUp) {
+        directionY -= 1;
+      }
+
+      if (keyboardDown) {
+        directionY += 1;
+      }
+
+      const hasKeyboardInput = directionX !== 0 || directionY !== 0;
+
+      if (!hasKeyboardInput && this.joystick.active) {
+        directionX = this.joystick.x;
+        directionY = this.joystick.y;
+      }
+
+      if (directionX === 0 && directionY === 0) {
+        return this.lastDirection;
+      }
+
+      if (Math.abs(directionX) > Math.abs(directionY)) {
+        if (directionX > 0) {
+          this.lastDirection = "right";
+        } else {
+          this.lastDirection = "left";
+        }
+      } else {
+        if (directionY > 0) {
+          this.lastDirection = "front";
+        } else {
+          this.lastDirection = "back";
+        }
       }
 
       return this.lastDirection;
