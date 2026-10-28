@@ -55,31 +55,30 @@
       </aside>
     </div>
     <div class="map-area">
-      <img src="assets/images/map.png" alt="校園地圖" id="campusMap">
-      <!-- 測試是否有疊圖到地圖上 -->
-      <!-- <img src="assets/images/map-collision.png" alt="" id="collisionPreview"> -->
+      <div id="mapWorld" class="map-world">
+        <img src="assets/images/map.png" alt="校園地圖" id="campusMap" draggable="false">
 
+        <!-- RPG 角色 -->
+        <div id="playerCharacter" class="player-character" style="display: none;">
+          <div id="playerSprite"></div>
+          <div class="player-shadow"></div>
+        </div>
+
+        <div class="location-hotspots">
+          <!-- 各建築與場地的點擊熱區將由 JavaScript 動態生成 -->
+        </div>
+
+        <div class="map-debug-overlays" aria-hidden="true"></div>
+      </div>
+
+      <!-- 只供碰撞判定使用，不需要放進可視地圖世界 -->
       <canvas id="collisionCanvas" hidden></canvas>
-
-      <!-- RPG 角色 -->
-      <div id="playerCharacter" class="player-character" style="display: none;">
-        <div id="playerSprite"></div>
-        <div class="player-shadow"></div>
-      </div>
-      <div class="location-hotspots">
-        <!-- 各建築與場地的點擊熱區將由 JavaScript 動態生成 -->
-      </div>
-      <div class="map-debug-overlays" aria-hidden="true"></div>
     </div>
 
     <!-- 觸控按鈕（手機用） -->
     <div id="rpgControls" class="rpg-controls" style="display: none;">
-      <div class="direction-pad">
-        <button class="dir-btn up" data-key="ArrowUp" aria-label="上"><i class="fa-solid fa-arrow-up"></i></button>
-        <button class="dir-btn left" data-key="ArrowLeft" aria-label="左"><i class="fa-solid fa-arrow-left"></i></button>
-        <button class="dir-btn down" data-key="ArrowDown" aria-label="下"><i class="fa-solid fa-arrow-down"></i></button>
-        <button class="dir-btn right" data-key="ArrowRight" aria-label="右"><i class="fa-solid fa-arrow-right"></i></button>
-      </div>
+      <div id="joystickZone" class="joystick-zone" aria-label="角色移動搖桿"></div>
+
       <div class="controls-hint">
         <span>鍵盤：↑↓←→ 或 WASD 移動</span>
       </div>
@@ -128,6 +127,7 @@
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.10.2/dist/nipplejs.min.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/settings.js"></script>
   <script src="js/dialogue.js"></script>
