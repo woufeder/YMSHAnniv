@@ -12,16 +12,16 @@
 
 class DialogueCore {
   constructor(options) {
-    this.container = document.querySelector(options.container || '#game');
+    this.container = document.querySelector(options.container || "#game");
     this.dataPath = options.data;
     this.studentsPath = options.students || null;
-    this.role = options.role || 'default';
+    this.role = options.role || "default";
     this.dialogueKey = options.dialogueKey || null;
     this.playerInfo = options.playerInfo || {};
     this.reuseExistingLayout = Boolean(options.reuseExistingLayout);
 
     // 從 SettingsManager 獲取速度設定，若無則使用預設值 50
-    this.typeTextSpeed = SettingsManager.get('textSpeed', 50);
+    this.typeTextSpeed = SettingsManager.get("textSpeed", 50);
     this.onFinish = options.onFinish || function () {};
     this.onAction = options.onAction || null;
 
@@ -44,7 +44,7 @@ class DialogueCore {
         const res = await fetch(this.studentsPath);
         this.studentList = await res.json();
       } catch (err) {
-        console.warn('⚠️ 沒有載入學生名單', err);
+        console.warn("⚠️ 沒有載入學生名單", err);
       }
     }
 
@@ -69,14 +69,12 @@ class DialogueCore {
       if (Array.isArray(data)) {
         this.dialogue = data;
       } else {
-        const keyedDialogue = this.dialogueKey
-          ? data[this.dialogueKey]
-          : null;
+        const keyedDialogue = this.dialogueKey ? data[this.dialogueKey] : null;
         let selected;
 
         if (Array.isArray(keyedDialogue)) {
           selected = keyedDialogue;
-        } else if (keyedDialogue && typeof keyedDialogue === 'object') {
+        } else if (keyedDialogue && typeof keyedDialogue === "object") {
           selected =
             keyedDialogue[this.role] ||
             keyedDialogue.default ||
@@ -92,7 +90,7 @@ class DialogueCore {
       }
 
       if (!this.dialogue.length) {
-        throw new Error('劇情檔沒有可播放的對話');
+        throw new Error("劇情檔沒有可播放的對話");
       }
 
       this.current = 0;
@@ -130,60 +128,67 @@ class DialogueCore {
   bindLayout() {
     this.setupBackgroundLayers();
     this.bg = this.backgroundImages[0] || null;
-    this.charImg = this.container.querySelector('#char');
+    this.charImg = this.container.querySelector("#char");
     if (!this.charImg) {
-      const characterLayer = this.container.querySelector('.character-layer');
+      const characterLayer = this.container.querySelector(".character-layer");
       if (characterLayer) {
-        this.charImg = document.createElement('img');
-        this.charImg.id = 'char';
-        this.charImg.alt = '';
+        this.charImg = document.createElement("img");
+        this.charImg.id = "char";
+        this.charImg.alt = "";
         characterLayer.appendChild(this.charImg);
       }
     }
-    if (this.charImg) this.charImg.alt = '';
-    this.nameBox = this.container.querySelector('#name');
-    this.dialogueHeader = this.container.querySelector('.dialogue-header');
-    this.textBox = this.container.querySelector('#text');
-    this.dialogueContent = this.textBox?.querySelector('.dialogue-content');
+    if (this.charImg) this.charImg.alt = "";
+    this.nameBox = this.container.querySelector("#name");
+    this.dialogueHeader = this.container.querySelector(".dialogue-header");
+    this.textBox = this.container.querySelector("#text");
+    this.dialogueContent = this.textBox?.querySelector(".dialogue-content");
     if (this.textBox && !this.dialogueContent) {
-      this.dialogueContent = document.createElement('div');
-      this.dialogueContent.className = 'dialogue-content';
+      this.dialogueContent = document.createElement("div");
+      this.dialogueContent.className = "dialogue-content";
       this.textBox.prepend(this.dialogueContent);
     }
-    this.nextBtn = this.container.querySelector('#nextBtn');
-    this.optionsArea = this.container.querySelector('#optionsArea');
+    this.nextBtn = this.container.querySelector("#nextBtn");
+    this.optionsArea = this.container.querySelector("#optionsArea");
     if (this.textBox && !this.optionsArea) {
-      this.optionsArea = document.createElement('div');
-      this.optionsArea.id = 'optionsArea';
-      this.optionsArea.className = 'options-area hidden';
+      this.optionsArea = document.createElement("div");
+      this.optionsArea.id = "optionsArea";
+      this.optionsArea.className = "options-area hidden";
       this.textBox.append(this.optionsArea);
-    } else if (this.textBox && this.optionsArea.parentElement !== this.textBox) {
+    } else if (
+      this.textBox &&
+      this.optionsArea.parentElement !== this.textBox
+    ) {
       this.textBox.append(this.optionsArea);
     }
 
-    this.nextBtn?.addEventListener('click', () => this.nextLine());
+    this.nextBtn?.addEventListener("click", () => this.nextLine());
   }
 
   setupBackgroundLayers() {
-    const backgroundLayer = this.container.querySelector('.background-layer');
+    const backgroundLayer = this.container.querySelector(".background-layer");
     if (!backgroundLayer) return;
 
-    const images = [...backgroundLayer.querySelectorAll('img')];
+    const images = [...backgroundLayer.querySelectorAll("img")];
     while (images.length < 2) {
-      const image = document.createElement('img');
-      image.className = 'dialogue-background';
-      image.alt = '';
+      const image = document.createElement("img");
+      image.className = "dialogue-background";
+      image.alt = "";
       backgroundLayer.appendChild(image);
       images.push(image);
     }
 
     this.backgroundImages = images.slice(0, 2);
-    this.backgroundImages.forEach((image) => image.classList.add('dialogue-background'));
+    this.backgroundImages.forEach((image) =>
+      image.classList.add("dialogue-background"),
+    );
 
-    const initialIndex = this.backgroundImages.findIndex((image) => image.getAttribute('src'));
+    const initialIndex = this.backgroundImages.findIndex((image) =>
+      image.getAttribute("src"),
+    );
     this.activeBackgroundIndex = initialIndex >= 0 ? initialIndex : 0;
     if (initialIndex >= 0) {
-      this.backgroundImages[initialIndex].classList.add('is-visible');
+      this.backgroundImages[initialIndex].classList.add("is-visible");
     }
   }
 
@@ -199,10 +204,14 @@ class DialogueCore {
     const requestId = ++this.backgroundRequestId;
 
     const revealBackground = () => {
-      if (requestId !== this.backgroundRequestId || nextImage.src !== resolvedSrc) return;
+      if (
+        requestId !== this.backgroundRequestId ||
+        nextImage.src !== resolvedSrc
+      )
+        return;
 
-      nextImage.classList.add('is-visible');
-      currentImage?.classList.remove('is-visible');
+      nextImage.classList.add("is-visible");
+      currentImage?.classList.remove("is-visible");
       this.activeBackgroundIndex = nextIndex;
     };
 
@@ -220,7 +229,7 @@ class DialogueCore {
       return src;
     }
 
-    if (typeof resolveAppAsset === 'function') {
+    if (typeof resolveAppAsset === "function") {
       return resolveAppAsset(`assets/images/${src}`);
     }
 
@@ -229,20 +238,21 @@ class DialogueCore {
 
   replaceVars(str) {
     const info = this.studentInfo || this.playerInfo || {};
-    const inputName = localStorage.getItem('playerInput') || info.input || info.name || '';
+    const inputName =
+      localStorage.getItem("playerInput") || info.input || info.name || "";
 
     return str
-      .replaceAll('{{input}}', inputName)
-      .replaceAll('{{name}}', info.name || '')
-      .replaceAll('{{class}}', info.className || info.class || '')
-      .replaceAll('{{role}}', info.role || this.role || '')
-      .replaceAll('{{year}}', info.year || '');
+      .replaceAll("{{input}}", inputName)
+      .replaceAll("{{name}}", info.name || "")
+      .replaceAll("{{class}}", info.className || info.class || "")
+      .replaceAll("{{role}}", info.role || this.role || "")
+      .replaceAll("{{year}}", info.year || "");
   }
 
   getDisplayText(text) {
-    return this.replaceVars(text || '')
-      .replace(/<[^>]*>/g, '')
-      .replace(/\|/g, '');
+    return this.replaceVars(text || "")
+      .replace(/<[^>]*>/g, "")
+      .replace(/\|/g, "");
   }
 
   /**
@@ -267,8 +277,8 @@ class DialogueCore {
    *    (格式為 <char:特效名稱>)
    */
   typeText(text) {
-    this.dialogueContent.textContent = '';
-    const parsed = this.replaceVars(text || '');
+    this.dialogueContent.textContent = "";
+    const parsed = this.replaceVars(text || "");
     let index = 0;
     let pauseUntil = 0;
 
@@ -280,27 +290,27 @@ class DialogueCore {
 
       const remaining = parsed.slice(index);
 
-      if (remaining.startsWith('<')) {
-        const closingIndex = remaining.indexOf('>');
+      if (remaining.startsWith("<")) {
+        const closingIndex = remaining.indexOf(">");
         if (closingIndex !== -1) {
           const command = remaining.slice(1, closingIndex);
 
-          if (command.startsWith('wait')) {
+          if (command.startsWith("wait")) {
             const match = command.match(/=(\d+)/);
             const delay = match ? parseInt(match[1], 10) : 300;
             pauseUntil = Date.now() + delay;
             index += closingIndex + 1;
             return;
-          } else if (command.startsWith('sound=')) {
+          } else if (command.startsWith("sound=")) {
             const match = command.match(/^sound=([A-Za-z0-9._-]+)$/);
-            if (match && typeof playSound === 'function') {
+            if (match && typeof playSound === "function") {
               playSound(match[1]);
             }
-          } else if (command.startsWith('char:')) {
+          } else if (command.startsWith("char:")) {
             const charEffect = command.slice(5);
             this.triggerCharEffect(charEffect);
           } else {
-            if (typeof triggerEffect === 'function') {
+            if (typeof triggerEffect === "function") {
               triggerEffect(command);
             }
           }
@@ -309,13 +319,13 @@ class DialogueCore {
         }
       }
 
-      if (remaining[0] === '|') {
+      if (remaining[0] === "|") {
         pauseUntil = Date.now() + 500;
         index++;
         return;
       }
 
-      this.dialogueContent.textContent += parsed[index] || '';
+      this.dialogueContent.textContent += parsed[index] || "";
       index++;
 
       if (index >= parsed.length) {
@@ -330,31 +340,43 @@ class DialogueCore {
     const line = this.dialogue[this.current];
     if (line && line.options && line.options.length > 0) {
       this.renderOptions(line.options);
-      if (this.nextBtn) this.nextBtn.classList.add('hidden');
+      if (this.nextBtn) this.nextBtn.classList.add("hidden");
     }
   }
 
   triggerCharEffect(effect) {
     if (!this.charImg) return;
 
-    let className = '';
+    let className = "";
     switch (effect) {
-      case 'shake': className = 'char-shake'; break;
-      case 'shakeStrong': className = 'char-shake-strong'; break;
-      case 'jump': className = 'char-jump'; break;
-      case 'dashAcross': className = 'char-dash-across'; break;
-      case 'dropPause': className = 'char-drop-pause'; break;
-      default: return;
+      case "shake":
+        className = "char-shake";
+        break;
+      case "shakeStrong":
+        className = "char-shake-strong";
+        break;
+      case "jump":
+        className = "char-jump";
+        break;
+      case "dashAcross":
+        className = "char-dash-across";
+        break;
+      case "dropPause":
+        className = "char-drop-pause";
+        break;
+      default:
+        return;
     }
 
     this.charImg.classList.remove(
-      'char-shake',
-      'char-shake-strong',
-      'char-jump',
-      'char-dash-across',
-      'char-drop-pause'
+      "char-shake",
+      "char-shake-strong",
+      "char-jump",
+      "char-dash-across",
+      "char-drop-pause",
     );
-    this.charImg.style.transform = effect === 'dashAcross' ? 'translateX(125vw)' : '';
+    this.charImg.style.transform =
+      effect === "dashAcross" ? "translateX(125vw)" : "";
     // 強制重繪 (Reflow) 以便重新觸發動畫
     void this.charImg.offsetWidth;
     this.charImg.classList.add(className);
@@ -363,9 +385,11 @@ class DialogueCore {
   prepareLeadingCharEffect(text) {
     if (!this.charImg) return;
 
-    const startsWithDash = /^(?:(?:<wait(?:=\d+)?>)|\|)*<char:dashAcross>/.test(text || '');
+    const startsWithDash = /^(?:(?:<wait(?:=\d+)?>)|\|)*<char:dashAcross>/.test(
+      text || "",
+    );
     if (startsWithDash) {
-      this.charImg.style.transform = 'translateX(125vw)';
+      this.charImg.style.transform = "translateX(125vw)";
     }
   }
 
@@ -380,31 +404,44 @@ class DialogueCore {
 
     if (this.charImg && line.char) {
       this.charImg.classList.remove(
-        'char-shake',
-        'char-shake-strong',
-        'char-jump',
-        'char-dash-across',
-        'char-drop-pause'
+        "char-shake",
+        "char-shake-strong",
+        "char-jump",
+        "char-dash-across",
+        "char-drop-pause",
+        "character-wide",
+        "character-portrait",
       );
-      this.charImg.style.transform = '';
+
+      const characterFileName = line.char.split("/").pop().toLowerCase();
+
+      const wideCharacters = ["dog.png", "student.png"];
+
+      if (wideCharacters.includes(characterFileName)) {
+        this.charImg.classList.add("character-wide");
+      } else {
+        this.charImg.classList.add("character-portrait");
+      }
+
+      this.charImg.style.transform = "";
       this.charImg.src = this.resolveCharacterSource(line.char);
       this.prepareLeadingCharEffect(line.text);
     }
 
     // 名字與文字
     if (this.nameBox) {
-      this.nameBox.textContent = line.name || '';
+      this.nameBox.textContent = line.name || "";
     }
 
     if (this.dialogueHeader) {
-      this.dialogueHeader.style.display = line.name ? 'block' : 'none';
+      this.dialogueHeader.style.display = line.name ? "block" : "none";
     }
 
-    if (line.effect && typeof triggerEffect === 'function') {
+    if (line.effect && typeof triggerEffect === "function") {
       triggerEffect(line.effect);
     }
 
-    this.typeText(line.text || '');
+    this.typeText(line.text || "");
 
     // 重設當前選項與下一句按鈕狀態。
     if (!this.nextBtn) {
@@ -412,44 +449,44 @@ class DialogueCore {
     }
 
     if (this.optionsArea) {
-      this.optionsArea.innerHTML = '';
-      this.optionsArea.classList.add('hidden');
+      this.optionsArea.innerHTML = "";
+      this.optionsArea.classList.add("hidden");
     }
 
     if (!line.options || line.options.length === 0) {
-      this.nextBtn.classList.remove('hidden');
+      this.nextBtn.classList.remove("hidden");
     } else {
-      this.nextBtn.classList.add('hidden');
+      this.nextBtn.classList.add("hidden");
     }
   }
 
   renderOptions(options) {
     if (!this.optionsArea) return;
-    this.optionsArea.innerHTML = '';
-    this.optionsArea.classList.remove('hidden');
+    this.optionsArea.innerHTML = "";
+    this.optionsArea.classList.remove("hidden");
 
-    options.forEach(opt => {
-      const btn = document.createElement('button');
-      btn.className = 'dialogue-option-btn';
+    options.forEach((opt) => {
+      const btn = document.createElement("button");
+      btn.className = "dialogue-option-btn";
       if (opt.action) btn.dataset.action = opt.action;
       btn.textContent = this.replaceVars(opt.text);
       btn.onclick = async () => {
-        this.optionsArea.classList.add('hidden');
-        if (this.nextBtn) this.nextBtn.classList.remove('hidden');
+        this.optionsArea.classList.add("hidden");
+        if (this.nextBtn) this.nextBtn.classList.remove("hidden");
 
-        if (opt.action && typeof this.onAction === 'function') {
+        if (opt.action && typeof this.onAction === "function") {
           await this.onAction(opt.action, opt);
           return;
         }
 
-        if (typeof opt.next === 'number') {
-          const targetLine = this.dialogue.find(l => l.id === opt.next);
+        if (typeof opt.next === "number") {
+          const targetLine = this.dialogue.find((l) => l.id === opt.next);
           if (targetLine) {
             this.current = this.dialogue.indexOf(targetLine);
           } else {
             this.current = opt.next;
           }
-        } else if (typeof opt.next === 'string') {
+        } else if (typeof opt.next === "string") {
           await this.loadDialogue(opt.next);
           this.current = 0;
         }
@@ -463,7 +500,7 @@ class DialogueCore {
     clearInterval(this.typingTimer);
     const line = this.dialogue[this.current];
     // 如果正在逐字播放，快速跳完
-    const fullText = this.getDisplayText(line?.text || '');
+    const fullText = this.getDisplayText(line?.text || "");
     if (this.dialogueContent.textContent.length < fullText.length) {
       this.dialogueContent.textContent = fullText;
       return;
@@ -484,13 +521,13 @@ class DialogueCore {
 }
 
 // 自動偵測啟動（容器明確標記 data-dialogue-auto="true" 時）
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener("DOMContentLoaded", () => {
   if (document.querySelector('#game[data-dialogue-auto="true"]')) {
     const game = new DialogueCore({
-      container: '#game',
-      data: 'data/start_default.json',
-      students: 'data/student.json',
-      onFinish: () => fadeTo('map.html')
+      container: "#game",
+      data: "data/start_default.json",
+      students: "data/student.json",
+      onFinish: () => fadeTo("map.html"),
     });
     game.init();
   }
