@@ -277,7 +277,10 @@ body {
   }
 
   .music-header {
-    padding-left: 52px;
+    width: 100%;
+    padding-inline: 52px;
+    box-sizing: border-box;
+    text-align: center;
   }
 
   .music-header h2 {
@@ -287,6 +290,9 @@ body {
   .music-stage {
     margin-top: 12px;
     padding: clamp(10px, 2dvh, 18px) 12px;
+    grid-template-rows: repeat(6, auto);
+    overflow-y: auto;
+    overscroll-behavior: contain;
   }
 
   .sheet-music {
@@ -325,16 +331,24 @@ body {
 
   .piano {
     grid-template-columns: repeat(6, minmax(0, 1fr));
-    min-height: 220px;
+    height: auto;
+    min-height: 0;
   }
 
   .piano-key {
-    min-height: 96px;
+    min-height: clamp(76px, 14dvh, 96px);
     padding: 12px 2px 8px;
   }
 
   .piano-key strong {
     font-size: 18px;
+  }
+
+  .music-stage-actions {
+    position: relative;
+    z-index: 1;
+    margin-top: 6px;
+    padding-bottom: 2px;
   }
 }
 

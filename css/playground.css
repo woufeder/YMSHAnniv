@@ -527,6 +527,29 @@ button.court-cell:focus-visible {
   border-top: 1px solid rgba(206, 225, 225, 0.2);
 }
 
+.mobile-piece-dock {
+  display: none;
+}
+
+.piece-drag-ghost {
+  position: fixed;
+  z-index: 1200;
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  border: 1px solid rgba(255, 226, 123, 0.9);
+  border-radius: 8px;
+  background: rgba(38, 72, 58, 0.94);
+  box-shadow: 0 10px 24px rgba(5, 23, 17, 0.42);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.piece-drag-ghost .piece-miniature {
+  grid-row: auto;
+}
+
 .piece-section__heading {
   display: flex;
   align-items: baseline;
@@ -790,10 +813,11 @@ button.court-cell:focus-visible {
   .pursuit-layout {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
+      "tray"
       "board"
       "actions"
       "panel";
-    grid-template-rows: auto auto auto;
+    grid-template-rows: auto auto auto auto;
   }
 
   .court-board {
@@ -808,12 +832,45 @@ button.court-cell:focus-visible {
     margin-bottom: 9px;
   }
 
-  .piece-tray {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+  .route-panel > .piece-section {
+    display: none;
+  }
+
+  .mobile-piece-dock {
+    grid-area: tray;
+    display: block;
+    min-width: 0;
+    margin: 0;
+    padding: 8px;
+    border: 1px solid rgba(206, 225, 225, 0.38);
+    border-radius: 8px;
+    background: rgba(68, 66, 66, 0.38);
+  }
+
+  .mobile-piece-dock .piece-section__heading {
+    margin-bottom: 7px;
+  }
+
+  .mobile-piece-dock .piece-tray {
+    grid-template-columns: none;
+    grid-template-rows: minmax(52px, auto);
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(138px, 43vw);
+    overflow-x: auto;
+    padding: 1px 1px 6px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 216, 93, 0.66) rgba(7, 38, 29, 0.24);
+    overscroll-behavior-inline: contain;
+  }
+
+  .mobile-piece-dock .piece-card {
+    min-height: 52px;
+    touch-action: pan-x;
   }
 
   .route-panel__hint {
     margin-top: 0;
+    display: none;
   }
 
   .puzzle-actions {
@@ -824,12 +881,22 @@ button.court-cell:focus-visible {
 }
 
 @media (max-width: 460px) {
+  .game-stats,.game-feedback,.piece-section__heading{
+    display: none;
+  }
+
+  .rescue-header{
+    padding-bottom: 0;
+    border-bottom:  0px;
+  }
+  
   .rescue-panel {
     padding-inline: 10px;
   }
 
   .game-kicker {
     margin-left: 42px;
+    display: none;
   }
 
   .rescue-header h3 {
@@ -840,8 +907,8 @@ button.court-cell:focus-visible {
     padding: 6px;
   }
 
-  .piece-tray {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .mobile-piece-dock .piece-tray {
+    grid-auto-columns: minmax(132px, 66vw);
   }
 
   .puzzle-actions {

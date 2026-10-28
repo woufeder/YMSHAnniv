@@ -465,6 +465,95 @@ document.addEventListener("DOMContentLoaded", () => {
     return miniature;
   }
 
+  function bindPieceDrag(button, piece, placed) {
+    if (placed) return;
+
+    button.addEventListener("pointerdown", (event) => {
+      const usesCompactLayout = window.matchMedia(
+        "(max-width: 760px), (max-aspect-ratio: 4 / 5)",
+      ).matches;
+      if (!usesCompactLayout || !gameActive || event.button > 0) return;
+
+      const board = gameBoard.querySelector(".court-board");
+      if (!board) return;
+
+      selectedPieceId = piece.id;
+      gameBoard.querySelectorAll(".piece-card").forEach((card) => {
+        card.classList.toggle("is-selected", card === button);
+        card.setAttribute("aria-pressed", card === button ? "true" : "false");
+      });
+
+      const pointerId = event.pointerId;
+      const startX = event.clientX;
+      const startY = event.clientY;
+      let moved = false;
+      let ghost = null;
+      let targetCell = null;
+
+      const updateTarget = (clientX, clientY) => {
+        const hit = document.elementFromPoint(clientX, clientY);
+        targetCell = hit?.closest(".court-cell.is-placement-zone") || null;
+        clearPlacementPreview(board);
+        if (targetCell?.dataset.cell) {
+          showPlacementPreview(
+            board,
+            targetCell.dataset.cell.split(",").map(Number),
+          );
+        }
+      };
+
+      const moveGhost = (clientX, clientY) => {
+        if (!ghost) {
+          ghost = document.createElement("div");
+          ghost.className = "piece-drag-ghost";
+          ghost.append(createPieceMiniature(piece));
+          document.body.append(ghost);
+        }
+        ghost.style.left = `${clientX}px`;
+        ghost.style.top = `${clientY}px`;
+      };
+
+      const onPointerMove = (moveEvent) => {
+        if (moveEvent.pointerId !== pointerId) return;
+        const distance = Math.hypot(
+          moveEvent.clientX - startX,
+          moveEvent.clientY - startY,
+        );
+        if (!moved && distance < 8) return;
+
+        moved = true;
+        moveEvent.preventDefault();
+        moveGhost(moveEvent.clientX, moveEvent.clientY);
+        updateTarget(moveEvent.clientX, moveEvent.clientY);
+      };
+
+      const finishDrag = (endEvent, cancelled = false) => {
+        if (endEvent.pointerId !== pointerId) return;
+        window.removeEventListener("pointermove", onPointerMove);
+        window.removeEventListener("pointerup", onPointerUp);
+        window.removeEventListener("pointercancel", onPointerCancel);
+        ghost?.remove();
+        clearPlacementPreview(board);
+
+        if (!moved) return;
+        button.dataset.suppressClick = "true";
+        endEvent.preventDefault();
+
+        if (!cancelled && targetCell?.dataset.cell) {
+          placeSelectedPiece(targetCell.dataset.cell.split(",").map(Number));
+        } else if (!cancelled) {
+          setFeedback(gameData.feedback.invalid, "error");
+        }
+      };
+
+      const onPointerUp = (endEvent) => finishDrag(endEvent);
+      const onPointerCancel = (endEvent) => finishDrag(endEvent, true);
+      window.addEventListener("pointermove", onPointerMove, { passive: false });
+      window.addEventListener("pointerup", onPointerUp);
+      window.addEventListener("pointercancel", onPointerCancel);
+    });
+  }
+
   function createPieceTray() {
     const section = document.createElement("section");
     section.className = "piece-section";
@@ -500,6 +589,10 @@ document.addEventListener("DOMContentLoaded", () => {
       state.textContent = placed ? "已上場" : "可使用";
       button.append(label, state);
       button.addEventListener("click", () => {
+        if (button.dataset.suppressClick === "true") {
+          delete button.dataset.suppressClick;
+          return;
+        }
         if (placed) removePiece(piece.id);
         else {
           selectedPieceId = piece.id;
@@ -507,6 +600,7 @@ document.addEventListener("DOMContentLoaded", () => {
           setFeedback(`已選擇「${piece.name}」，可旋轉後放入場內。`);
         }
       });
+      bindPieceDrag(button, piece, placed);
       tray.append(button);
     });
     section.append(heading, tray);
@@ -630,13 +724,16 @@ document.addEventListener("DOMContentLoaded", () => {
           : "目前沒有可通行的出口",
       ),
     );
+    const desktopPieceTray = createPieceTray();
+    const mobilePieceTray = createPieceTray();
+    mobilePieceTray.classList.add("mobile-piece-dock");
     routePanel.append(
       mapLabel,
       mapName,
       briefing,
       createBoardLegend(),
       createRouteSummary(analysis),
-      createPieceTray(),
+      desktopPieceTray,
       routeHint,
     );
 
@@ -654,7 +751,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
     actions.append(rotateButton, resetButton, releaseButton);
 
-    layout.append(boardFrame, routePanel, actions);
+    layout.append(boardFrame, mobilePieceTray, routePanel, actions);
     gameBoard.replaceChildren(layout);
     updateBoardStatus(analysis, announce);
   }
@@ -800,6 +897,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    endingDialogue.replaceChildren();
     endingDialogue.style.display = "block";
     const dataPath =
       outcome === "success"

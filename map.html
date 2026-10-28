@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/map.css">
   <link rel="stylesheet" href="css/dialogue.css">
+  <link rel="preload" href="assets/images/map-frame-2.webp" as="image" type="image/webp">
 </head>
 
 <body>
@@ -57,6 +58,7 @@
     <div class="map-area">
       <div id="mapWorld" class="map-world">
         <img src="assets/images/map.png" alt="校園地圖" id="campusMap" draggable="false">
+        <div class="map-animation-frame" aria-hidden="true"></div>
 
         <!-- RPG 角色 -->
         <div id="playerCharacter" class="player-character" style="display: none;">

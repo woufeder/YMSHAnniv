@@ -282,6 +282,12 @@ p.hall-title {
 }
 
 @media (max-width: 576px) {
+  #hallContent .modal-dialog {
+    width: calc(100% - 20px) !important;
+    max-width: none;
+    margin: 10px auto;
+  }
+
   .hall-title {
     margin-bottom: 8px;
   }

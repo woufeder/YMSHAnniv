@@ -200,6 +200,38 @@
   -webkit-user-drag: none;
 }
 
+.map-animation-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 1867px;
+  height: 1280px;
+  background: url("../assets/images/map-frame-2.webp") 0 0 / 100% 100%
+    no-repeat;
+  opacity: 0;
+  pointer-events: none;
+  animation: map-frame-swap 1.5s steps(1, end) infinite;
+}
+
+@keyframes map-frame-swap {
+  0%,
+  49.999% {
+    opacity: 0;
+  }
+
+  50%,
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-animation-frame {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 .location-hotspots {
   position: absolute;
   inset: 0;

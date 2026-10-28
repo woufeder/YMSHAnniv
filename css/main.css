@@ -168,25 +168,25 @@ body.fade-in {
     z-index: -1;
   }
 
-.question-icon {
-  text-decoration: none;
+  .question-icon {
+    text-decoration: none;
     position: fixed;
-    top: 20px;
-    left: 20px;
+    top: clamp(12px, 2.4dvh, 20px);
+    left: clamp(12px, 2.4dvh, 20px);
     z-index: 1000;
 
     display: grid;
     place-items: center;
 
-    width: 44px;
-    height: 44px;
+    width: clamp(36px, 5.2dvh, 44px);
+    height: clamp(36px, 5.2dvh, 44px);
     padding: 0;
     border: 1px solid rgba(255, 255, 255, 0.8);
     border-radius: 50%;
 
     background: var(--primary700-op7);
     color: #fff;
-    font-size: 18px;
+    font-size: clamp(15px, 2.1dvh, 18px);
     line-height: 1;
     cursor: pointer;
   }
@@ -808,11 +808,6 @@ body.fade-in {
   #index .input-group > a {
     width: 100%;
     border-radius: var(--border-radius) !important;
-  }
-
-  #index .question-icon {
-    top: 12px;
-    left: 12px;
   }
 
   .settings-content {

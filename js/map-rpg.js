@@ -15,18 +15,22 @@
   const EASTER_EGGS = (MAP_CONFIG.easterEggs || []).filter(
     (easterEgg) => easterEgg.enabled !== false,
   );
+  const playerSpriteSheet =
+    localStorage.getItem("playerName")?.trim() === "蔡曉薇"
+      ? "assets/images/RPG-avatar-wheelchair.png"
+      : "assets/images/RPG-avatar.png";
 
   // 角色設定
   const CHARACTER_CONFIG = {
-    tileSize: 60, // 192 x 192 sprite sheet，每格為 48 x 48
+    tileSize: 60, // 240 x 240 sprite sheet，每格為 60 x 60
     framesPerDirection: 4, // 每個方向 4 幀動畫
     totalDirections: 4, // 上、下、左、右
-    spriteSheet: "assets/images/RPG-avatar.png", // Sprite sheet 路徑
+    spriteSheet: playerSpriteSheet, // Sprite sheet 路徑
     speed: 150, // 依 1867 × 1280 地圖尺寸換算後的移動速度
   };
 
   // 計算 sprite sheet 尺寸
-  // 排列方式：4 行 x 4 列 = 192 x 192
+  // 排列方式：4 行 x 4 列 = 240 x 240
   const SPRITE_WIDTH = CHARACTER_CONFIG.tileSize * 4;
   const SPRITE_HEIGHT = CHARACTER_CONFIG.tileSize * 4;
 
