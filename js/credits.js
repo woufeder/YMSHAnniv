@@ -129,6 +129,23 @@ document.addEventListener("DOMContentLoaded", () => {
       notice.append(contactBlock);
     }
 
+    const thanks = section.notice?.thanks;
+
+    if (thanks) {
+      const thanksBlock = document.createElement("div");
+
+      const discription = section.notice?.thanks.description || [];
+
+      appendText(thanksBlock, "small", thanks.label || "測試銘謝", "label");
+      if (discription.length > 0) {
+        discription.forEach((line) => {
+          appendText(thanksBlock, "p", line, "value");
+        });
+      }
+
+      notice.append(thanksBlock);
+    }
+
     return notice;
   }
 

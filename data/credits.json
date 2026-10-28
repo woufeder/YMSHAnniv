@@ -15,15 +15,23 @@
         "contact": {
           "label": "問題回報",
           "creator": "葬光@woufeder",
-          "description": "如有任何問題或bug回報，請私訊噗浪或Email聯絡，十分感謝。",
+          "description": "如有任何問題或bug回報，請於官噗下方留言或電子郵件聯絡，十分感謝。",
           "plurk": {
-            "value": "噗浪",
-            "url": "https://www.plurk.com/woufeder"
+            "value": "官方噗浪",
+            "url": "https://www.plurk.com/YMSH_Project"
           },
           "email": {
-            "value": "una860215@gmail.com",
-            "url": "mailto:una860215@gmail.com?subject=永明高中網站問題回報"
+            "value": "電子郵件",
+            "url": "mailto:una860215@gmail.com?subject=永明高中紀念網站問題回報"
           }
+        },
+        "thanks": {
+          "label": "銘謝",
+          "description": [
+            "感謝魚燒、ㄇㄊ、阿捏協助測試。",
+            "感謝參與企劃的每一位玩家。",
+            "感謝點進這個網站的你。"
+        ]
         }
       }
     },
