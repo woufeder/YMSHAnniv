@@ -174,59 +174,56 @@ document.addEventListener("DOMContentLoaded", function () {
   function positionLocationHotspots() {
     if (!markers) return;
 
-    const rect = markers.getBoundingClientRect();
-    const scale = Math.min(rect.width / mapWidth, rect.height / mapHeight);
-    const renderedWidth = mapWidth * scale;
-    const renderedHeight = mapHeight * scale;
-    const offsetX = (rect.width - renderedWidth) / 2;
-    const offsetY = (rect.height - renderedHeight) / 2;
-
     markers.querySelectorAll(".location-hotspot").forEach((hotspot) => {
       const location = locations.find(
         (item) => item.id === hotspot.dataset.locationId,
       );
+
       if (!location) return;
 
       const area = location.clickArea;
-      hotspot.style.left = `${offsetX + area.x * scale}px`;
-      hotspot.style.top = `${offsetY + area.y * scale}px`;
-      hotspot.style.width = `${area.width * scale}px`;
-      hotspot.style.height = `${area.height * scale}px`;
+
+      hotspot.style.left = `${area.x}px`;
+      hotspot.style.top = `${area.y}px`;
+      hotspot.style.width = `${area.width}px`;
+      hotspot.style.height = `${area.height}px`;
       hotspot.style.clipPath = area.clipPath || "none";
     });
 
-    debugOverlays
-      ?.querySelectorAll(".map-debug-trigger")
-      .forEach((trigger) => {
-        const location = locations.find(
-          (item) => item.id === trigger.dataset.locationId,
-        );
-        if (!location) return;
+    debugOverlays?.querySelectorAll(".map-debug-trigger").forEach((trigger) => {
+      const location = locations.find(
+        (item) => item.id === trigger.dataset.locationId,
+      );
 
-        const triggerIndex = Number.parseInt(trigger.dataset.triggerIndex, 10);
-        const area = getLocationTriggerAreas(location)[triggerIndex];
-        if (!area) return;
-        trigger.style.left = `${offsetX + area.x * scale}px`;
-        trigger.style.top = `${offsetY + area.y * scale}px`;
-        trigger.style.width = `${area.width * scale}px`;
-        trigger.style.height = `${area.height * scale}px`;
-        trigger.style.setProperty(
-          "--debug-trigger-shape",
-          area.clipPath || "inset(0)",
-        );
-      });
+      if (!location) return;
 
-    debugOverlays
-      ?.querySelectorAll(".map-debug-spawn")
-      .forEach((spawn) => {
-        const location = locations.find(
-          (item) => item.id === spawn.dataset.locationId,
-        );
-        if (!location) return;
+      const triggerIndex = Number.parseInt(trigger.dataset.triggerIndex, 10);
 
-        spawn.style.left = `${offsetX + location.spawn.x * scale}px`;
-        spawn.style.top = `${offsetY + location.spawn.y * scale}px`;
-      });
+      const area = getLocationTriggerAreas(location)[triggerIndex];
+
+      if (!area) return;
+
+      trigger.style.left = `${area.x}px`;
+      trigger.style.top = `${area.y}px`;
+      trigger.style.width = `${area.width}px`;
+      trigger.style.height = `${area.height}px`;
+
+      trigger.style.setProperty(
+        "--debug-trigger-shape",
+        area.clipPath || "inset(0)",
+      );
+    });
+
+    debugOverlays?.querySelectorAll(".map-debug-spawn").forEach((spawn) => {
+      const location = locations.find(
+        (item) => item.id === spawn.dataset.locationId,
+      );
+
+      if (!location) return;
+
+      spawn.style.left = `${location.spawn.x}px`;
+      spawn.style.top = `${location.spawn.y}px`;
+    });
 
     debugOverlays
       ?.querySelectorAll(".map-debug-easter-egg")
@@ -234,13 +231,15 @@ document.addEventListener("DOMContentLoaded", function () {
         const easterEgg = easterEggs.find(
           (item) => item.id === marker.dataset.easterEggId,
         );
+
         if (!easterEgg) return;
 
         const area = easterEgg.area;
-        marker.style.left = `${offsetX + area.x * scale}px`;
-        marker.style.top = `${offsetY + area.y * scale}px`;
-        marker.style.width = `${area.width * scale}px`;
-        marker.style.height = `${area.height * scale}px`;
+
+        marker.style.left = `${area.x}px`;
+        marker.style.top = `${area.y}px`;
+        marker.style.width = `${area.width}px`;
+        marker.style.height = `${area.height}px`;
       });
   }
 
@@ -254,9 +253,7 @@ document.addEventListener("DOMContentLoaded", function () {
       item.className = `progress-achievement${earned ? " is-earned" : ""}`;
 
       const icon = document.createElement("i");
-      icon.className = earned
-        ? "fa-solid fa-star"
-        : "fa-solid fa-question";
+      icon.className = earned ? "fa-solid fa-star" : "fa-solid fa-question";
       icon.setAttribute("aria-hidden", "true");
 
       const name = document.createElement("span");
