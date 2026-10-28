@@ -289,6 +289,7 @@
       this.rpgControls = null;
       this.joystickZone = null;
       this.joystickManager = null;
+      this.joystickSetupFrame = null;
       this.easterEggDialogueContainer = null;
 
       this.mapArea = null;
@@ -325,7 +326,7 @@
       if (this.isMobileControlMode()) {
         if (this.rpgControls && this.joystickZone) {
           this.rpgControls.style.display = "flex";
-          this.setupJoystick();
+          this.scheduleJoystickSetup();
         }
       }
 
@@ -358,6 +359,7 @@
       window.addEventListener("ymsh:map-revealed", () => {
         this.updatePlayerElement();
         this.updateCamera();
+        this.scheduleJoystickSetup();
       });
 
       window.addEventListener("pageshow", (event) => {
@@ -646,6 +648,8 @@
     }
 
     setupJoystick() {
+      if (this.joystickManager) return;
+
       if (!this.joystickZone) {
         console.error("RPG Mode: 找不到 #joystickZone");
         return;
@@ -709,6 +713,29 @@
 
       this.joystickManager.on("end", () => {
         this.resetJoystick();
+      });
+    }
+
+    scheduleJoystickSetup() {
+      if (
+        this.joystickManager ||
+        this.joystickSetupFrame !== null ||
+        !this.isMobileControlMode() ||
+        !this.rpgControls ||
+        !this.joystickZone
+      ) {
+        return;
+      }
+
+      this.rpgControls.style.display = "flex";
+      this.joystickSetupFrame = requestAnimationFrame(() => {
+        this.joystickSetupFrame = null;
+
+        const zoneRect = this.joystickZone.getBoundingClientRect();
+        if (zoneRect.width === 0 || zoneRect.height === 0) return;
+
+        this.resetJoystick();
+        this.setupJoystick();
       });
     }
 

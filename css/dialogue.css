@@ -151,8 +151,8 @@
   position: relative;
   width: min(100%, var(--dialogue-max-width));
   min-height: clamp(132px, 22dvh, 158px);
-  padding: clamp(18px, 3dvh, 24px) clamp(24px, 5dvw, 50px)
-    clamp(16px, 2.6dvh, 20px);
+  padding: clamp(16px, 2.5dvh, 24px) clamp(16px, 16px, 50px)
+    clamp(16px, 16px, 20px);
   box-sizing: border-box;
   border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 8px;
@@ -172,7 +172,7 @@
   border-radius: 8px;
   background-color: var(--dialogue-header-bg);
   color: #fff;
-  font-size: clamp(1rem, 3.2dvw, 1.4rem);
+  font-size: clamp(1.3rem, 3.2dvw, 1.4rem);
   line-height: 1.4;
 }
 
@@ -188,7 +188,7 @@
 }
 
 .dialogue-text {
-  min-height: clamp(76px, 13dvh, 92px);
+  min-height: clamp(76px, 9dvh, 92px);
   color: var(--dialogue-text-color);
   font-size: clamp(1.3rem, 3.2dvw, 1.5rem);
   line-height: 1.6;
@@ -256,7 +256,7 @@
     height: auto;
     max-width: none;
     max-height: none;
-    margin-top: 2dvh;
+    margin-top: auto;
   }
 }
 
