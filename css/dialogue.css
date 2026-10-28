@@ -72,34 +72,69 @@
 }
 
 @keyframes char-shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-10px); }
-  75% { transform: translateX(10px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-10px);
+  }
+  75% {
+    transform: translateX(10px);
+  }
 }
 
 @keyframes char-shake-strong {
-  0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-20px); }
-  40% { transform: translateX(20px); }
-  60% { transform: translateX(-10px); }
-  80% { transform: translateX(10px); }
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-20px);
+  }
+  40% {
+    transform: translateX(20px);
+  }
+  60% {
+    transform: translateX(-10px);
+  }
+  80% {
+    transform: translateX(10px);
+  }
 }
 
 @keyframes char-jump {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-50px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-50px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 
 @keyframes char-dash-across {
-  0% { transform: translateX(125vw); }
-  100% { transform: translateX(-125vw); }
+  0% {
+    transform: translateX(125vw);
+  }
+  100% {
+    transform: translateX(-125vw);
+  }
 }
 
 @keyframes char-drop-pause {
-  0% { transform: translateY(0); }
-  20%, 80% { transform: translateY(28px); }
-  100% { transform: translateY(0); }
+  0% {
+    transform: translateY(0);
+  }
+  20%,
+  80% {
+    transform: translateY(28px);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
 /* ------------------ */
 
@@ -116,7 +151,8 @@
   position: relative;
   width: min(100%, var(--dialogue-max-width));
   min-height: clamp(132px, 22dvh, 158px);
-  padding: clamp(18px, 3dvh, 24px) clamp(24px, 5dvw, 50px) clamp(16px, 2.6dvh, 20px);
+  padding: clamp(18px, 3dvh, 24px) clamp(24px, 5dvw, 50px)
+    clamp(16px, 2.6dvh, 20px);
   box-sizing: border-box;
   border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 8px;
@@ -194,7 +230,6 @@
   background: linear-gradient(180deg, #24262b 0%, #141518 100%);
 }
 
-
 @media (max-width: 640px) {
   .dialogue-layer {
     padding: 0 12px 40px;
@@ -202,6 +237,26 @@
 
   .dialogue-box {
     width: 100%;
+  }
+  .character-layer {
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .character-layer img.character-wide {
+    width: 100dvw;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    margin-top: 8dvh;
+  }
+
+  .character-layer img.character-portrait {
+    width: 160dvw;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    margin-top: 2dvh;
   }
 }
 
