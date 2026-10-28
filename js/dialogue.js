@@ -94,6 +94,7 @@ class DialogueCore {
       }
 
       this.current = 0;
+      await this.preloadCharacterImages();
     } catch (err) {
       console.error(`❌ 劇情檔載入失敗：${path}`, err);
       throw err;
@@ -234,6 +235,49 @@ class DialogueCore {
     }
 
     return `assets/images/${src}`;
+  }
+
+  preloadImage(src) {
+    if (!src) return Promise.resolve();
+
+    const resolvedSrc = new URL(src, document.baseURI).href;
+    DialogueCore.imagePreloadCache ||= new Map();
+
+    if (DialogueCore.imagePreloadCache.has(resolvedSrc)) {
+      return DialogueCore.imagePreloadCache.get(resolvedSrc).promise;
+    }
+
+    const image = new Image();
+    image.decoding = "async";
+    image.fetchPriority = "high";
+
+    const promise = new Promise((resolve) => {
+      image.onload = () => {
+        const decodePromise = image.decode ? image.decode() : Promise.resolve();
+        decodePromise.catch(() => {}).finally(resolve);
+      };
+      image.onerror = () => {
+        console.warn(`角色圖片預載失敗：${src}`);
+        resolve();
+      };
+      image.src = resolvedSrc;
+    });
+
+    DialogueCore.imagePreloadCache.set(resolvedSrc, { image, promise });
+    return promise;
+  }
+
+  async preloadCharacterImages() {
+    const sources = [
+      ...new Set(
+        this.dialogue
+          .map((line) => line?.char)
+          .filter(Boolean)
+          .map((src) => this.resolveCharacterSource(src)),
+      ),
+    ];
+
+    await Promise.all(sources.map((src) => this.preloadImage(src)));
   }
 
   replaceVars(str) {

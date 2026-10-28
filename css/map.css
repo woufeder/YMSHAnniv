@@ -230,11 +230,11 @@
   left: 50%;
   bottom: 7%;
   min-width: max-content;
-  padding: clamp(3px, 0.8dvh, 5px) clamp(5px, 1.3dvw, 10px);
+  padding: clamp(6px, 0.8dvh, 8px) clamp(10px, 1.3dvw, 20px);
   border-radius: var(--border-radius);
   background: rgba(45, 57, 82, 0.82);
   color: var(--white);
-  font-size: clamp(0.66rem, 1.25dvw, 1rem);
+  font-size: clamp(1.5rem, 1rem, 1.2rem);
   font-weight: 700;
   line-height: 1.2;
   white-space: nowrap;
@@ -512,8 +512,8 @@
 /* 玩家角色 */
 .player-character {
   position: absolute;
-  width: 48px;
-  height: 48px;
+  width: 60px;
+  height: 60px;
   left: 0;
   top: 0;
   transform: translate(-50%, -100%);
@@ -526,10 +526,10 @@
   position: relative;
   z-index: 2;
   display: block;
-  width: 48px;
-  height: 48px;
+  width: 60px;
+  height: 60px;
   background-repeat: no-repeat;
-  background-size: 144px 192px;
+  background-size: 240px 240px;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
@@ -564,8 +564,8 @@
   align-items: center;
   justify-content: center;
 
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
 
   pointer-events: none;
   touch-action: none;
@@ -616,14 +616,14 @@
 
 @media (max-width: 480px) {
   .rpg-controls {
-    right: 14px;
-    bottom: 14px;
-    width: 110px;
-    height: 110px;
+    right: 16px;
+    bottom: 16px;
+    width: 140px;
+    height: 140px;
   }
 
   .joystick-zone {
-    width: 110px;
-    height: 110px;
+    width: 140px;
+    height: 140px;
   }
 }

@@ -43,7 +43,7 @@
   --dialogue-text-color: #151925;
   --dialogue-max-width: 1080px;
 
-  font-size: clamp(15px, 1.35vw, 17px);
+  font-size: 17px;
 }
 
 h1 {
@@ -760,10 +760,6 @@ body.fade-in {
 }
 
 @media (max-width: 640px) {
-  :root {
-    font-size: 15px;
-  }
-
   #achievementToastRegion {
     right: 16px;
     bottom: 16px;

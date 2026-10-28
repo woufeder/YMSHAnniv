@@ -18,16 +18,16 @@
 
   // 角色設定
   const CHARACTER_CONFIG = {
-    tileSize: 48, // 144 x 192 sprite sheet，每格為 48 x 48
-    framesPerDirection: 3, // 每個方向 3 幀動畫
+    tileSize: 60, // 192 x 192 sprite sheet，每格為 48 x 48
+    framesPerDirection: 4, // 每個方向 4 幀動畫
     totalDirections: 4, // 上、下、左、右
     spriteSheet: "assets/images/RPG-avatar.png", // Sprite sheet 路徑
     speed: 150, // 依 1867 × 1280 地圖尺寸換算後的移動速度
   };
 
   // 計算 sprite sheet 尺寸
-  // 排列方式：4 行 x 3 列 = 144 x 192
-  const SPRITE_WIDTH = CHARACTER_CONFIG.tileSize * 3;
+  // 排列方式：4 行 x 4 列 = 192 x 192
+  const SPRITE_WIDTH = CHARACTER_CONFIG.tileSize * 4;
   const SPRITE_HEIGHT = CHARACTER_CONFIG.tileSize * 4;
 
   // 遮罩外框仍保留少量邊距，實際可行走範圍由碰撞圖決定。

@@ -190,7 +190,7 @@
 .dialogue-text {
   min-height: clamp(76px, 13dvh, 92px);
   color: var(--dialogue-text-color);
-  font-size: clamp(1rem, 3.2dvw, 1.3rem);
+  font-size: clamp(1.3rem, 3.2dvw, 1.5rem);
   line-height: 1.6;
   letter-spacing: 0;
 }
