@@ -35,6 +35,8 @@ class DialogueCore {
     this.backgroundImages = [];
     this.activeBackgroundIndex = 0;
     this.backgroundRequestId = 0;
+    this.isComplete = false;
+    this.handleDialogueKeydown = this.handleDialogueKeydown.bind(this);
   }
 
   async init() {
@@ -56,6 +58,7 @@ class DialogueCore {
       this.buildLayout();
     }
     this.showLine();
+    this.bindKeyboardControls();
   }
 
   async loadDialogue(path) {
@@ -164,6 +167,58 @@ class DialogueCore {
     }
 
     this.nextBtn?.addEventListener("click", () => this.nextLine());
+  }
+
+  bindKeyboardControls() {
+    document.removeEventListener("keydown", this.handleDialogueKeydown);
+    document.addEventListener("keydown", this.handleDialogueKeydown);
+  }
+
+  unbindKeyboardControls() {
+    document.removeEventListener("keydown", this.handleDialogueKeydown);
+  }
+
+  handleDialogueKeydown(event) {
+    if (
+      this.isComplete ||
+      event.defaultPrevented ||
+      event.repeat ||
+      (event.code !== "Space" && event.key !== " ")
+    ) {
+      return;
+    }
+
+    const target = event.target;
+    if (
+      target instanceof Element &&
+      target.closest(
+        "input, textarea, select, button, a, [contenteditable='true']",
+      )
+    ) {
+      return;
+    }
+
+    const settingsModal = document.querySelector(".settings-modal:not(.hidden)");
+    const dialogueIsVisible =
+      this.container?.isConnected &&
+      !this.container.hidden &&
+      this.container.getClientRects().length > 0;
+    const nextIsAvailable =
+      this.nextBtn?.isConnected && !this.nextBtn.classList.contains("hidden");
+
+    if (!dialogueIsVisible || !nextIsAvailable || settingsModal) {
+      return;
+    }
+
+    event.preventDefault();
+    this.nextLine();
+  }
+
+  completeDialogue() {
+    if (this.isComplete) return;
+    this.isComplete = true;
+    this.unbindKeyboardControls();
+    this.onFinish();
   }
 
   setupBackgroundLayers() {
@@ -439,7 +494,7 @@ class DialogueCore {
 
   showLine() {
     const line = this.dialogue[this.current];
-    if (!line) return this.onFinish();
+    if (!line) return this.completeDialogue();
 
     // 背景、角色
     if (line.bg) {
@@ -559,7 +614,7 @@ class DialogueCore {
     if (this.current < this.dialogue.length) {
       this.showLine();
     } else {
-      this.onFinish();
+      this.completeDialogue();
     }
   }
 }

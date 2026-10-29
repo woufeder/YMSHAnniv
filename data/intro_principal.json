@@ -43,7 +43,7 @@
     {
       "char": "principal.png",
       "name": "桓成康",
-      "text": "「非常感謝您今日蒞臨永明高中。」"
+      "text": "「<char:dropPause>非常感謝您今日蒞臨永明高中。」"
     }
   ],
   "student": [
@@ -102,7 +102,7 @@
     {
       "char": "principal.png",
       "name": "桓成康",
-      "text": "「今天真的很高興見到你，<wait>{{input}}同學。<wait=300>我現在依然覺得你能來這裡就讀，<wait>真的太好了。」"
+      "text": "「今天真的很高興見到你<char:dropPause>，<wait>{{input}}同學。<wait=>我現在依然覺得你能來這裡就讀，><wait>真的太好了。」"
     },
     {
       "char": "principal.png",
@@ -161,7 +161,7 @@
     {
       "char": "principal.png",
       "name": "桓成康",
-      "text": "「今天真的很高興見到你，<wait>{{input}}老師。<wait=300>我現在依然覺得你能來這裡就職，<wait>真的太好了。」"
+      "text": "「今天真的很高興見到你<char:dropPause>，<wait>{{input}}老師。<wait=300>我現在依然覺得你能來這裡就職，<wait>真的太好了。」"
     },
     {
       "char": "principal.png",

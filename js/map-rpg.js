@@ -15,10 +15,14 @@
   const EASTER_EGGS = (MAP_CONFIG.easterEggs || []).filter(
     (easterEgg) => easterEgg.enabled !== false,
   );
-  const playerSpriteSheet =
-    localStorage.getItem("playerName")?.trim() === "蔡曉薇"
-      ? "assets/images/RPG-avatar-wheelchair.png"
-      : "assets/images/RPG-avatar.png";
+  const usesWheelchair =
+    localStorage.getItem("playerName")?.trim() === "蔡曉薇";
+  const playerSpriteSheet = usesWheelchair
+    ? "assets/images/RPG-avatar-wheelchair.png"
+    : "assets/images/RPG-avatar.png";
+  const playerMoveSound = usesWheelchair
+    ? "assets/audio/wheelchair.wav"
+    : "assets/audio/walk.wav";
 
   // 角色設定
   const CHARACTER_CONFIG = {
@@ -82,7 +86,7 @@
   }
 
   function isInsideClipPath(localX, localY, area) {
-    const clipPath = area.clipPath?.trim();
+    const clipPath = area.clipPath?.trim().replace(/;+\s*$/, "");
     if (!clipPath || clipPath === "none") return true;
 
     const circleMatch = clipPath.match(
@@ -294,6 +298,14 @@
       this.joystickZone = null;
       this.joystickManager = null;
       this.joystickSetupFrame = null;
+      this.walkAudioUrl = resolveAppAsset(playerMoveSound);
+      this.walkAudioContext = null;
+      this.walkAudioBuffer = null;
+      this.walkAudioSource = null;
+      this.walkAudioGain = null;
+      this.walkAudioLoading = null;
+      this.walkAudioWanted = false;
+      this.walkAudioVolume = 0.5;
       this.easterEggDialogueContainer = null;
 
       this.mapArea = null;
@@ -345,9 +357,17 @@
       this.playerElement.style.display = "block";
 
       this.setupKeyboardControls();
+      this.updateWalkAudioVolume();
       window.addEventListener("ymsh:map-ui-lock", (event) => {
         this.isUiLocked = Boolean(event.detail?.locked);
         if (this.isUiLocked) this.clearMovementKeys();
+      });
+      window.addEventListener("ymsh:settings-changed", (event) => {
+        if (event.detail?.key === "seVolume") this.updateWalkAudioVolume();
+      });
+      window.addEventListener("pagehide", () => this.stopWalkAudio());
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) this.stopWalkAudio();
       });
       // 出生點如果正好位於傳送區，先暫時封鎖
       this.blockInitialTriggers();
@@ -554,6 +574,90 @@
 
       this.resetJoystick();
       this.isMoving = false;
+      this.stopWalkAudio();
+    }
+
+    updateWalkAudioVolume() {
+      this.walkAudioVolume = SettingsManager.get("seVolume", 0.5);
+      if (this.walkAudioGain && this.walkAudioContext) {
+        this.walkAudioGain.gain.setValueAtTime(
+          this.walkAudioVolume,
+          this.walkAudioContext.currentTime,
+        );
+      }
+    }
+
+    updateWalkAudio(shouldPlay) {
+      this.walkAudioWanted = shouldPlay;
+      if (!shouldPlay) {
+        this.stopWalkAudio();
+        return;
+      }
+
+      this.startWalkAudio();
+    }
+
+    async startWalkAudio() {
+      if (this.walkAudioSource || this.walkAudioLoading) return;
+
+      const AudioContextClass =
+        window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) return;
+
+      this.walkAudioLoading = (async () => {
+        this.walkAudioContext ||= new AudioContextClass();
+
+        if (!this.walkAudioBuffer) {
+          const response = await fetch(this.walkAudioUrl);
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const audioData = await response.arrayBuffer();
+          this.walkAudioBuffer = await this.walkAudioContext.decodeAudioData(
+            audioData,
+          );
+        }
+
+        if (!this.walkAudioWanted) return;
+        if (this.walkAudioContext.state === "suspended") {
+          await this.walkAudioContext.resume();
+        }
+        if (!this.walkAudioWanted) return;
+
+        if (!this.walkAudioGain) {
+          this.walkAudioGain = this.walkAudioContext.createGain();
+          this.walkAudioGain.connect(this.walkAudioContext.destination);
+        }
+        this.updateWalkAudioVolume();
+
+        const source = this.walkAudioContext.createBufferSource();
+        source.buffer = this.walkAudioBuffer;
+        source.loop = true;
+        source.connect(this.walkAudioGain);
+        source.onended = () => {
+          if (this.walkAudioSource === source) this.walkAudioSource = null;
+          source.disconnect();
+        };
+        this.walkAudioSource = source;
+        source.start();
+      })()
+        .catch((error) => {
+          console.warn("RPG Mode: walk sound could not be played", error);
+        })
+        .finally(() => {
+          this.walkAudioLoading = null;
+        });
+    }
+
+    stopWalkAudio() {
+      this.walkAudioWanted = false;
+      const source = this.walkAudioSource;
+      this.walkAudioSource = null;
+      if (!source) return;
+
+      try {
+        source.stop();
+      } catch (error) {
+        console.warn("RPG Mode: walk sound could not be stopped", error);
+      }
     }
 
     cancelLocationEntry() {
@@ -759,10 +863,12 @@
         this.isAnimating ||
         this.currentTrigger
       ) {
+        this.updateWalkAudio(false);
         return;
       }
 
       if (!this.collisionReady) {
+        this.updateWalkAudio(false);
         return;
       }
 
@@ -812,10 +918,10 @@
           this.updatePlayerElement();
         }
 
+        this.updateWalkAudio(false);
+
         return;
       }
-
-      this.isMoving = true;
 
       const normalizedX = directionX / directionLength;
 
@@ -830,6 +936,8 @@
       const nextX = this.player.x + dx;
 
       const nextY = this.player.y + dy;
+      const previousX = this.player.x;
+      const previousY = this.player.y;
 
       if (
         this.isInsideMap(nextX, this.player.y) &&
@@ -844,6 +952,11 @@
       ) {
         this.player.y = nextY;
       }
+
+      this.isMoving =
+        Math.abs(this.player.x - previousX) > 0.01 ||
+        Math.abs(this.player.y - previousY) > 0.01;
+      this.updateWalkAudio(this.isMoving);
 
       this.updateAnimation(deltaSeconds);
       this.updatePlayerElement();

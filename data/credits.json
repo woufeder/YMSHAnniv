@@ -31,7 +31,7 @@
             "感謝魚燒、ㄇㄊ、阿捏協助測試。",
             "感謝參與企劃的每一位玩家。",
             "感謝點進這個網站的你。"
-        ]
+          ]
         }
       }
     },
@@ -66,12 +66,28 @@
           "note": "紙張提示音"
         },
         {
+          "name": "土の上を歩く",
+          "type": "音效",
+          "creator": "Killy",
+          "source": "効果音ラボ",
+          "url": "https://soundeffect-lab.info/sound/various/",
+          "note": "地圖走路聲"
+        },
+        {
+          "name": "SonicSnaps-IDES-FR-wheelchair",
+          "type": "音效",
+          "creator": "thecityrings",
+          "source": "freesound",
+          "url": "https://freesound.org/people/thecityrings/sounds/174603/",
+          "note": "地圖輪椅滾動聲"
+        },
+        {
           "name": "Passos arrastados",
           "type": "音效",
           "creator": "pollyschambers",
           "source": "freesound",
           "url": "https://freesound.org/people/pollyschambers/sounds/428981/",
-          "note": "一般腳步聲"
+          "note": "走廊腳步聲"
         },
         {
           "name": "Achievement Happy Beeps Jingle",
@@ -279,7 +295,7 @@
           "creator": "葬光@woufeder",
           "source": "噗浪帳號",
           "url": "https://www.plurk.com/woufeder",
-          "note": "學生、警衛、工友、狗狗、校徽與對話框圖像"
+          "note": "學生、警衛、工友、狗狗、主人、校徽與對話框圖像"
         }
       ]
     },

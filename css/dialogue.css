@@ -29,6 +29,8 @@
 }
 
 .character-layer {
+  --character-top-offset: 52px;
+  --character-jump-offset: -50px;
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -36,7 +38,7 @@
 }
 
 .character-layer img {
-  margin-top: clamp(5dvh, 5.7dvh, 15dvh);
+  margin-top: var(--character-top-offset);
   width: auto;
   height: auto;
   max-width: 100dvw;
@@ -108,7 +110,7 @@
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-50px);
+    transform: translateY(var(--character-jump-offset));
   }
   100% {
     transform: translateY(0);
@@ -151,7 +153,7 @@
   position: relative;
   width: min(100%, var(--dialogue-max-width));
   min-height: clamp(132px, 22dvh, 158px);
-  padding: clamp(16px, 2.5dvh, 24px) clamp(16px, 16px, 50px)
+  padding: clamp(16px, 2.5dvh, 24px) clamp(16px, 32px, 50px)
     clamp(16px, 16px, 20px);
   box-sizing: border-box;
   border: 1px solid rgba(255, 255, 255, 0.45);

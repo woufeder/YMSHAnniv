@@ -393,7 +393,7 @@ body.fade-in {
   width: min(400px, calc(100vw - 32px));
   padding: 28px;
   border-radius: var(--border-radius);
-  background: var(--primary300);
+  background: var(--primary100);
   color: var(--text-color);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   display: flex;

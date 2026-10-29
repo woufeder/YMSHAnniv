@@ -23,7 +23,7 @@
     {
       "char": "principal.png",
       "name": "桓成康",
-      "text": "「今天真的很高興見到你，{{input}}老師，<wait>謝謝你回來看永明。」"
+      "text": "「<char:dropPause>今天真的很高興見到你，{{input}}老師，<wait>謝謝你回來看永明。」"
     }
   ]
 }

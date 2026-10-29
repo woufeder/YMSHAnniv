@@ -15,6 +15,13 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
+  function normalizeClipPath(value, fallback = "none") {
+    const clipPath = String(value || "")
+      .trim()
+      .replace(/;+\s*$/, "");
+    return clipPath || fallback;
+  }
+
   const {
     width: mapWidth,
     height: mapHeight,
@@ -187,7 +194,7 @@ document.addEventListener("DOMContentLoaded", function () {
       hotspot.style.top = `${area.y}px`;
       hotspot.style.width = `${area.width}px`;
       hotspot.style.height = `${area.height}px`;
-      hotspot.style.clipPath = area.clipPath || "none";
+      hotspot.style.clipPath = normalizeClipPath(area.clipPath);
     });
 
     debugOverlays?.querySelectorAll(".map-debug-trigger").forEach((trigger) => {
@@ -210,7 +217,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       trigger.style.setProperty(
         "--debug-trigger-shape",
-        area.clipPath || "inset(0)",
+        normalizeClipPath(area.clipPath, "inset(0)"),
       );
     });
 
