@@ -139,11 +139,11 @@
       url: "index.html",
       returnPages: ["index.html", "whoAreYou.html"],
       clickArea: {
-        x: 1230,
-        y: 995,
-        width: 0,
-        height: 0,
-        clipPath: "polygon(0% 100%, 100% -34%, 100% 104%)",
+        x: 1205,
+        y: 901,
+        width: 663,
+        height: 380,
+        clipPath: "polygon(0% 100%, 100% 0%, 100% 100%)",
       },
       triggerArea: {
         x: 1352,
