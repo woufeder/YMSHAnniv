@@ -4,7 +4,7 @@ window.memberData = [
   { "name": "梁莫止", "class": "一年仁班", "role": "student" },
   { "name": "孫小吉", "class": "一年仁班", "role": "student" },
   { "name": "米利亞‧蓮恩", "class": "一年仁班", "role": "student", 
-    "alias": ["蓮恩", "米利亞蓮恩"] },
+    "alias": ["蓮恩", "米利亞蓮恩","米利亞 蓮恩"] },
   { "name": "白少淵", "class": "一年仁班", "role": "student" },
   { "name": "李天成", "class": "一年仁班", "role": "student" },
   { "name": "蘇達毅", "class": "一年仁班", "role": "student" },
@@ -12,7 +12,7 @@ window.memberData = [
   { "name": "謝家軒", "class": "一年仁班", "role": "student" },
   { "name": "徐佳皓", "class": "一年仁班", "role": "student" },
   { "name": "潘蜜拉・貝爾", "class": "一年仁班", "role": "student", 
-    "alias": ["潘蜜拉", "潘蜜拉貝爾"]},
+    "alias": ["潘蜜拉", "潘蜜拉貝爾", "潘蜜拉 貝爾"]},
   { "name": "蘇望夜", "class": "一年仁班", "role": "student" },
   { "name": "蔣範", "class": "一年仁班", "role": "student" },
   { "name": "蔡沛諠", "class": "一年仁班", "role": "student" },
@@ -27,7 +27,7 @@ window.memberData = [
   { "name": "楊銘熙", "class": "一年和班", "role": "student" },
   { "name": "嚴育昕", "class": "一年和班", "role": "student" },
   { "name": "安吉", "class": "一年和班", "role": "student" },
-  { "name": "米利亞．瑞", "class": "一年和班", "role": "student","alias": ["瑞", "米利亞瑞"]
+  { "name": "米利亞．瑞", "class": "一年和班", "role": "student","alias": ["瑞", "米利亞瑞", "米利亞 瑞"]
   },
   { "name": "郭逸凡", "class": "一年和班", "role": "student" },
   { "name": "黃志風", "class": "一年和班", "role": "student" },
@@ -143,7 +143,7 @@ window.memberData = [
 { "name": "韓家芬", "class": "一年級", "role": "student" },
 { "name": "左智宇", "class": "一年級", "role": "student" },
 { "name": "坂西萬造", "class": "一年級", "role": "student"
-  ,"alias": ["萬造"]
+  ,"alias": ["萬造", "坂西 萬造"]
  },
 { "name": "貓田", "class": "一年級", "role": "student" },
 { "name": "芷切瑛", "class": "一年級", "role": "student" },
@@ -337,7 +337,7 @@ window.memberData = [
 { "name": "蔡玉琳", "class": "二年義班", "role": "student" },
 { "name": "宋桀", "class": "二年義班", "role": "student" },
 { "name": "四月一日 林", "class": "二年義班", "role": "student" 
-  ,"alias": ["四月一日林", "四月一日", "小林"]
+  ,"alias": ["四月一日林", "四月一日", "小林", "林似依"]
 },
 { "name": "夏子甯", "class": "二年義班", "role": "student" },
 { "name": "陳利彗", "class": "二年義班", "role": "student" },
@@ -446,8 +446,8 @@ window.memberData = [
 { "name": "譚米", "class": "三年義班", "role": "student" },
 { "name": "婁瀾辰", "class": "三年義班", "role": "student" },
 { "name": "古柏禾", "class": "三年義班", "role": "student" },
-{ "name": "雷諾德　布蘭頓", "class": "三年義班", "role": "student"
-  ,"alias": ["雷諾德", "布蘭頓", "雷諾德布蘭頓"]
+{ "name": "雷諾德 布蘭頓", "class": "三年義班", "role": "student"
+  ,"alias": ["雷諾德", "布蘭頓", "雷諾德布蘭頓", "雷諾德．布蘭頓"]
  },
 { "name": "李世君", "class": "三年義班", "role": "student" },
 // 老師
@@ -464,7 +464,7 @@ window.memberData = [
 { "name": "曾芝赫", "class": "駐校替代役", "role": "teacher" },
 { "name": "梟", "class": "化學兼保健室老師", "role": "teacher" },
 { "name": "三輪荊生", "class": "保健師醫生", "role": "teacher"
-  ,"alias": ["三輪", "荊生"]
+  ,"alias": ["三輪", "荊生", "三輪 荊生"]
  },
 { "name": "李臨睿", "class": "數學", "role": "teacher" },
 { "name": "許曉泱", "class": "藝術", "role": "teacher" },
@@ -476,6 +476,6 @@ window.memberData = [
 { "name": "趙雯", "class": "生物", "role": "teacher" },
 { "name": "李昕雪", "class": "數學", "role": "teacher" },
 { "name": "御岳早紀", "class": "體育", "role": "teacher"
-  ,"alias": ["御岳", "早紀"]
+  ,"alias": ["御岳", "早紀", "御岳 早紀"]
  }
 ];
